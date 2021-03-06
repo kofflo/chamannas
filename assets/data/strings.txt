@@ -1,0 +1,124 @@
+closed	Closed	Chiuso	Geschl.
+no information available	N/A	N/A	n.v.
+all dates	All dates	Tutte le date	Alle Daten
+menu language	["Language"]	["Lingua"]	["Sprache"]
+menu preferences	["Preferences"]	["Configurazione"]	["Einstellungen"]
+menu gui	["GUI library"]	["Libreria GUI"]	["GUI-Toolkit"]
+menu view	["Default view"]	["Vista di default"]	["Standardansicht"]
+menu map view	["Shows &map\tAlt-M"]	["Mostra la &mappa\tAlt-M"]	["&Karte zeigen\tAlt-K"]
+menu table view	["Shows &table view\tAlt-T"]	["Mostra la vista a &tabelle\tAlt-T"]	["&Tabellenansicht zeigen\tAlt-T"]
+menu exit	["E&xit\tAlt-X"]	["E&sci\tAlt-S"]	["&Beenden\tAlt-B"]
+menu about	["&About\tAlt-A"]	["I&nfo\tAlt-N"]	["I&nfo\tAlt-N"]
+menu warnings	["Show &warnings\tAlt-W"]	["Mostra i &warnings\tAlt-W"]	["&Warnungen zeigen\tAlt-W"]
+menu errors	["Show e&rrors\tAlt-R"]	["Mostra gli e&rrori\tAlt-R"]	["Fehle&r zeigen\tAlt-R"]
+menu main	["Main menu"]	["Menu principale"]	["Hauptmenü"]
+menu developer	["Developer tools"]	["Strumenti di sviluppo"]	["Entwicklertools"]
+menu help	["Help"]	["Aiuto"]	["Hilfe"]
+menu updates	["Search for updates"]	["Ricerca aggiornamenti"]	["Suche nach Updates"]
+title	Huts online booking	Prenotazione rifugi	Online Hütten-Reservierung
+hide no response	Hide no response	Nascondi rifugi senza risposta	Hütten ohne Antwort ausblenden
+hide closed	Hide closed	Nascondi rifugi chiusi	Geschlossene ausblenden
+selected huts	Selected huts	Rifugi selezionati	Ausgewählte Hütten
+request date	Request date	Data richiesta	Anreisetag
+number of days	Number of days	Numero di giorni	Anzahl von Tagen
+retrieve info	Retrieve info for	Recupera informazioni per	Infos abrufen für
+retrieve displayed	All listed huts	Tutti i rifugi elencati	Alle aufgelisteten Hütten
+retrieve selected	Selected huts only	Solo i rifugi selezionati	Nur ausgewählte Hütten
+retrieve selected detailed	Retrieve info	Recupera informazioni	Infos abrufen
+reference	Reference location	Posizione di riferimento	Referenzort
+latitude	Latitude	Latitudine	Breite
+longitude	Longitude	Longitudine	Länge
+update location	Update location	Aggiorna la posizione	Referenzort aktualisieren
+invalid location	Invalid reference location	Posizione non valida	Ungültiger Referenzort
+error	Error	Errore	Fehler
+filter	Filter for {0}	Filtra per {0}	Für {0} filtern
+remove filter	Remove filter	Rimuovi il filtro	Filter entfernen
+ok	OK	OK	OK
+cancel	Cancel	Annulla	Abbrechen
+log	Save log	Salva un file di log	Logdatei speichern
+yes	Yes	Sì	Ja
+no	No	No	Nein
+min	Min	Minimo	Min
+max	Max	Massimo	Max
+select	Select	Seleziona	Auswählen
+deselect	Deselect	Deseleziona	Abwählen
+select all	Select all listed	Seleziona tutti	Alle auswählen
+select all group	Select all	Seleziona tutti	Alle auswählen
+deselect all	Deselect all	Deseleziona tutti	Alle abwählen
+deselect all group	Deselect all	Deseleziona tutti	Alle abwählen
+show details	Show details for hut	Mostra informazioni dettagliate per il rifugio	Detaillierte Infos für die Hütte zeigen
+show details selected	Show details for all selected	Mostra informazioni dettagliate per tutti i rifugi selezionati	Detaillierte Infos für die augewählten Hütten zeigen
+retrieve	Retrieve hut info	Recupera informazioni	Infos abrufen
+set location	Set as location reference	Usa come posizione di riferimento	Als Referenzort wählen
+open web	Open web page	Apre la pagina web del rifugio	Webseite öffnen
+open booking	Open booking web page	Apre la pagina web per la prenotazione	Webseite für Buchung öffnen
+button close	Close	Chiudi	Schließen
+button open web	Web page	Pagina web	Webseite
+button open booking	Booking	Prenotazione	Buchung
+button retrieve info	Retrieve hut info	Recupera informazioni	Infos abrufen
+detailed info	Detailed information	Informazioni dettagliate	Detaillierte Infos
+self catering	Self catering hut	Rifugio in autogestione	Selbstversorgungshütte
+height	Height	Quota	Höhe
+waiting message huts	Retrieval of information for {0} huts ongoing - Please wait...	Recupero informazioni per {0} rifugi in corso - Attendere...	Abruf von Infos für {0} Hütten - Bitte warten...
+waiting caption huts	Retrieve hut info	Recupera informazioni	Infos abrufen
+waiting message updates	Looking for updates ({0}) - Please wait...	Ricerca aggiornamenti ({0}) - Attendere...	Suche nach Updates ({0}) - Bitte warten...
+waiting caption updates	Looking for updates	Ricerca aggiornamenti	Suche nach Updates
+developer info	Information for developers	Informazioni per sviluppatori	Infos für Entwickler
+info warning	Warnings occurred during the program execution	Warning durante l'esecuzione del programma	Warnungen während der Programmausführung
+info error	Errors occurred during the program execution	Errori durante l'esecuzione del programma	Fehler während der Programmausführung
+no warning	No warnings occurred	Nessun warning	Keine Warnung
+no error	No errors occurred	Nessun errore	Kein Fehler
+developer table name	Index	Indice	Index
+developer table type	Type	Tipo	Typ
+developer table message	Message	Messaggio	Nachricht
+map title	Huts online booking	Prenotazione rifugi	Online Hütten-Reservierung
+retrieve shown	Retrieve info for all shown	Recupera informazioni per i rifugi mostrati	Infos für gezeigte Hütten abrufen
+zoom to window	Zoom to window	Zoom nella finestra	Ins Fenster zoomen
+select in window	Select all in window	Seleziona tutti nella finestra	Alle im Fenster auswählen
+deselect in window	Deselect all in window	Deseleziona tutti nella finestra	Alle im Fenster abwählen
+select only in window	Keep selected only huts in window	Mantiene nella selezione solo i rifugi nella finestra	Nur Hütten im Fenster ausgewählt halten
+zoom on hut	Zoom on hut	Zoom sul rifugio	Auf die Hütte zoomen
+zoom on group	Zoom on group	Zoom sul gruppo	Auf die Gruppe zoomen
+retrieve group	Retrieve info for group	Recupera informazioni per il gruppo	Infos abrufen für die Gruppe
+show displayed	Show all listed	Mostra tutti i rifugi elencati	Alle aufgelisteten Hütten zeigen
+show selected	Show selected only	Mostra solo i rifugi selezionati	Nur augewählte Hütten zeigen
+show reference	Show reference point	Mostra il punto di riferimento	Referenzort zeigen
+fit zoom	Zoom to fit	Adatta lo zoom ai rifugi mostrati	Zoomen, um alle einzupassen
+close map	Close map	Chiudi la mappa	Karte schließen
+close table view	Close table view	Chiudi la vista a tabelle	Tabellenansicht schließen
+dormitory	Dormitory	Dormitorio	Matratzenlager
+shared	Shared room	Camera multipla	Mehrbettzimmer
+double	Double room	Camera doppia	Doppelzimmer
+single	Single room	Camera singola	Einzelzimmer
+all rooms	All rooms	Tutte le camere	Alle Zimmer
+name	Name	Nome	Name
+country	Country	Nazione	Staat
+region	Region	Regione	Bundesland
+mountain_range	Mountain range	Gruppo montuoso	Gebirge
+self_catering	Self-catering	In autogestione	Selbstversorgung
+distance	Distance	Distanza	Distanz
+available	Available places	Posti disponibili	Verfügbare Plätze
+measure distance	Measure distance	Misura distanza	Entfernung messen
+room	Room	Camera	Zimmer
+date	Date	Data	Datum
+table error	Table error	Errore nella tabella	Fehler in der Tabelle
+selected info	Detailed information about selected huts	Informazioni dettagliate sui rifugi selezionati	Detaillierte Infos über ausgewählte Hütten
+select all shown	Select all huts in current view	Seleziona i rifugi visualizzati	Alle gezeigten Hütten auswählen
+deselect all shown	Deselect all huts in current view	Deseleziona i rifugi visualizzati	Alle gezeigten Hütten abwählen
+available updates	Available updates	Aggiornamenti disponibili	Verfügbare Updates
+choose updates	Choose the updates to apply	Seleziona gli aggiornamenti da installare	Wähle die Updates zu installieren
+no updates available	No updates available	Nessun aggiornamento	Kein Update verfügbar
+config file	Configuration file	File di configurazione	Konfigurationsdatei
+huts data	List of huts	Lista dei rifugi	Liste der Hütten
+mountain ranges	Name of mountain ranges	Nomi dei gruppi montuosi	Namen der Gebirge
+regions	Names of regions	Nomi delle regioni	Namen der Bundesländer
+strings	Text strings	Stringhe di testo	Textzeichenfolgen
+tiles archive	Map tiles	Tile per la mappa	Tiles für die Karte
+data_files	data files	file di dati	Datendataien
+all updates	all updates	tutti gli aggiornamenti	alle Updates
+tiles	map tiles	tile per la mappa	Tiles für die Karte
+table	Table view	Vista a tabelle	Tabellenansicht
+map	Map	Mappa	Karte
+wx	wxPython	wxPython	wxPython
+qt5	Qt 5	Qt 5	Qt 5
+tk	TkInter	TkInter	TkInter

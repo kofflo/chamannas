@@ -1,0 +1,73 @@
+Adula Alpen	Adula Alps	Alpi dell'Adula	Adula Alpen
+Albula Alpen	Albula Alps	Alpi dell'Albula	Albula Alpen
+Allgäuer Alpen	Allgäu Alps	Alpi dell'Algovia	Allgäuer Alpen
+Ammergauer Alpen	Ammergau Alps	Alpi dell'Ammergau	Ammergauer Alpen
+Ankogel Gruppe	Ankogel Group	Gruppo dell'Ankogel	Ankogel Gruppe
+Appenzeller Alpen	Appenzell Alps	Prealpi di Appenzello	Appenzeller Alpen
+Bayerische Voralpen	Bavarian Prealps	Alpi Bavaresi	Bayerische Voralpen
+Berchtesgadener Alpen	Berchtesgaden Alps	Alpi di Berchtesgaden	Berchtesgadener Alpen
+Berner Alpen	Bernese Alps	Alpi Bernesi	Berner Alpen
+Bernina Alpen	Bernina Alps	Alpi del Bernina	Bernina Alpen
+Bregenzerwald Gebirge	Bregenz Forest Mountains	Prealpi di Bregenz	Bregenzerwald Gebirge
+Chiemgauer Alpen	Chiemgau Alps	Alpi del Chiemgau	Chiemgauer Alpen
+Dachstein Gebirge	Dachstein Mountains	Monti del Dachstein	Dachstein Gebirge
+Dolomiten	Dolomites	Dolomiti	Dolomiten
+Emmentaler Alpen	Emmental Alps	Alpi dell'Emmental	Emmentaler Alpen
+Ennstaler Alpen	Ennstal Alps	Alpi dell'Ennstal	Ennstaler Alpen
+Erzgebirge	Ore Mountains	Monti Metalliferi	Erzgebirge
+Freiburger Alpen	Fribourg Alps	Prealpi di Friburgo	Freiburger Alpen
+Glarner Alpen	Glarus Alps	Alpi Glaronesi	Glarner Alpen
+Glockner Gruppe	Glockner Group	Gruppo del Glockner	Glockner Gruppe
+Goldberggruppe	Goldberg Group	Gruppo del Goldberg	Goldberggruppe
+Gotthardmassiv	Saint-Gotthard Massif	Massiccio del San Gottardo	Gotthardmassiv
+Granatspitz Gruppe	Granatspitze Group	Gruppo del Granatspitze	Granatspitz Gruppe
+Gurktaler Alpen	Gurktal Alps	Alpi della Gurktal	Gurktaler Alpen
+Harz	Harz	Harz	Harz
+Julischen Alpen	Julian Alps	Alpi Giulie	Julischen Alpen
+Jura	Jura	Giura	Jura
+Kaiser Gebirge	Kaiser Mountains	Monti del Kaiser	Kaiser Gebirge
+Karnischer Hauptkamm	Carnic Main Crest	Catena Carnica principale	Karnischer Hauptkamm
+Karwendel	Karwendel	Monti del Karwendel	Karwendel
+Kitzbüheler Alpen	Kitzbühel Alps	Alpi di Kitzbühel	Kitzbüheler Alpen
+Kreuzeck Gruppe	Kreuzeck Group	Gruppo del Kreuzeck	Kreuzeck Gruppe
+Lechquellen Gebirge	Lechquellen Mountains	Monti delle Lechquellen	Lechquellen Gebirge
+Lechtaler Alpen	Lechtal Alps	Alpi della Lechtal	Lechtaler Alpen
+Livigno Alpen	Livigno Alps	Alpi di Livigno	Livigno Alpen
+Loferer und Leoganger Steinberge	Lofer and Leogang Mountains	Monti dello Stein	Loferer und Leoganger Steinberge
+Luganer Voralpen	Lugano Prealps	Prealpi Luganesi	Luganer Voralpen
+Mont-Blanc Gruppe	Mont Blanc Massif	Massiccio del Monte Bianco	Mont-Blanc Gruppe
+Monte Leone-Blinnenhorn-Kette	Range of Monte Leone and Blinnenhorn	Catena Monte Leone-Blinnenhorn	Monte Leone-Blinnenhorn-Kette
+Mürzsteger Alpen	Mürzsteg Alps	Alpi di Mürzsteg	Mürzsteger Alpen
+Oberösterreichischen Voralpen	Upper Austrian Prealps	Prealpi dell'Alta Austria	Oberösterreichischen Voralpen
+Ötztaler Alpen	Ötztal Alps	Alpi Venoste	Ötztaler Alpen
+Plessur Alpen	Plessur Alps	Alpi del Plessur	Plessur Alpen
+Radstädter Tauern	Radstadt Tauern	Tauri di Radstadt 	Radstädter Tauern
+Randgebirge östlich der Mur	Prealps East of the Mur	Prealpi ad est della Mura	Randgebirge östlich der Mur
+Rätikon	Rätikon	Catena del Rätikon	Rätikon
+Rax-Schneeberg-Gruppe	Rax-Schneeberg Group	Catena Rax-Schneeberg	Rax-Schneeberg-Gruppe
+Rofan Gebirge	Brandenberg Alps	Alpi di Brandenberg	Rofan Gebirge
+Rottenmanner und Wölzer Tauern	Rottenmanner and Wölzer Tauern	Tauri di Wölz e di Rottenmann	Rottenmanner und Wölzer Tauern
+Salzkammergut Berge	Salzkammergut Mountains	Monti del Salzkammergut	Salzkammergut Berge
+Samnaun Gruppe	Samnaun Alps	Gruppo del Samnaun	Samnaun Gruppe
+Sarntaler Alpen	Sarntal Alps	Alpi Sarentine	Sarntaler Alpen
+Sauerland	Sauerland	Sauerland	Sauerland
+Schwäbische Alb	Swabian Jura	Alpi Sveve	Schwäbische Alb
+Schwarzwald	Black Forest	Foresta Nera	Schwarzwald
+Sesvenna Gruppe	Sesvenna Alps	Gruppo del Sesvenna	Sesvenna Gruppe
+Silvretta	Silvretta Alps	Gruppo del Silvretta	Silvretta
+Stubaier Alpen	Stubai Alps	Alpi dello Stubai	Stubaier Alpen
+Tennengebirge	Tennen Mountains	Monti di Tennen	Tennengebirge
+Tessiner Alpen	Ticino Alps	Alpi Ticinesi	Tessiner Alpen
+Thüster Berg	Thüster Berg	Thüster Berg	Thüster Berg
+Totes Gebirge	Totes Gebirge	Monti Totes	Totes Gebirge
+Türnitzer Alpen	Türnitz Alps	Alpi di Türnitz	Türnitzer Alpen
+Tuxer Alpen	Tux Alps	Prealpi del Tux	Tuxer Alpen
+Urner Alpen	Uri Alps	Alpi Urane	Urner Alpen
+Venediger Gruppe	Venediger Group	Gruppo del Venediger	Venediger Gruppe
+Verwall	Verwall Alps	Gruppo del Verwall	Verwall
+Waldviertel	Waldviertel	Waldviertel	Waldviertel
+Walliser Alpen	Pennine Alps	Alpi Pennine	Walliser Alpen
+Wetterstein Gebirge	Wetterstein Mountains	Monti del Wetterstein	Wetterstein Gebirge
+Wienerwald	Vienna Woods	Selva Viennese	Wienerwald
+Ybbstaler Alpen	Ybbstal Alps	Alpi dell'Ybbstal	Ybbstaler Alpen
+Zillertaler Alpen	Zillertal Alps	Alpi della Zillertal	Zillertaler Alpen

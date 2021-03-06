@@ -1,0 +1,54 @@
+# Configuration file for Chamannas
+ABOUT:
+  name: CHAMANNAS
+  version: "1.0"
+  description:
+    - "Search for available beds in mountain huts"
+    - "Ricerca di letti liberi nei rifugi alpini"
+    - "Suche von verfügbaren Plätzen in Berghütten"
+  copyright: "(C) 2020"
+  website: http://github.com/kofflo/chamannashttp://raw.github.com/kofflo/chamannas/master/
+  developer: "Alessandro Conti"
+BASE_URL: http://www.alpsonline.org/reservation/
+UPDATES_URL: http://127.0.0.1:8000/
+ROOM_BASIC_TYPES:
+  'Matratzenlager': 'dormitory'
+  'Massenlager': 'dormitory'
+  'Mehrbettzimmer': 'shared'
+  'Zimmer': 'shared'
+  'Dreibettzimmer': 'shared'
+  'Spezialzimmer': 'shared'
+  '4-er Zimmer': 'shared'
+  '6-er Zimmer': 'shared'
+  '8-er Zimmer': 'shared'
+  '10-er Zimmer': 'shared'
+  'Doppelzimmer': 'double'
+  'Zweierzimmer': 'double'
+  'Einzelzimmer': 'single'
+  '2 Bettzimmer': 'double'
+  '3-6 Bettzimmer': 'shared'
+  '7-12 Bettzimmer': 'shared'
+  '12+ Bettzimmer': 'shared'
+  'default_type': 'shared'
+LANGUAGES:
+  - 'English': 'en'
+  - 'Italiano': 'it'
+  - 'Deutsch': 'de_{0}'
+RESULTS_CACHE_EXPIRATION: 7
+TILES_CACHE: 300
+MAX_NIGHTS: 14
+UPDATE_DATA_FILES:
+  assets/data/:
+    config.yaml: 'config file'
+    huts.txt: 'huts data'
+    mountain_ranges.txt: 'mountain ranges'
+    regions.txt: 'regions'
+    strings.txt: 'strings'
+UPDATE_TILES:
+  assets/tiles/:
+    tiles.tar: 'tiles archive'
+SUPPORTED_GUIS:
+  - 'wx'
+  - 'qt5'
+  - 'tk'
+DEFAULT_GUI: 'wx'

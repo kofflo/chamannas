@@ -2,11 +2,12 @@ import wx
 import wx.adv
 import wx.lib.newevent
 
-from src.view.abstract_view.frames import AbstractFrame, FrameStyle, CursorStyle, AbstractDialog
+from src.view.abstract.frames import AbstractFrame, FrameStyle, CursorStyle, AbstractDialog
 
 
 class WxFrame(AbstractFrame, wx.Frame):
 
+    _NEW_VERSION = False
     def __init__(self, *, parent, pos=None, size=None, **kwargs):
 
         if self._STYLE is FrameStyle.FIXED_SIZE:
@@ -30,7 +31,11 @@ class WxFrame(AbstractFrame, wx.Frame):
         self._frame_sizer.Add(self._panel)
         super().__init__(parent=parent, **kwargs)
         self._create_widgets(self._panel)
-        self._create_gui()
+        if self._NEW_VERSION is True:
+            print('NEW VERSION')
+            self._create_gui().create_layout(self._panel)
+        else:
+            self._create_gui()
         self._create_menu()
 
     def event_connect(self, event, on_event):
@@ -85,10 +90,10 @@ class WxFrame(AbstractFrame, wx.Frame):
         self.Layout()
         self.SetSizerAndFit(self._frame_sizer)
 
-    def close_from_thread(self):
+    def close_from_thread(self): # TODO STILL REQUIRED?
         wx.CallAfter(self.close)
 
-    def update_gui_from_thread(self, data):
+    def update_gui_from_thread(self, data): # TODO STILL REQUIRED?
         wx.CallAfter(self.update_gui, data)
 
     def _set_cursor(self, cursor):
@@ -103,11 +108,19 @@ class WxFrame(AbstractFrame, wx.Frame):
 
 class WxDialog(AbstractDialog, wx.Dialog):
 
+    _NEW_VERSION = False
+
     def __init__(self, parent, **kwargs):
         wx.Dialog.__init__(self, parent)
         super().__init__(**kwargs)
         self._create_widgets(self)
-        self._create_gui()
+        if self._NEW_VERSION is True:
+            print('NEW VERSION')
+            self._create_gui().create_layout(self)
+            self.Fit()
+            self.SetSizeHints(self.GetSize().x, self.GetSize().y, self.GetMaxWidth(), self.GetMaxHeight())
+        else:
+            self._create_gui()
         self.SetIcon(wx.Icon(parent.icon))
 
     def _create_gui(self):

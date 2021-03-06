@@ -1,4 +1,4 @@
-from src.view.abstract_view.tables import AbstractHutsGrid, AbstractDetailedGrid, \
+from src.view.abstract.tables import AbstractHutsGrid, AbstractDetailedGrid, \
     AbstractDeveloperGrid, AbstractSelectedDetailedGrid
 
 from src.gui_library.wx.tables import WxAbstractGrid

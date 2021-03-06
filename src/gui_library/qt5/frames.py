@@ -3,10 +3,12 @@ import PySide2.QtWidgets
 import PySide2.QtCore
 import PySide2.QtGui
 
-from src.view.abstract_view.frames import AbstractFrame, FrameStyle, CursorStyle, AbstractDialog
+from src.view.abstract.frames import AbstractFrame, FrameStyle, CursorStyle, AbstractDialog
 
 
 class QtFrame(AbstractFrame, PySide2.QtWidgets.QMainWindow):
+
+    _NEW_VERSION = False
 
     def __init__(self, *, parent, pos=None, size=None, **kwargs):
 
@@ -32,14 +34,11 @@ class QtFrame(AbstractFrame, PySide2.QtWidgets.QMainWindow):
         super().__init__(parent=parent, **kwargs)
         self._size = size
         self._panel = self
-        self._layout = PySide2.QtWidgets.QVBoxLayout()
-
         self._create_widgets(self._panel)
-        self._create_gui()
-        self._create_menu()
 
         central_widget = PySide2.QtWidgets.QWidget()
-        central_widget.setLayout(self._layout)
+        self._create_menu()
+        self._create_gui().create_layout(central_widget)
         self.setCentralWidget(central_widget)
 
     def event_connect(self, event, on_event):
@@ -81,6 +80,7 @@ class QtFrame(AbstractFrame, PySide2.QtWidgets.QMainWindow):
 
     def show(self):
         PySide2.QtWidgets.QMainWindow.show(self)
+        self._refresh_widgets()
 
     def close(self):
         PySide2.QtWidgets.QMainWindow.close(self)
@@ -111,7 +111,7 @@ class QtDialog(AbstractDialog, PySide2.QtWidgets.QDialog):
         super().__init__(**kwargs)
         self.setWindowFlags(self.windowFlags() & ~PySide2.QtGui.Qt.WindowContextHelpButtonHint)
         self._create_widgets(self)
-        self._create_gui()
+        self._create_gui().create_layout(self)
 
     def __enter__(self):
         return self

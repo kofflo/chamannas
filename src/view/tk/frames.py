@@ -2,11 +2,12 @@ import tkinter
 import tkinter.ttk
 import tkinter.messagebox
 
-from src.view.abstract_view.frames import AbstractWaitingMessage, \
+from src.view.abstract.frames import AbstractWaitingMessage, \
     AbstractDetailedInfoView, AbstractDeveloperInfoView, AbstractHutsView, \
     AbstractSelectedInfoView, AbstractHutsTableView, AbstractHutsMapView, \
     AbstractMessageDialog, AbstractFilterDialog, AbstractAboutDialog, AbstractUpdateDialog, ROOM_TYPES
 from src.gui_library.tk.frames import TkFrame, TkDialog
+from src.gui_library.tk.widgets import HBoxLayout, VBoxLayout, GridLayout, Align
 
 
 class WaitingMessage(AbstractWaitingMessage, TkFrame):
@@ -155,28 +156,44 @@ class HutsMapView(AbstractHutsMapView, HutsView):
 
 class SelectedInfoView(AbstractSelectedInfoView, TkFrame):
 
+    _NEW_VERSION = True
+
     def _create_gui(self):
-        controls_sizer = tkinter.Frame(self._toplevel)
+        if self._NEW_VERSION:
+            main_sizer = VBoxLayout()
+            controls_sizer = HBoxLayout()
+            controls_sizer.add(self._all_rooms_button, border=10)
+            for room in ROOM_TYPES:
+                controls_sizer.add(self._rooms_checkbox[room], align=Align.CENTER, border=10)
+            controls_sizer.add(self._retrieve_info_button, border=10)
+            controls_sizer.add_stretch()
+            controls_sizer.add(self._close_button, border=10)
+            main_sizer.add(controls_sizer, align=Align.EXPAND)
+            main_sizer.add(self._grid_selected_detailed, align=Align.LEFT, border=10)
+#            self._grid_selected_detailed._MAXIMUM_HEIGHT = self._SELECTED_DETAILED_GRID_HEIGHT
+            return main_sizer
+        else:
+            controls_sizer = tkinter.Frame(self._toplevel)
 
-        self._all_rooms_button.set_frame(controls_sizer)
-        for room in ROOM_TYPES:
-            self._rooms_checkbox[room].set_frame(controls_sizer)
-        self._retrieve_info_button.set_frame(controls_sizer)
-        self._close_button.set_frame(controls_sizer)
+            self._all_rooms_button.set_frame(controls_sizer)
+            for room in ROOM_TYPES:
+                self._rooms_checkbox[room].set_frame(controls_sizer)
+            self._retrieve_info_button.set_frame(controls_sizer)
+            self._close_button.set_frame(controls_sizer)
 
-        self._all_rooms_button.grid(row=0, column=0, padx=(0, 10), pady=10)
-        col = 0
-        for room in ROOM_TYPES:
-            col += 1
-            self._rooms_checkbox[room].grid(row=0, column=col, padx=10, pady=10)
-        self._retrieve_info_button.grid(row=0, column=col+1, padx=10, pady=10)
-        controls_sizer.columnconfigure(col+2, weight=1)
-        self._close_button.grid(row=0, column=col+3, padx=(10, 0), pady=10, sticky='e')
+            self._all_rooms_button.grid(row=0, column=0, padx=(0, 10), pady=10)
+            col = 0
+            for room in ROOM_TYPES:
+                col += 1
+                self._rooms_checkbox[room].grid(row=0, column=col, padx=10, pady=10)
+            self._retrieve_info_button.grid(row=0, column=col+1, padx=10, pady=10)
+            controls_sizer.columnconfigure(col+2, weight=1)
+            self._close_button.grid(row=0, column=col+3, padx=(10, 0), pady=10, sticky='e')
 
-        self._grid_selected_detailed.set_frame(self._toplevel)
+            self._grid_selected_detailed.set_frame(self._toplevel)
 
-        controls_sizer.grid(row=0, column=0, padx=10, pady=10, sticky='ew')
-        self._grid_selected_detailed.grid(row=1, column=0, padx=10, pady=10, sticky='w')
+            controls_sizer.grid(row=0, column=0, padx=10, pady=10, sticky='ew')
+            self._grid_selected_detailed.grid(row=1, column=0, padx=10, pady=10, sticky='w')
 
 
 class DetailedInfoView(AbstractDetailedInfoView, TkFrame):
@@ -345,7 +362,7 @@ class AboutDialog(AbstractAboutDialog, TkDialog):
         self._ok_button.grid(row=5, column=0, padx=10, pady=10)
 
 
-import src.view.abstract_view.frames as frames
+import src.view.abstract.frames as frames
 frames.WaitingMessage = WaitingMessage
 frames.FilterDialog = FilterDialog
 frames.MessageDialog = MessageDialog

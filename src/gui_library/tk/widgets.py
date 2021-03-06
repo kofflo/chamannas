@@ -9,7 +9,8 @@ from threading import Timer
 
 from src.gui_library.abstract.widgets import AbstractWidget, AbstractMouseEventsWidget, AbstractLabelledWidget, \
     AbstractButton, AbstractCheckBox, AbstractRadioBox, AbstractBitmap, \
-    AbstractText, AbstractCalendar, AbstractSpinControl, AbstractMenu, TextStyle, AbstractTextTimedMenu
+    AbstractText, AbstractCalendar, AbstractSpinControl, AbstractMenu, TextStyle, AbstractTextTimedMenu, \
+    AbstractBoxLayout, AbstractGridLayout, Align
 from src.gui_library.tk import ttk_style
 
 
@@ -600,3 +601,140 @@ class TextTimedMenu(AbstractTextTimedMenu, Widget):
     def _on_close_signal(self, event):
         self.on_close(self)
         self._widget.destroy()
+
+
+class TkLayout:
+
+    def create_layout(self, parent):
+        raise NotImplementedError()
+
+    def apply_border(self, border_tuple):
+        return (border_tuple[3], border_tuple[1]), (border_tuple[0], border_tuple[2])
+
+    def apply_align(self, align):
+        raise NotImplementedError()
+
+
+class BoxLayout(AbstractBoxLayout, TkLayout):
+    _DIRECTION = None
+
+    def create_layout(self, parent):
+        frame = tkinter.Frame(parent)
+        for index, widget_dict in enumerate(self._widgets):
+            widget = widget_dict['type']
+
+            if widget == 'space':
+                pass
+                #self.create_space(frame, index, widget_dict['space'])
+            elif widget == 'stretch':
+                #TODO frame.AddStretchSpacer(widget_dict['stretch'])
+                pass
+            else:
+                widget_align = widget_dict['align']
+
+                sticky = self.apply_align(widget_align)
+
+                if isinstance(widget, TkLayout):
+                    widget = widget.create_layout(frame)
+                else:
+                    widget.set_frame(frame)
+
+                widget_border = widget_dict['border']
+                if isinstance(widget_border, int):
+                    widget_border = [widget_border] * 4
+                padx, pady = self.apply_border(widget_border)
+
+                row, col = self._get_row_col(index)
+
+                print(frame, widget, row, col, padx, pady, sticky)
+
+                widget.grid(row=row, column=col, padx=padx, pady=pady, sticky=sticky)
+        return frame
+
+    def _get_row_col(self, index):
+        raise NotImplementedError()
+
+    def create_space(self, frame, index, space):
+        raise NotImplementedError()
+
+
+class VBoxLayout(BoxLayout):
+    def create_space(self, frame, index, space):
+        frame.grid_rowconfigure(index, minsize=space)
+
+    def _get_row_col(self, index):
+        return index, 0
+
+    def apply_align(self, align):
+        if align & Align.EXPAND:
+            return "ew"
+        elif align & Align.LEFT:
+            return "w"
+        elif align & Align.HCENTER:
+            return ""
+        elif align & Align.RIGHT:
+            return "e"
+        return ""
+
+
+class HBoxLayout(BoxLayout):
+
+    def create_space(self, frame, index, space):
+        frame.grid_colconfigure(index, minsize=space)
+
+    def _get_row_col(self, index):
+        return 0, index
+
+    def apply_align(self, align):
+        if align & Align.EXPAND:
+            return "ns"
+        elif align & Align.TOP:
+            return "n"
+        elif align & Align.VCENTER:
+            return ""
+        elif align & Align.BOTTOM:
+            return "s"
+        return ""
+
+
+class GridLayout(AbstractGridLayout, TkLayout):
+
+    def create_layout(self, parent):
+        frame = tkinter.Frame(parent)#wx.FlexGridSizer(self._rows, self._cols, self._vgap, self._hgap)
+
+        for row in range(self._rows):
+            if self._row_stretch[row] is not None:
+                frame.AddGrowableRow(row, self._row_stretch[row])
+
+        for col in range(self._cols):
+            if self._row_stretch[col] is not None:
+                frame.AddGrowableCol(col, self._col_stretch[col])
+
+        for widgets_row in self._widgets:
+            for widget_dict in widgets_row:
+                widget = widget_dict['type']
+                if widget is None:
+                    frame.Add(0, 0)
+                elif widget == 'space':
+                    frame.Add(widget_dict['width'], widget_dict['height'])
+                else:
+                    widget_align = widget_dict['align']
+                    flag = self.apply_align(widget_align)
+
+                    if isinstance(widget, TkLayout):
+                        widget = widget.create_layout(frame)
+
+                    widget_border = widget_dict['border']
+                    if isinstance(widget_border, int):
+                        flag |= wx.ALL
+                    elif any(b != 0 for b in widget_border):
+                        widget, widget_border, flag_border = self.apply_border(widget, widget_border, widget_align)
+                        flag |= flag_border
+                    else:
+                        widget_border = 0
+
+                    frame.Add(widget, flag=flag, border=widget_border)
+        return frame
+
+    def apply_align(self, align):
+        return "" #TODO

@@ -34,7 +34,7 @@ Classes:
 import sys
 import src.gui_library
 from src import config
-from src.view.abstract_view import view_errors
+from src.view.abstract import view_errors
 
 
 _config_GUI = config.GUI

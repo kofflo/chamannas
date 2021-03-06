@@ -167,38 +167,38 @@ RESULTS_DICTIONARY:
       *id033: null
       *id034: null
     warning: null
-  4:
+  6:
     error: null
     places:
-      &id035 2021-02-23:
-        dormitory: 29
-      &id036 2021-02-24:
-        dormitory: 45
-      &id037 2021-02-25:
-        dormitory: 43
-      &id038 2021-02-26:
-        dormitory: 21
-      &id039 2021-02-27:
-        dormitory: 1
-      &id040 2021-02-28:
-        dormitory: 41
-      &id041 2021-03-01:
-        dormitory: 37
-      &id042 2021-03-02:
-        dormitory: 36
-      &id043 2021-03-03:
-        dormitory: 36
-      &id044 2021-03-04:
-        dormitory: 37
-      &id045 2021-03-05:
-        dormitory: 26
-      &id046 2021-03-06:
-        dormitory: 34
-      &id047 2021-03-07:
-        dormitory: 42
-      &id048 2021-03-08:
-        dormitory: 40
-    request_time: 2021-02-22 08:20:07.518849
+      &id035 2021-02-28:
+        closed: 0
+      &id036 2021-03-01:
+        closed: 0
+      &id037 2021-03-02:
+        closed: 0
+      &id038 2021-03-03:
+        closed: 0
+      &id039 2021-03-04:
+        closed: 0
+      &id040 2021-03-05:
+        closed: 0
+      &id041 2021-03-06:
+        closed: 0
+      &id042 2021-03-07:
+        closed: 0
+      &id043 2021-03-08:
+        closed: 0
+      &id044 2021-03-09:
+        closed: 0
+      &id045 2021-03-10:
+        closed: 0
+      &id046 2021-03-11:
+        closed: 0
+      &id047 2021-03-12:
+        closed: 0
+      &id048 2021-03-13:
+        closed: 0
+    request_time: 2021-02-27 18:15:47.770674
     requested_dates: !!set
       *id035: null
       *id036: null
@@ -215,7 +215,7 @@ RESULTS_DICTIONARY:
       *id047: null
       *id048: null
     warning: null
-  6:
+  7:
     error: null
     places:
       &id049 2021-02-28:
@@ -246,7 +246,7 @@ RESULTS_DICTIONARY:
         closed: 0
       &id062 2021-03-13:
         closed: 0
-    request_time: 2021-02-27 18:15:47.770674
+    request_time: 2021-02-27 18:19:57.445025
     requested_dates: !!set
       *id049: null
       *id050: null
@@ -263,38 +263,38 @@ RESULTS_DICTIONARY:
       *id061: null
       *id062: null
     warning: null
-  7:
+  8:
     error: null
     places:
-      &id063 2021-02-28:
-        closed: 0
-      &id064 2021-03-01:
-        closed: 0
-      &id065 2021-03-02:
-        closed: 0
-      &id066 2021-03-03:
-        closed: 0
-      &id067 2021-03-04:
-        closed: 0
-      &id068 2021-03-05:
-        closed: 0
-      &id069 2021-03-06:
-        closed: 0
-      &id070 2021-03-07:
-        closed: 0
-      &id071 2021-03-08:
-        closed: 0
-      &id072 2021-03-09:
-        closed: 0
-      &id073 2021-03-10:
-        closed: 0
-      &id074 2021-03-11:
-        closed: 0
-      &id075 2021-03-12:
-        closed: 0
-      &id076 2021-03-13:
-        closed: 0
-    request_time: 2021-02-27 18:19:57.445025
+      &id063 2021-03-01:
+        dormitory: 20
+      &id064 2021-03-02:
+        dormitory: 22
+      &id065 2021-03-03:
+        dormitory: 22
+      &id066 2021-03-04:
+        dormitory: 22
+      &id067 2021-03-05:
+        dormitory: 22
+      &id068 2021-03-06:
+        dormitory: 22
+      &id069 2021-03-07:
+        dormitory: 22
+      &id070 2021-03-08:
+        dormitory: 22
+      &id071 2021-03-09:
+        dormitory: 18
+      &id072 2021-03-10:
+        dormitory: 18
+      &id073 2021-03-11:
+        dormitory: 10
+      &id074 2021-03-12:
+        dormitory: 20
+      &id075 2021-03-13:
+        dormitory: 15
+      &id076 2021-03-14:
+        dormitory: 22
+    request_time: 2021-02-28 07:21:34.178838
     requested_dates: !!set
       *id063: null
       *id064: null
@@ -310,52 +310,4 @@ RESULTS_DICTIONARY:
       *id074: null
       *id075: null
       *id076: null
-    warning: null
-  8:
-    error: null
-    places:
-      &id077 2021-03-01:
-        dormitory: 20
-      &id078 2021-03-02:
-        dormitory: 22
-      &id079 2021-03-03:
-        dormitory: 22
-      &id080 2021-03-04:
-        dormitory: 22
-      &id081 2021-03-05:
-        dormitory: 22
-      &id082 2021-03-06:
-        dormitory: 22
-      &id083 2021-03-07:
-        dormitory: 22
-      &id084 2021-03-08:
-        dormitory: 22
-      &id085 2021-03-09:
-        dormitory: 18
-      &id086 2021-03-10:
-        dormitory: 18
-      &id087 2021-03-11:
-        dormitory: 10
-      &id088 2021-03-12:
-        dormitory: 20
-      &id089 2021-03-13:
-        dormitory: 15
-      &id090 2021-03-14:
-        dormitory: 22
-    request_time: 2021-02-28 07:21:34.178838
-    requested_dates: !!set
-      *id077: null
-      *id078: null
-      *id079: null
-      *id080: null
-      *id081: null
-      *id082: null
-      *id083: null
-      *id084: null
-      *id085: null
-      *id086: null
-      *id087: null
-      *id088: null
-      *id089: null
-      *id090: null
     warning: null

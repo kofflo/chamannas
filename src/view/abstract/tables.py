@@ -2,7 +2,7 @@ import datetime
 
 from src.model import ROOM_TYPES, HutStatus
 from src import i18n
-from src.view.abstract_view import view_errors
+from src.view.abstract import view_errors
 from src.gui_library.abstract.tables import AbstractGrid, Align, Renderer, TextStyle
 
 _WHITE = (255, 255, 255)

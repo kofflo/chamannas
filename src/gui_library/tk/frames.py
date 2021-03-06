@@ -2,13 +2,15 @@ import tkinter
 import tkinter.ttk
 import tkinter.messagebox
 
-from src.view.abstract_view.frames import AbstractFrame, FrameStyle, CursorStyle, AbstractDialog
+from src.view.abstract.frames import AbstractFrame, FrameStyle, CursorStyle, AbstractDialog
 
 
 _TABLE_VIEW_SIZE = (1000, 600)
 
 
 class TkFrame(AbstractFrame):
+
+    _NEW_VERSION = False
 
     def __init__(self, *, parent, pos=None, size=None, **kwargs):
 
@@ -44,7 +46,10 @@ class TkFrame(AbstractFrame):
 
         super().__init__(parent=logical_parent, **kwargs)
         self._create_widgets(self._toplevel)
-        self._create_gui()
+        if self._NEW_VERSION:
+            self._create_gui().create_layout(self._toplevel)
+        else:
+            self._create_gui()
         self._create_menu()
 
     def event_connect(self, event, on_event):
@@ -126,6 +131,8 @@ class TkFrame(AbstractFrame):
 
 class TkDialog(AbstractDialog):
 
+    _NEW_VERSION = False
+
     def __init__(self, *, parent, **kwargs):
 
         if not isinstance(parent, TkFrame):
@@ -141,7 +148,11 @@ class TkDialog(AbstractDialog):
 
         super().__init__(**kwargs)
         self._create_widgets(self._toplevel)
-        self._create_gui()
+
+        if self._NEW_VERSION:
+            self._create_gui().create_layout(self._toplevel)
+        else:
+            self._create_gui()
 
     def _create_gui(self):
         raise NotImplementedError

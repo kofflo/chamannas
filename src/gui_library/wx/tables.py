@@ -1,6 +1,6 @@
 import wx.grid
 
-from src.view.abstract_view.tables import Align, TextStyle, Renderer, AbstractGrid
+from src.view.abstract.tables import Align, TextStyle, Renderer, AbstractGrid
 from src.gui_library.wx.widgets import Widget
 
 
@@ -123,6 +123,14 @@ class WxAbstractGrid(AbstractGrid, Widget, wx.grid.Grid):
             self.AutoSizeColumns()
         else:
             self._set_col_sizes(self._COL_WIDTH)
+        if self._MINIMUM_HEIGHT is not None:
+            self.SetMinSize(wx.Size(width=-1, height=self._MINIMUM_HEIGHT))
+        if self._MAXIMUM_HEIGHT is not None:
+            self.SetMaxSize(wx.Size(width=-1, height=self._MAXIMUM_HEIGHT))
+        if self._MINIMUM_WIDTH is not None:
+            self.SetMinSize(wx.Size(width=-1, height=self._MINIMUM_WIDTH))
+        if self._MAXIMUM_WIDTH is not None:
+            self.SetMaxSize(wx.Size(width=-1, height=self._MAXIMUM_WIDTH))
         self.EndBatch()
 
     def _refresh_attributes(self):

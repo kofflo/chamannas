@@ -28,6 +28,10 @@ class AbstractGrid(AbstractWidget):
     _auto_size_row_labels = False
     _auto_size_col_labels = False
     _row_colour = False
+    _MAXIMUM_HEIGHT = None
+    _MAXIMUM_WIDTH = None
+    _MINIMUM_HEIGHT = None
+    _MINIMUM_WIDTH = None
 
     def __init__(self, **kwargs):
         self._col_widths = None

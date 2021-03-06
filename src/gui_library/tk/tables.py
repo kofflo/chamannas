@@ -2,7 +2,7 @@ import tkinter
 import tkinter.ttk
 import tkinter.font
 
-from src.view.abstract_view.tables import Align, TextStyle, Renderer, AbstractGrid
+from src.view.abstract.tables import Align, TextStyle, Renderer, AbstractGrid
 from src.gui_library.tk.widgets import Widget
 from src.gui_library.tk import ttk_style
 

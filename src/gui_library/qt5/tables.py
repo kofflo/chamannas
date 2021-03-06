@@ -2,7 +2,7 @@ import PySide2.QtWidgets
 import PySide2.QtCore
 import PySide2.QtGui
 
-from src.view.abstract_view.tables import Align, TextStyle, Renderer, AbstractGrid
+from src.view.abstract.tables import Align, TextStyle, Renderer, AbstractGrid
 from src.gui_library.qt5.widgets import Widget, rgb2hex
 
 _UNCHECKED_BOX_SYMBOL = '\u2610'
@@ -50,8 +50,8 @@ class QtAbstractGrid(AbstractGrid, Widget, PySide2.QtWidgets.QTableView):
     _MAX_COL_WIDTH = 400
     _HEADER_FOREGROUND_COLOR = (0, 0, 0)
     _HEADER_BACKGROUND_COLOR = (220, 220, 220)
-    _FIXED_WIDTH_TABLE = False
-    _FIXED_HEIGHT_TABLE = False
+    _AVOID_HORIZONTAL_SCROLL = False
+    _AVOID_VERTICAL_SCROLL = False
 
     def __init__(self, panel):
         PySide2.QtWidgets.QTableView.__init__(self, panel)
@@ -193,19 +193,41 @@ class QtAbstractGrid(AbstractGrid, Widget, PySide2.QtWidgets.QTableView):
         else:
             self._set_row_sizes(self._COL_WIDTH)
 
-        if self._FIXED_WIDTH_TABLE:
+        height = 0
+        width = 0
+
+        if self._AVOID_HORIZONTAL_SCROLL:
             self.setHorizontalScrollBarPolicy(PySide2.QtGui.Qt.ScrollBarAlwaysOff)
             width = self.horizontalHeader().length()
             if not self.verticalHeader().isHidden():
                 width += self.verticalHeader().width()
-            self.setFixedWidth(width)
+            if self._MAXIMUM_WIDTH is not None and width > self._MAXIMUM_WIDTH:
+                width = self._MAXIMUM_WIDTH
+                self.setHorizontalScrollBarPolicy(PySide2.QtGui.Qt.ScrollBarAsNeeded)
+                height += self.horizontalScrollBar().height()
 
-        if self._FIXED_HEIGHT_TABLE:
+        if self._AVOID_VERTICAL_SCROLL:
             self.setVerticalScrollBarPolicy(PySide2.QtGui.Qt.ScrollBarAlwaysOff)
             height = self.verticalHeader().length()
             if not self.horizontalHeader().isHidden():
                 height += self.horizontalHeader().height()
+            if self._MAXIMUM_HEIGHT is not None and height > self._MAXIMUM_HEIGHT:
+                height = self._MAXIMUM_HEIGHT
+                self.setVerticalScrollBarPolicy(PySide2.QtGui.Qt.ScrollBarAsNeeded)
+                width += self.verticalScrollBar().width()
+
+        if self._AVOID_HORIZONTAL_SCROLL:
+            self.setFixedWidth(width)
+        elif self._MAXIMUM_WIDTH is not None:
+            self.setMaximumWidth(self._MAXIMUM_WIDTH)
+        if self._MINIMUM_WIDTH is not None:
+            self.setMinimumWidth(self._MAXIMUM_WIDTH)
+        if self._AVOID_VERTICAL_SCROLL:
             self.setFixedHeight(height)
+        elif self._MAXIMUM_HEIGHT is not None:
+            self.setMaximumHeight(self._MAXIMUM_HEIGHT)
+        if self._MINIMUM_HEIGHT is not None:
+            self.setMinimumHeight(self._MINIMUM_HEIGHT)
 
     def _get_row_size(self, row):
         return self.rowHeight(row)

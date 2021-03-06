@@ -1,2 +1,5 @@
 /assets/tiles/
 /chamannas/
+*.pyo
+*.pyc
+__pycache__/

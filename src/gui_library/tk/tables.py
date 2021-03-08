@@ -296,6 +296,3 @@ class TkAbstractGrid(AbstractGrid, Widget):
     def _set_col_sizes(self, size):
         for col in range(self._get_number_cols()):
             self._widget.column(f"#{col + 1}", width=size)
-
-    def _get_row_colour(self, row):
-        return self._get_row_col_colour(row, 0)

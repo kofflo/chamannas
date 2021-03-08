@@ -624,12 +624,12 @@ class BoxLayout(AbstractBoxLayout, TkLayout):
             widget = widget_dict['type']
 
             if widget == 'space':
-                pass
-                #self.create_space(frame, index, widget_dict['space'])
+                self.create_space(frame, index, widget_dict['space'])
             elif widget == 'stretch':
-                #TODO frame.AddStretchSpacer(widget_dict['stretch'])
-                pass
+                self.create_stretch(frame, index, widget_dict['stretch'])
             else:
+                row, col = self._get_row_col(index)
+
                 widget_align = widget_dict['align']
 
                 sticky = self.apply_align(widget_align)
@@ -644,11 +644,10 @@ class BoxLayout(AbstractBoxLayout, TkLayout):
                     widget_border = [widget_border] * 4
                 padx, pady = self.apply_border(widget_border)
 
-                row, col = self._get_row_col(index)
-
-                print(frame, widget, row, col, padx, pady, sticky)
+                print(id(frame), id(widget), widget, row, col, padx, pady, sticky)
 
                 widget.grid(row=row, column=col, padx=padx, pady=pady, sticky=sticky)
+        print(id(frame), frame, id(parent), parent)
         return frame
 
     def _get_row_col(self, index):
@@ -657,10 +656,16 @@ class BoxLayout(AbstractBoxLayout, TkLayout):
     def create_space(self, frame, index, space):
         raise NotImplementedError()
 
+    def create_stretch(self, frame, index, space):
+        raise NotImplementedError()
+
 
 class VBoxLayout(BoxLayout):
     def create_space(self, frame, index, space):
         frame.grid_rowconfigure(index, minsize=space)
+
+    def create_stretch(self, frame, index, stretch):
+        frame.grid_rowconfigure(index, weight=stretch)
 
     def _get_row_col(self, index):
         return index, 0
@@ -680,7 +685,10 @@ class VBoxLayout(BoxLayout):
 class HBoxLayout(BoxLayout):
 
     def create_space(self, frame, index, space):
-        frame.grid_colconfigure(index, minsize=space)
+        frame.grid_columnconfigure(index, minsize=space)
+
+    def create_stretch(self, frame, index, stretch):
+        frame.grid_columnconfigure(index, weight=stretch)
 
     def _get_row_col(self, index):
         return 0, index

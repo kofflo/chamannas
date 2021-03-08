@@ -326,6 +326,7 @@ class DeveloperInfoView(AbstractDeveloperInfoView, WxFrame):
             left_sizer.add(self._main_label, align=Align.EXPAND, border=10)
             left_sizer.add(self._no_info_label, align=Align.EXPAND, border=10)
             left_sizer.add(self._grid_developer, align=Align.EXPAND, border=10)
+            # TODO!!!!!
             self._grid_developer.SetMinSize(wx.Size(width=-1, height=self._DEVELOPER_GRID_HEIGHT))
             right_sizer.add_space(30)
             right_sizer.add(self._log_button, border=10)

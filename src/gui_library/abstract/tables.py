@@ -62,7 +62,7 @@ class AbstractGrid(AbstractWidget):
         return _NORMAL_COLOUR
 
     def _get_row_colour(self, row):
-        return _NORMAL_COLOUR
+        return self._get_row_col_colour(row, 0)
 
     def _get_style(self, row, col):
         return TextStyle.NORMAL

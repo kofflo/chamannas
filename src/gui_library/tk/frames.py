@@ -2,13 +2,13 @@ import tkinter
 import tkinter.ttk
 import tkinter.messagebox
 
-from src.view.abstract.frames import AbstractFrame, FrameStyle, CursorStyle, AbstractDialog
+from src.view.abstract.frames import AbstractIconFrame, FrameStyle, CursorStyle, AbstractDialog
 
 
 _TABLE_VIEW_SIZE = (1000, 600)
 
 
-class TkFrame(AbstractFrame):
+class TkFrame(AbstractIconFrame):
 
     _NEW_VERSION = False
 
@@ -45,9 +45,11 @@ class TkFrame(AbstractFrame):
             self._toplevel.wm_protocol('WM_DELETE_WINDOW', self._on_close)
 
         super().__init__(parent=logical_parent, **kwargs)
-        self._create_widgets(self._toplevel)
+        self._create_widgets(None)
         if self._NEW_VERSION:
-            self._create_gui().create_layout(self._toplevel)
+            print("NEW VERSION", self._toplevel, id(self._toplevel))
+            layout = self._create_gui().create_layout(self._toplevel)
+            layout.pack()
         else:
             self._create_gui()
         self._create_menu()

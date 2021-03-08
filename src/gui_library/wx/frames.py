@@ -2,10 +2,10 @@ import wx
 import wx.adv
 import wx.lib.newevent
 
-from src.view.abstract.frames import AbstractFrame, FrameStyle, CursorStyle, AbstractDialog
+from src.view.abstract.frames import AbstractIconFrame, FrameStyle, CursorStyle, AbstractDialog
 
 
-class WxFrame(AbstractFrame, wx.Frame):
+class WxFrame(AbstractIconFrame, wx.Frame):
 
     _NEW_VERSION = False
     def __init__(self, *, parent, pos=None, size=None, **kwargs):
@@ -89,12 +89,6 @@ class WxFrame(AbstractFrame, wx.Frame):
     def _fit_frame(self):
         self.Layout()
         self.SetSizerAndFit(self._frame_sizer)
-
-    def close_from_thread(self): # TODO STILL REQUIRED?
-        wx.CallAfter(self.close)
-
-    def update_gui_from_thread(self, data): # TODO STILL REQUIRED?
-        wx.CallAfter(self.update_gui, data)
 
     def _set_cursor(self, cursor):
         if cursor is CursorStyle.SIZING:

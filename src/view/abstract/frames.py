@@ -22,13 +22,18 @@ FilterDialog = None
 MessageDialog = None
 
 
-class AbstractWaitingMessage(AbstractFrame):
+class AbstractIconFrame(AbstractFrame):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs, icon=_APP_ICON_FILENAME)
+
+
+class AbstractWaitingMessage(AbstractIconFrame):
 
     _STYLE = FrameStyle.DIALOG
 
     def __init__(self, *, cancel_function, **kwargs):
         self._on_click = cancel_function
-        super().__init__(**kwargs, icon=_APP_ICON_FILENAME)
+        super().__init__(**kwargs)
 
     def _create_widgets(self, panel):
         self._message = Text(panel)
@@ -45,13 +50,13 @@ class AbstractWaitingMessage(AbstractFrame):
         self._message.label = label
 
 
-class AbstractHutsInfoFrame(AbstractFrame):
+class AbstractHutsInfoFrame(AbstractIconFrame):
 
     def __init__(self, *, controller, **kwargs):
         self._controller = controller
         self._menu_chosen_item = None
         self._retrieve_enabled = True
-        super().__init__(**kwargs, icon=_APP_ICON_FILENAME)
+        super().__init__(**kwargs)
 
     def _update_gui_for_retrieve_enabled(self, is_enabled):
         self._retrieve_enabled = is_enabled
@@ -1329,7 +1334,7 @@ class AbstractSelectedInfoView(AbstractHutsInfoFrame):
         super()._update_gui_for_retrieve_enabled(is_enabled)
 
 
-class AbstractDeveloperInfoView(AbstractFrame):
+class AbstractDeveloperInfoView(AbstractIconFrame):
 
     _STYLE = FrameStyle.FIXED_SIZE
 

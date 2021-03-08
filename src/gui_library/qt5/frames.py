@@ -3,10 +3,10 @@ import PySide2.QtWidgets
 import PySide2.QtCore
 import PySide2.QtGui
 
-from src.view.abstract.frames import AbstractFrame, FrameStyle, CursorStyle, AbstractDialog
+from src.view.abstract.frames import AbstractIconFrame, FrameStyle, CursorStyle, AbstractDialog
 
 
-class QtFrame(AbstractFrame, PySide2.QtWidgets.QMainWindow):
+class QtFrame(AbstractIconFrame, PySide2.QtWidgets.QMainWindow):
 
     _NEW_VERSION = False
 

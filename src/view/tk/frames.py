@@ -12,11 +12,17 @@ from src.gui_library.tk.widgets import HBoxLayout, VBoxLayout, GridLayout, Align
 
 class WaitingMessage(AbstractWaitingMessage, TkFrame):
 
+    _NEW_VERSION = True
+
     def _create_gui(self):
-        self._message.set_frame(self._toplevel)
-        self._stop_button.set_frame(self._toplevel)
-        self._message.pack(padx=15, pady=15)
-        self._stop_button.pack(padx=15, pady=15, side='right')
+#        self._message.set_frame(self._toplevel)
+#        self._stop_button.set_frame(self._toplevel)
+#        self._message.pack(padx=15, pady=15)
+#        self._stop_button.pack(padx=15, pady=15, side='right')
+        info_sizer = VBoxLayout()
+        info_sizer.add(self._message, align=Align.EXPAND, border=20)
+        info_sizer.add(self._stop_button, align=Align.RIGHT, border=15)
+        return info_sizer
 
 
 class HutsView(AbstractHutsView, TkFrame):
@@ -170,10 +176,10 @@ class SelectedInfoView(AbstractSelectedInfoView, TkFrame):
             controls_sizer.add(self._close_button, border=10)
             main_sizer.add(controls_sizer, align=Align.EXPAND)
             main_sizer.add(self._grid_selected_detailed, align=Align.LEFT, border=10)
-#            self._grid_selected_detailed._MAXIMUM_HEIGHT = self._SELECTED_DETAILED_GRID_HEIGHT
             return main_sizer
         else:
-            controls_sizer = tkinter.Frame(self._toplevel)
+            main_sizer = tkinter.Frame(self._toplevel)
+            controls_sizer = tkinter.Frame(main_sizer)
 
             self._all_rooms_button.set_frame(controls_sizer)
             for room in ROOM_TYPES:
@@ -190,70 +196,115 @@ class SelectedInfoView(AbstractSelectedInfoView, TkFrame):
             controls_sizer.columnconfigure(col+2, weight=1)
             self._close_button.grid(row=0, column=col+3, padx=(10, 0), pady=10, sticky='e')
 
-            self._grid_selected_detailed.set_frame(self._toplevel)
+            self._grid_selected_detailed.set_frame(main_sizer)
 
             controls_sizer.grid(row=0, column=0, padx=10, pady=10, sticky='ew')
             self._grid_selected_detailed.grid(row=1, column=0, padx=10, pady=10, sticky='w')
+            main_sizer.pack()
 
 
 class DetailedInfoView(AbstractDetailedInfoView, TkFrame):
 
+    _NEW_VERSION = True
+
     def _create_gui(self):
-        info_left_sizer = tkinter.Frame(self._toplevel)
-        self._hut_text.set_frame(info_left_sizer)
-        self._country_text.set_frame(info_left_sizer)
-        self._mountain_text.set_frame(info_left_sizer)
-        self._height_text.set_frame(info_left_sizer)
-        self._self_catering_text.set_frame(info_left_sizer)
-        self._bitmap.set_frame(info_left_sizer)
-        self._hut_text.grid(row=0, column=0, padx=10, pady=10, sticky='w')
-        self._country_text.grid(row=1, column=0, padx=10, pady=5, sticky='w')
-        self._mountain_text.grid(row=2, column=0, padx=10, pady=5, sticky='w')
-        self._height_text.grid(row=3, column=0, padx=10, pady=5, sticky='w')
-        self._self_catering_text.grid(row=4, column=0, padx=10, pady=5, sticky='w')
-        self._bitmap.grid(row=5, column=0, padx=10, pady=10, sticky='w')
+        if self._NEW_VERSION:
+            info_left_sizer = VBoxLayout()
 
-        info_right_sizer = tkinter.Frame(self._toplevel)
+            info_left_sizer.add(self._hut_text, align=Align.EXPAND, border=10)
+            info_left_sizer.add(self._country_text, align=Align.EXPAND, border=(10, 10, 5, 10))
+            info_left_sizer.add(self._mountain_text, align=Align.EXPAND, border=(0, 10, 5, 10))
+            info_left_sizer.add(self._height_text, align=Align.EXPAND, border=(0, 10, 10, 10))
+            info_left_sizer.add(self._self_catering_text, align=Align.EXPAND, border=10)
+            info_left_sizer.add(self._bitmap, border=10)
+            info_left_sizer.add_stretch()
+            info_right_sizer = VBoxLayout()
+            button_sizer = HBoxLayout()
+            button_sizer.add(self._retrieve_info_button, border=10)
+            button_sizer.add(self._open_web_button, border=10)
+            button_sizer.add(self._open_booking_button, border=10)
+            info_right_sizer.add(button_sizer, border=(10, 0, 10, 0))
+            info_right_sizer.add(self._grid_detailed, align=Align.LEFT, border=10)
+            info_right_sizer.add_stretch()
+            info_right_sizer.add(self._close_button, align=Align.RIGHT, border=10)
 
-        button_sizer = tkinter.Frame(info_right_sizer)
-        self._grid_detailed.set_frame(info_right_sizer)
-        self._close_button.set_frame(info_right_sizer)
+            info_sizer = HBoxLayout()
+            info_sizer.add(info_left_sizer)
+            info_sizer.add(info_right_sizer, align=Align.EXPAND)
+            return info_sizer
+        else:
+            info_left_sizer = tkinter.Frame(self._toplevel)
+            self._hut_text.set_frame(info_left_sizer)
+            self._country_text.set_frame(info_left_sizer)
+            self._mountain_text.set_frame(info_left_sizer)
+            self._height_text.set_frame(info_left_sizer)
+            self._self_catering_text.set_frame(info_left_sizer)
+            self._bitmap.set_frame(info_left_sizer)
+            self._hut_text.grid(row=0, column=0, padx=10, pady=10, sticky='w')
+            self._country_text.grid(row=1, column=0, padx=10, pady=5, sticky='w')
+            self._mountain_text.grid(row=2, column=0, padx=10, pady=5, sticky='w')
+            self._height_text.grid(row=3, column=0, padx=10, pady=5, sticky='w')
+            self._self_catering_text.grid(row=4, column=0, padx=10, pady=5, sticky='w')
+            self._bitmap.grid(row=5, column=0, padx=10, pady=10, sticky='w')
 
-        self._retrieve_info_button.set_frame(button_sizer)
-        self._open_web_button.set_frame(button_sizer)
-        self._open_booking_button.set_frame(button_sizer)
-        self._retrieve_info_button.grid(row=0, column=0, padx=(0, 10), pady=10)
-        self._open_web_button.grid(row=0, column=1, padx=10, pady=10)
-        self._open_booking_button.grid(row=0, column=2, padx=(10, 0), pady=10)
+            info_right_sizer = tkinter.Frame(self._toplevel)
 
-        button_sizer.grid(row=0, column=0, padx=10, pady=10, sticky='w')
-        self._grid_detailed.grid(row=1, column=0, padx=10, pady=10, sticky='w')
-        self._close_button.grid(row=2, column=0, padx=10, pady=10, sticky='e')
+            button_sizer = tkinter.Frame(info_right_sizer)
+            self._grid_detailed.set_frame(info_right_sizer)
+            self._close_button.set_frame(info_right_sizer)
 
-        info_left_sizer.grid(row=0, column=0, padx=(10, 0), pady=10, sticky='n')
-        info_right_sizer.grid(row=0, column=1, padx=(0, 10), pady=10, sticky='n')
+            self._retrieve_info_button.set_frame(button_sizer)
+            self._open_web_button.set_frame(button_sizer)
+            self._open_booking_button.set_frame(button_sizer)
+            self._retrieve_info_button.grid(row=0, column=0, padx=(0, 10), pady=10)
+            self._open_web_button.grid(row=0, column=1, padx=10, pady=10)
+            self._open_booking_button.grid(row=0, column=2, padx=(10, 0), pady=10)
+
+            button_sizer.grid(row=0, column=0, padx=10, pady=10, sticky='w')
+            self._grid_detailed.grid(row=1, column=0, padx=10, pady=10, sticky='w')
+            self._close_button.grid(row=2, column=0, padx=10, pady=10, sticky='e')
+
+            info_left_sizer.grid(row=0, column=0, padx=(10, 0), pady=10, sticky='n')
+            info_right_sizer.grid(row=0, column=1, padx=(0, 10), pady=10, sticky='n')
 
 
 class DeveloperInfoView(AbstractDeveloperInfoView, TkFrame):
 
+    _NEW_VERSION = True
+
     def _create_gui(self):
-        left_sizer = tkinter.Frame(self._toplevel)
-        self._main_label.set_frame(left_sizer)
-        self._no_info_label.set_frame(left_sizer)
-        self._grid_developer.set_frame(left_sizer)
+        if self._NEW_VERSION:
+            left_sizer = VBoxLayout()
+            right_sizer = VBoxLayout()
+            left_sizer.add(self._main_label, align=Align.EXPAND, border=10)
+            left_sizer.add(self._no_info_label, align=Align.EXPAND, border=10)
+            left_sizer.add(self._grid_developer, align=Align.EXPAND, border=10)
+#            self._grid_developer.SetMinSize(wx.Size(width=-1, height=self._DEVELOPER_GRID_HEIGHT))
+            right_sizer.add_space(30)
+            right_sizer.add(self._log_button, border=10)
+            right_sizer.add(self._ok_button, align=Align.EXPAND, border=10)
+            info_sizer = HBoxLayout()
+            info_sizer.add(left_sizer, border=10)
+            info_sizer.add(right_sizer, border=10)
+            return info_sizer
+        else:
+            left_sizer = tkinter.Frame(self._toplevel)
+            self._main_label.set_frame(left_sizer)
+            self._no_info_label.set_frame(left_sizer)
+            self._grid_developer.set_frame(left_sizer)
 
-        self._main_label.grid(row=0, column=0, padx=10, pady=10, sticky='w')
-        self._no_info_label.grid(row=1, column=0, padx=10, pady=10, sticky='w')
-        self._grid_developer.grid(row=2, column=0, padx=10, pady=10, sticky='nsw')
+            self._main_label.grid(row=0, column=0, padx=10, pady=10, sticky='w')
+            self._no_info_label.grid(row=1, column=0, padx=10, pady=10, sticky='w')
+            self._grid_developer.grid(row=2, column=0, padx=10, pady=10, sticky='nsw')
 
-        right_sizer = tkinter.Frame(self._toplevel)
-        self._log_button.set_frame(right_sizer)
-        self._ok_button.set_frame(right_sizer)
-        self._log_button.grid(row=0, column=0, padx=10, pady=10)
-        self._ok_button.grid(row=1, column=0, padx=10, pady=10)
+            right_sizer = tkinter.Frame(self._toplevel)
+            self._log_button.set_frame(right_sizer)
+            self._ok_button.set_frame(right_sizer)
+            self._log_button.grid(row=0, column=0, padx=10, pady=10)
+            self._ok_button.grid(row=1, column=0, padx=10, pady=10)
 
-        left_sizer.grid(row=0, column=0, padx=(10, 0), pady=10)
-        right_sizer.grid(row=0, column=1, padx=(0, 10), pady=10)
+            left_sizer.grid(row=0, column=0, padx=(10, 0), pady=10)
+            right_sizer.grid(row=0, column=1, padx=(0, 10), pady=10)
 
 
 class MessageDialog(AbstractMessageDialog):

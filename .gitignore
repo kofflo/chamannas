@@ -3,3 +3,6 @@
 *.pyo
 *.pyc
 __pycache__/
+/assets/data/preferences.yaml
+/assets/data/results.yaml
+*.bak

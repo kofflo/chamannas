@@ -49,7 +49,7 @@ class TkFrame(AbstractIconFrame):
         if self._NEW_VERSION:
             print("NEW VERSION", self._toplevel, id(self._toplevel))
             layout = self._create_gui().create_layout(self._toplevel)
-            layout.pack()
+            layout.grid(row=0, column=0, sticky="nsew")
         else:
             self._create_gui()
         self._create_menu()
@@ -88,7 +88,8 @@ class TkFrame(AbstractIconFrame):
     @icon.setter
     def icon(self, icon):
         super(TkFrame, TkFrame).icon.__set__(self, icon)
-        self._toplevel.iconphoto(True, tkinter.PhotoImage(file=self.icon))
+        if self.icon is not None:
+            self._toplevel.iconphoto(True, tkinter.PhotoImage(file=self.icon))
 
     def show(self):
         #
@@ -152,7 +153,8 @@ class TkDialog(AbstractDialog):
         self._create_widgets(self._toplevel)
 
         if self._NEW_VERSION:
-            self._create_gui().create_layout(self._toplevel)
+            layout = self._create_gui().create_layout(self._toplevel)
+            layout.pack()
         else:
             self._create_gui()
 

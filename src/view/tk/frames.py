@@ -7,7 +7,7 @@ from src.view.abstract.frames import AbstractWaitingMessage, \
     AbstractSelectedInfoView, AbstractHutsTableView, AbstractHutsMapView, \
     AbstractMessageDialog, AbstractFilterDialog, AbstractAboutDialog, AbstractUpdateDialog, ROOM_TYPES
 from src.gui_library.tk.frames import TkFrame, TkDialog
-from src.gui_library.tk.widgets import HBoxLayout, VBoxLayout, GridLayout, Align
+from src.gui_library.tk.layouts import HBoxLayout, VBoxLayout, GridLayout, Align
 
 
 class WaitingMessage(AbstractWaitingMessage, TkFrame):
@@ -27,137 +27,197 @@ class WaitingMessage(AbstractWaitingMessage, TkFrame):
 
 class HutsView(AbstractHutsView, TkFrame):
 
-    def _create_date_gui(self, frame):
-        widget_sizer = tkinter.Frame(frame)
+    def _create_date_gui(self, frame=None):
+        if self._NEW_VERSION:
+            widget_sizer = VBoxLayout()
+            widget_sizer.add(self._request_date_label, align=Align.EXPAND, border=(10, 10, 0, 10))
+            widget_sizer.add(self._date_widget, align=Align.EXPAND, border=(0, 10, 10, 10))
+            widget_sizer.add(self._number_days_label, align=Align.EXPAND, border=(10, 10, 0, 10))
+            widget_sizer.add(self._number_days_widget, align=Align.EXPAND, border=(0, 10, 10, 10))
+            return widget_sizer
+        else:
+            widget_sizer = tkinter.Frame(frame)
 
-        self._request_date_label.set_frame(widget_sizer)
-        self._date_widget.set_frame(widget_sizer)
-        self._number_days_label.set_frame(widget_sizer)
-        self._number_days_widget.set_frame(widget_sizer)
+            self._request_date_label.set_frame(widget_sizer)
+            self._date_widget.set_frame(widget_sizer)
+            self._number_days_label.set_frame(widget_sizer)
+            self._number_days_widget.set_frame(widget_sizer)
 
-        self._request_date_label.grid(row=0, column=0, padx=0, pady=0, sticky='w')
-        self._date_widget.grid(row=1, column=0, padx=0, pady=(0, 10), sticky='we')
-        self._number_days_label.grid(row=2, column=0, padx=0, pady=(10, 0), sticky='w')
-        self._number_days_widget.grid(row=3, column=0, padx=0, pady=0, sticky='we')
+            self._request_date_label.grid(row=0, column=0, padx=0, pady=0, sticky='w')
+            self._date_widget.grid(row=1, column=0, padx=0, pady=(0, 10), sticky='we')
+            self._number_days_label.grid(row=2, column=0, padx=0, pady=(10, 0), sticky='w')
+            self._number_days_widget.grid(row=3, column=0, padx=0, pady=0, sticky='we')
 
-        return widget_sizer
+            return widget_sizer
 
 
 class HutsTableView(AbstractHutsTableView, HutsView):
 
+    _NEW_VERSION = True
+
     def _create_gui(self):
-        splitter = tkinter.PanedWindow(self._toplevel, orient=tkinter.HORIZONTAL)
+        if self._NEW_VERSION:
+            main_sizer = HBoxLayout()
+            box_left = VBoxLayout()
+            box_checkboxes = HBoxLayout()
+            box_checkboxes.add(self._checkbox_no_response, border=10)
+            box_checkboxes.add(self._checkbox_closed, border=10)
+            box_left.add(box_checkboxes, align=Align.RIGHT)
+            self._grid_displayed._GRID_ROW_NUMBERS = 14
+            box_left.add(self._grid_displayed, align=Align.EXPAND, border=(0, 10, 10, 10), stretch=1)
+            box_left.add(self._selected_huts_label, align=Align.EXPAND, border=(0, 10, 0, 10))
+            self._grid_selected._GRID_ROW_NUMBERS = 6
+            box_left.add(self._grid_selected, align=Align.EXPAND, border=(0, 10, 10, 10))
+            box_right = VBoxLayout()
+            date_sizer = self._create_date_gui()
+            box_right.add(date_sizer)
+            box_right.add(self._retrieve_info_label, align=Align.EXPAND, border=(10, 10, 0, 10))
+            box_right.add(self._get_displayed_results_button, align=Align.EXPAND, border=(0, 10, 5, 10))
+            box_right.add(self._get_selected_results_button, align=Align.EXPAND, border=(0, 10, 10, 10))
+            box_right.add(self._reference_label, align=Align.EXPAND, border=(10, 10, 5, 10))
+            box_right.add(self._latitude_label, align=Align.EXPAND, border=(0, 10, 0, 10))
+            box_right.add(self._latitude_widget, align=Align.EXPAND, border=(0, 10, 5, 10))
+            box_right.add(self._longitude_label, align=Align.EXPAND, border=(0, 10, 0, 10))
+            box_right.add(self._longitude_widget, align=Align.EXPAND, border=(0, 10, 5, 10))
+            box_right.add(self._set_location_button, align=Align.EXPAND, border=(0, 10, 10, 10))
+            box_right.add(self._close_button, align=Align.EXPAND, border=10)
+            main_sizer.add(box_left, stretch=1, align=Align.EXPAND)
+            main_sizer.add(box_right, stretch=0, align=Align.EXPAND)
+            return main_sizer
+        else:
+            splitter = tkinter.PanedWindow(self._toplevel, orient=tkinter.HORIZONTAL)
 
-        box_left = tkinter.Frame(splitter)
+            box_left = tkinter.Frame(splitter)
 
-        box_checkboxes = tkinter.Frame(box_left)
-        self._checkbox_no_response.set_frame(box_checkboxes)
-        self._checkbox_closed.set_frame(box_checkboxes)
-        self._checkbox_no_response.grid(row=0, column=0, padx=5)
-        self._checkbox_closed.grid(row=0, column=1, padx=5)
+            box_checkboxes = tkinter.Frame(box_left)
+            self._checkbox_no_response.set_frame(box_checkboxes)
+            self._checkbox_closed.set_frame(box_checkboxes)
+            self._checkbox_no_response.grid(row=0, column=0, padx=5)
+            self._checkbox_closed.grid(row=0, column=1, padx=5)
 
-        self._grid_displayed._GRID_ROW_NUMBERS = 14
-        self._grid_displayed.set_frame(box_left)
-        displayed_ysb = tkinter.ttk.Scrollbar(box_left, orient='vertical', command=self._grid_displayed.yview)
-        displayed_xsb = tkinter.ttk.Scrollbar(box_left, orient='horizontal', command=self._grid_displayed.xview)
-        self._grid_displayed.configure(yscrollcommand=displayed_ysb.set, xscrollcommand=displayed_xsb.set)
+            self._grid_displayed._GRID_ROW_NUMBERS = 14
+            self._grid_displayed.set_frame(box_left)
+#            displayed_ysb = tkinter.ttk.Scrollbar(box_left, orient='vertical', command=self._grid_displayed.yview)
+#            displayed_xsb = tkinter.ttk.Scrollbar(box_left, orient='horizontal', command=self._grid_displayed.xview)
+#            self._grid_displayed.configure(yscrollcommand=displayed_ysb.set, xscrollcommand=displayed_xsb.set)
 
-        self._selected_huts_label.set_frame(box_left)
+            self._selected_huts_label.set_frame(box_left)
 
-        self._grid_selected._GRID_ROW_NUMBERS = 6
-        self._grid_selected.set_frame(box_left)
-        selected_ysb = tkinter.ttk.Scrollbar(box_left, orient='vertical', command=self._grid_selected.yview)
-        selected_xsb = tkinter.ttk.Scrollbar(box_left, orient='horizontal', command=self._grid_selected.xview)
-        self._grid_selected.configure(yscrollcommand=selected_ysb.set, xscrollcommand=selected_xsb.set)
+            self._grid_selected._GRID_ROW_NUMBERS = 6
+            self._grid_selected.set_frame(box_left)
+#            selected_ysb = tkinter.ttk.Scrollbar(box_left, orient='vertical', command=self._grid_selected.yview)
+#            selected_xsb = tkinter.ttk.Scrollbar(box_left, orient='horizontal', command=self._grid_selected.xview)
+#            self._grid_selected.configure(yscrollcommand=selected_ysb.set, xscrollcommand=selected_xsb.set)
 
-        box_right = tkinter.Frame(splitter)
-        date_sizer = self._create_date_gui(box_right)
-        self._retrieve_info_label.set_frame(box_right)
-        self._get_displayed_results_button.set_frame(box_right)
-        self._get_selected_results_button.set_frame(box_right)
-        self._reference_label.set_frame(box_right)
-        self._latitude_label.set_frame(box_right)
-        self._latitude_widget.set_frame(box_right)
-        self._longitude_label.set_frame(box_right)
-        self._longitude_widget.set_frame(box_right)
-        self._set_location_button.set_frame(box_right)
-        self._close_button.set_frame(box_right)
+            box_right = tkinter.Frame(splitter)
+            date_sizer = self._create_date_gui(box_right)
+            self._retrieve_info_label.set_frame(box_right)
+            self._get_displayed_results_button.set_frame(box_right)
+            self._get_selected_results_button.set_frame(box_right)
+            self._reference_label.set_frame(box_right)
+            self._latitude_label.set_frame(box_right)
+            self._latitude_widget.set_frame(box_right)
+            self._longitude_label.set_frame(box_right)
+            self._longitude_widget.set_frame(box_right)
+            self._set_location_button.set_frame(box_right)
+            self._close_button.set_frame(box_right)
 
-        splitter.add(box_left)
-        splitter.add(box_right)
-        splitter.pack(fill=tkinter.BOTH, expand=1)
+            splitter.add(box_left)
+            splitter.add(box_right)
+            splitter.pack(fill=tkinter.BOTH, expand=1)
 
-        box_checkboxes.grid(row=0, column=0, padx=5, pady=(0, 5), sticky='w')
-        self._grid_displayed.grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
-        displayed_ysb.grid(row=1, column=1, pady=5, sticky='ns')
-        displayed_xsb.grid(row=2, column=0, padx=5, sticky='ew')
+            box_checkboxes.grid(row=0, column=0, padx=5, pady=(0, 5), sticky='e')
+            self._grid_displayed.grid(row=1, column=0, padx=5, pady=5, sticky='nsew')
+            self._grid_displayed.ysb.grid(row=1, column=1, pady=5, sticky='ns')
+            self._grid_displayed.xsb.grid(row=2, column=0, padx=5, sticky='ew')
 
-        self._selected_huts_label.grid(row=3, column=0, padx=5, pady=(10, 0),  sticky='w')
+            self._selected_huts_label.grid(row=3, column=0, padx=5, pady=(10, 0),  sticky='w')
 
-        self._grid_selected.grid(row=4, column=0, padx=5, pady=5,  sticky='nsew')
-        selected_ysb.grid(row=4, column=1, pady=5, sticky='ns')
-        selected_xsb.grid(row=5, column=0, padx=5, sticky='ew')
+            self._grid_selected.grid(row=4, column=0, padx=5, pady=5,  sticky='nsew')
+            self._grid_selected.ysb.grid(row=4, column=1, pady=5, sticky='ns')
+            self._grid_selected.xsb.grid(row=5, column=0, padx=5, sticky='ew')
 
-        box_left.columnconfigure(0, weight=1)
-        box_left.rowconfigure(1, weight=1)
-        box_left.rowconfigure(4, weight=1)
+            box_left.columnconfigure(0, weight=1)
+            box_left.rowconfigure(1, weight=1)
+            box_left.rowconfigure(4, weight=1)
 
-        date_sizer.grid(row=0, column=0, pady=5, sticky='we')
-        self._retrieve_info_label.grid(row=1, column=0, pady=(10, 0), sticky='w')
-        self._get_displayed_results_button.grid(row=2, column=0, sticky='we')
-        self._get_selected_results_button.grid(row=3, column=0, pady=(0, 10), sticky='we')
-        self._reference_label.grid(row=4, column=0, pady=(10, 0), sticky='w')
-        self._latitude_label.grid(row=5, column=0, sticky='w')
-        self._latitude_widget.grid(row=6, column=0, sticky='we')
-        self._longitude_label.grid(row=7, column=0, sticky='w')
-        self._longitude_widget.grid(row=8, column=0, sticky='we')
-        self._set_location_button.grid(row=9, column=0, pady=(0, 10), sticky='we')
-        self._close_button.grid(row=10, column=0, pady=10, sticky='we')
+            date_sizer.grid(row=0, column=0, pady=5, sticky='we')
+            self._retrieve_info_label.grid(row=1, column=0, pady=(10, 0), sticky='w')
+            self._get_displayed_results_button.grid(row=2, column=0, sticky='we')
+            self._get_selected_results_button.grid(row=3, column=0, pady=(0, 10), sticky='we')
+            self._reference_label.grid(row=4, column=0, pady=(10, 0), sticky='w')
+            self._latitude_label.grid(row=5, column=0, sticky='w')
+            self._latitude_widget.grid(row=6, column=0, sticky='we')
+            self._longitude_label.grid(row=7, column=0, sticky='w')
+            self._longitude_widget.grid(row=8, column=0, sticky='we')
+            self._set_location_button.grid(row=9, column=0, pady=(0, 10), sticky='we')
+            self._close_button.grid(row=10, column=0, pady=10, sticky='we')
 
-        splitter.paneconfigure(box_left, padx=10, pady=10)
-        splitter.paneconfigure(box_right, minsize=250, padx=10, pady=10)
-        splitter.bind('<Motion>', lambda event: "break")
+            splitter.paneconfigure(box_left, padx=10, pady=10)
+            splitter.paneconfigure(box_right, minsize=250, padx=10, pady=10)
+            splitter.bind('<Motion>', lambda event: "break")
 
 
 class HutsMapView(AbstractHutsMapView, HutsView):
+    _NEW_VERSION = True
 
     def _create_gui(self):
+        if self._NEW_VERSION:
+            main_sizer = HBoxLayout()
+            box_left = VBoxLayout()
+            box_left.add(self._bitmap, border=10)
+            box_right = VBoxLayout()
+            date_sizer = self._create_date_gui()
+            box_right.add(date_sizer)
+            box_right.add(self._get_results_button, align=Align.EXPAND, border=10)
+            box_right.add_space(5)
+            box_checkboxes = VBoxLayout()
+            box_checkboxes.add(self._checkbox_no_response, border=5)
+            box_checkboxes.add(self._checkbox_closed, border=5)
+            box_checkboxes.add(self._checkbox_reference, border=5)
+            box_right.add(box_checkboxes, align=Align.EXPAND, border=10)
+            box_right.add(self._huts_choice, align=Align.EXPAND, border=10)
+            box_right.add(self._fit_button, align=Align.EXPAND, border=10)
+            box_right.add(self._close_button, align=Align.EXPAND, border=10)
+            main_sizer.add(box_left, align=Align.EXPAND, stretch=1)
+            main_sizer.add(box_right)
+            return main_sizer
+        else:
+            box_left = tkinter.Frame(self._toplevel)
 
-        box_left = tkinter.Frame(self._toplevel)
+            box_right = tkinter.Frame(self._toplevel)
 
-        box_right = tkinter.Frame(self._toplevel)
+            self._bitmap.set_frame(box_left)
+            self._bitmap.grid(row=0, column=0, padx=5, pady=5, sticky='nw')
 
-        self._bitmap.set_frame(box_left)
-        self._bitmap.grid(row=0, column=0, padx=5, pady=5, sticky='nw')
+            date_sizer = self._create_date_gui(box_right)
+            self._get_results_button.set_frame(box_right)
 
-        date_sizer = self._create_date_gui(box_right)
-        self._get_results_button.set_frame(box_right)
+            date_sizer.grid(row=0, column=0, padx=5, pady=5, sticky='w')
+            self._get_results_button.grid(row=1, column=0, padx=5, pady=15, sticky='we')
 
-        date_sizer.grid(row=0, column=0, padx=5, pady=5, sticky='w')
-        self._get_results_button.grid(row=1, column=0, padx=5, pady=15, sticky='we')
+            box_checkboxes = tkinter.Frame(box_right)
 
-        box_checkboxes = tkinter.Frame(box_right)
+            self._checkbox_no_response.set_frame(box_checkboxes)
+            self._checkbox_closed.set_frame(box_checkboxes)
+            self._checkbox_reference.set_frame(box_checkboxes)
 
-        self._checkbox_no_response.set_frame(box_checkboxes)
-        self._checkbox_closed.set_frame(box_checkboxes)
-        self._checkbox_reference.set_frame(box_checkboxes)
+            self._checkbox_no_response.grid(row=0, column=0, padx=5, pady=(5, 0), sticky='w')
+            self._checkbox_closed.grid(row=1, column=0, padx=5, pady=(5, 0), sticky='w')
+            self._checkbox_reference.grid(row=2, column=0, padx=5, pady=5, sticky='w')
 
-        self._checkbox_no_response.grid(row=0, column=0, padx=5, pady=(5, 0), sticky='w')
-        self._checkbox_closed.grid(row=1, column=0, padx=5, pady=(5, 0), sticky='w')
-        self._checkbox_reference.grid(row=2, column=0, padx=5, pady=5, sticky='w')
+            box_checkboxes.grid(row=2, column=0, padx=5, pady=5, sticky='w')
 
-        box_checkboxes.grid(row=2, column=0, padx=5, pady=5, sticky='w')
+            self._huts_choice.set_frame(box_right)
+            self._fit_button.set_frame(box_right)
+            self._close_button.set_frame(box_right)
 
-        self._huts_choice.set_frame(box_right)
-        self._fit_button.set_frame(box_right)
-        self._close_button.set_frame(box_right)
+            self._huts_choice.grid(row=3, column=0, padx=5, pady=10, sticky='w')
+            self._fit_button.grid(row=4, column=0, padx=5, pady=10, sticky='we')
+            self._close_button.grid(row=5, column=0, padx=5, pady=10, sticky='we')
 
-        self._huts_choice.grid(row=3, column=0, padx=5, pady=10, sticky='w')
-        self._fit_button.grid(row=4, column=0, padx=5, pady=10, sticky='we')
-        self._close_button.grid(row=5, column=0, padx=5, pady=10, sticky='we')
-
-        box_left.grid(row=0, column=0, padx=5, pady=5, sticky='nw')
-        box_right.grid(row=0, column=1, padx=5, pady=5, sticky='nw')
+            box_left.grid(row=0, column=0, padx=5, pady=5, sticky='nw')
+            box_right.grid(row=0, column=1, padx=5, pady=5, sticky='nw')
 
 
 class SelectedInfoView(AbstractSelectedInfoView, TkFrame):
@@ -279,7 +339,6 @@ class DeveloperInfoView(AbstractDeveloperInfoView, TkFrame):
             left_sizer.add(self._main_label, align=Align.EXPAND, border=10)
             left_sizer.add(self._no_info_label, align=Align.EXPAND, border=10)
             left_sizer.add(self._grid_developer, align=Align.EXPAND, border=10)
-#            self._grid_developer.SetMinSize(wx.Size(width=-1, height=self._DEVELOPER_GRID_HEIGHT))
             right_sizer.add_space(30)
             right_sizer.add(self._log_button, border=10)
             right_sizer.add(self._ok_button, align=Align.EXPAND, border=10)
@@ -343,74 +402,119 @@ class MessageDialog(AbstractMessageDialog):
 
 class FilterDialog(AbstractFilterDialog, TkDialog):
 
+    _NEW_VERSION = True
+
     def _create_gui(self):
-        self._min_label.set_frame(self._toplevel)
-        self._min_ctrl.set_frame(self._toplevel)
-        self._max_label.set_frame(self._toplevel)
-        self._max_ctrl.set_frame(self._toplevel)
+        if self._NEW_VERSION:
+            sizer = VBoxLayout()
+            sizer.add(self._min_label, align=Align.EXPAND, border=(10, 10, 0, 10))
+            sizer.add(self._min_ctrl, align=Align.EXPAND, border=(0, 10, 10, 10))
+            sizer.add(self._max_label, align=Align.EXPAND, border=(10, 10, 0, 10))
+            sizer.add(self._max_ctrl, align=Align.EXPAND, border=(0, 10, 10, 10))
+            button_sizer = HBoxLayout()
+            button_sizer.add(self._ok_button, border=(0, 10, 0, 0))
+            button_sizer.add(self._cancel_button, border=(0, 0, 0, 10))
+            sizer.add(button_sizer, align=Align.EXPAND, border=10)
+            return sizer
+        else:
+            self._min_label.set_frame(self._toplevel)
+            self._min_ctrl.set_frame(self._toplevel)
+            self._max_label.set_frame(self._toplevel)
+            self._max_ctrl.set_frame(self._toplevel)
 
-        self._min_label.grid(row=0, column=0, padx=10, pady=(10, 0), sticky='w')
-        self._min_ctrl.grid(row=1, column=0, padx=10, pady=(0, 10))
-        self._max_label.grid(row=2, column=0, padx=10, pady=(10, 0), sticky='w')
-        self._max_ctrl.grid(row=3, column=0, padx=10, pady=(0, 10))
+            self._min_label.grid(row=0, column=0, padx=10, pady=(10, 0), sticky='w')
+            self._min_ctrl.grid(row=1, column=0, padx=10, pady=(0, 10))
+            self._max_label.grid(row=2, column=0, padx=10, pady=(10, 0), sticky='w')
+            self._max_ctrl.grid(row=3, column=0, padx=10, pady=(0, 10))
 
-        button_sizer = tkinter.Frame(self._toplevel)
-        self._ok_button.set_frame(button_sizer)
-        self._cancel_button.set_frame(button_sizer)
-        self._ok_button.grid(row=0, column=0, padx=10)
-        self._cancel_button.grid(row=0, column=1, padx=10)
+            button_sizer = tkinter.Frame(self._toplevel)
+            self._ok_button.set_frame(button_sizer)
+            self._cancel_button.set_frame(button_sizer)
+            self._ok_button.grid(row=0, column=0, padx=10)
+            self._cancel_button.grid(row=0, column=1, padx=10)
 
-        button_sizer.grid(row=4, column=0, pady=10)
+            button_sizer.grid(row=4, column=0, pady=10)
 
 
 class UpdateDialog(AbstractUpdateDialog, TkDialog):
 
+    _NEW_VERSION = True
+
     def _create_gui(self):
+        if self._NEW_VERSION:
+            sizer = VBoxLayout()
+            sizer.add(self._main_label, align=Align.EXPAND, border=10)
+            if self._available_updates:
+                grid_sizer = GridLayout(len(self._available_updates), 2, 25, 25)
+                grid_sizer.col_stretch(0, 1)
+                grid_sizer.col_stretch(1, 5)
+                for row, filename in enumerate(self._available_updates):
+                    grid_sizer.add(row, 0, self._checkbox[filename], Align.CENTER)
+                    grid_sizer.add(row, 1, self._labels[filename], Align.LEFT | Align.VCENTER)
+                sizer.add(grid_sizer, align=Align.EXPAND, border=15)
+            button_sizer = HBoxLayout()
+            button_sizer.add(self._ok_button, border=(0, 10, 0, 0))
+            button_sizer.add(self._cancel_button, border=(0, 0, 0, 10))
+            sizer.add(button_sizer, align=Align.EXPAND, border=10)
+            return sizer
+        else:
 
-        self._main_label.set_frame(self._toplevel)
+            self._main_label.set_frame(self._toplevel)
 
-        for filename in self._available_updates:
-            self._checkbox[filename].set_frame(self._toplevel)
-            self._labels[filename].set_frame(self._toplevel)
+            for filename in self._available_updates:
+                self._checkbox[filename].set_frame(self._toplevel)
+                self._labels[filename].set_frame(self._toplevel)
 
-        self._main_label.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
+            self._main_label.grid(row=0, column=0, columnspan=2, padx=10, pady=10)
 
-        for index, filename in enumerate(self._available_updates):
-            self._checkbox[filename].grid(row=index + 1, column=0, pady=10)
-            self._labels[filename].grid(row=index + 1, column=1, pady=10, sticky='w')
+            for index, filename in enumerate(self._available_updates):
+                self._checkbox[filename].grid(row=index + 1, column=0, pady=10)
+                self._labels[filename].grid(row=index + 1, column=1, pady=10, sticky='w')
 
-        last_row = len(self._available_updates)
+            last_row = len(self._available_updates)
 
-        button_sizer = tkinter.Frame(self._toplevel)
-        self._ok_button.set_frame(button_sizer)
-        self._ok_button.grid(row=0, column=0, padx=10)
+            button_sizer = tkinter.Frame(self._toplevel)
+            self._ok_button.set_frame(button_sizer)
+            self._ok_button.grid(row=0, column=0, padx=10)
 
-        if self._available_updates:
-            self._cancel_button.set_frame(button_sizer)
-            self._cancel_button.grid(row=0, column=1, padx=10)
+            if self._available_updates:
+                self._cancel_button.set_frame(button_sizer)
+                self._cancel_button.grid(row=0, column=1, padx=10)
 
-        button_sizer.grid(row=last_row + 1, column=0, columnspan=2, pady=10)
+            button_sizer.grid(row=last_row + 1, column=0, columnspan=2, pady=10)
 
 
 class AboutDialog(AbstractAboutDialog, TkDialog):
+
+    _NEW_VERSION = True
 
     def __init__(self, **kwargs):
         super().__init__(title=f"About {kwargs['dialog_infos']['name']}", **kwargs)
 
     def _create_gui(self):
-        self._name_label.set_frame(self._toplevel)
-        self._desc_label.set_frame(self._toplevel)
-        self._copyright_label.set_frame(self._toplevel)
-        self._website_label.set_frame(self._toplevel)
-        self._developer_label.set_frame(self._toplevel)
-        self._ok_button.set_frame(self._toplevel)
+        if self._NEW_VERSION:
+            sizer = VBoxLayout()
+            sizer.add(self._name_label, align=Align.HCENTER, border=(10, 10, 0, 10))
+            sizer.add(self._desc_label, align=Align.HCENTER, border=(10, 10, 0, 10))
+            sizer.add(self._copyright_label, align=Align.HCENTER, border=(10, 10, 10, 10))
+            sizer.add(self._website_label, align=Align.HCENTER, border=(10, 10, 20, 10))
+            sizer.add(self._developer_label, align=Align.LEFT, border=(10, 10, 10, 10))
+            sizer.add(self._ok_button, align=Align.RIGHT, border=(10, 10, 10, 10))
+            return sizer
+        else:
+            self._name_label.set_frame(self._toplevel)
+            self._desc_label.set_frame(self._toplevel)
+            self._copyright_label.set_frame(self._toplevel)
+            self._website_label.set_frame(self._toplevel)
+            self._developer_label.set_frame(self._toplevel)
+            self._ok_button.set_frame(self._toplevel)
 
-        self._name_label.grid(row=0, column=0, padx=10, pady=10)
-        self._desc_label.grid(row=1, column=0, padx=10, pady=5)
-        self._copyright_label.grid(row=2, column=0, padx=10, pady=5)
-        self._website_label.grid(row=3, column=0, padx=10, pady=10)
-        self._developer_label.grid(row=4, column=0, padx=10, pady=10)
-        self._ok_button.grid(row=5, column=0, padx=10, pady=10)
+            self._name_label.grid(row=0, column=0, padx=10, pady=10)
+            self._desc_label.grid(row=1, column=0, padx=10, pady=5)
+            self._copyright_label.grid(row=2, column=0, padx=10, pady=5)
+            self._website_label.grid(row=3, column=0, padx=10, pady=10)
+            self._developer_label.grid(row=4, column=0, padx=10, pady=10)
+            self._ok_button.grid(row=5, column=0, padx=10, pady=10)
 
 
 import src.view.abstract.frames as frames

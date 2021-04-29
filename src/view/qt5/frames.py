@@ -7,7 +7,7 @@ from src.view.abstract.frames import AbstractWaitingMessage, \
     AbstractSelectedInfoView, AbstractHutsTableView, AbstractHutsMapView, \
     AbstractMessageDialog, AbstractFilterDialog, AbstractAboutDialog, AbstractUpdateDialog, ROOM_TYPES
 from src.gui_library.qt5.frames import QtFrame, QtDialog
-from src.gui_library.qt5.widgets import HBoxLayout, VBoxLayout, GridLayout, Align
+from src.gui_library.qt5.layouts import HBoxLayout, VBoxLayout, GridLayout, Align
 
 
 class WaitingMessage(AbstractWaitingMessage, QtFrame):
@@ -61,7 +61,7 @@ class HutsTableView(AbstractHutsTableView, HutsView):
             box_checkboxes.add(self._checkbox_no_response, border=10)
             box_checkboxes.add(self._checkbox_closed, border=10)
             box_left.add(box_checkboxes, align=Align.RIGHT)
-            box_left.add(self._grid_displayed, align=Align.EXPAND, stretch=20)
+            box_left.add(self._grid_displayed, align=Align.EXPAND, stretch=1)
             box_left.add(self._selected_huts_label, align=Align.EXPAND, border=(10, 10, 0, 10))
             box_left.add(self._grid_selected, align=Align.EXPAND)
 #            self._grid_selected.setMinimumHeight(self._SELECTED_GRID_HEIGHT)
@@ -426,7 +426,6 @@ class AboutDialog(AbstractAboutDialog, QtDialog):
 
     def _create_gui(self):
         if self._NEW_VERSION:
-            self.setWindowTitle(self.title)
             sizer = VBoxLayout()
             sizer.add(self._name_label, align=Align.HCENTER, border=(10, 10, 0, 10))
             sizer.add(self._desc_label, align=Align.HCENTER, border=(10, 10, 0, 10))

@@ -40,8 +40,8 @@ class TkAbstractGrid(AbstractGrid, Widget):
     _HEADER_BACKGROUND_COLOR = (220, 220, 220)
     _GRID_ROW_NUMBERS = 10
     _FIXED_ROW_NUMBERS = True
-    _SCROLLBAR_X = True
-    _SCROLLBAR_Y = True
+    SCROLLBAR_X = True
+    SCROLLBAR_Y = True
     _row_colour = True
 
     ttk_style.map("Treeview",
@@ -83,6 +83,20 @@ class TkAbstractGrid(AbstractGrid, Widget):
         self._current_yview = None
         self._frame = None
 
+    def hide(self, is_hidden):
+        super().hide(is_hidden)
+        if self._widget is not None:
+            if self._is_hidden:
+                if self.SCROLLBAR_X:
+                    self.xsb.grid_remove()
+                if self.SCROLLBAR_Y:
+                    self.ysb.grid_remove()
+            else:
+                if self.SCROLLBAR_X:
+                    self.xsb.grid()
+                if self.SCROLLBAR_Y:
+                    self.ysb.grid()
+
     def _create_widget(self, row_numbers):
         self._widget = tkinter.ttk.Treeview(self._frame, height=row_numbers,
                                             selectmode="none", style=str(id(self)) + '.Treeview')
@@ -92,6 +106,12 @@ class TkAbstractGrid(AbstractGrid, Widget):
         self._widget.bind("<Button-3>", self._on_right_click)
         self._widget.bind("<Double-3>", self._on_right_double_click)
         self._widget.bind("<Motion>", self._on_motion)
+        if self.SCROLLBAR_X:
+            self.xsb = tkinter.ttk.Scrollbar(self._frame, orient='horizontal', command=self.xview)
+            self.configure(xscrollcommand=self.xsb.set)
+        if self.SCROLLBAR_Y:
+            self.ysb = tkinter.ttk.Scrollbar(self._frame, orient='vertical', command=self.yview)
+            self.configure(yscrollcommand=self.ysb.set)
 
     def set_frame(self, frame):
         self._frame = frame
@@ -164,11 +184,20 @@ class TkAbstractGrid(AbstractGrid, Widget):
         if not self._FIXED_ROW_NUMBERS:
             grid_params = self._widget.grid_info()
             self._widget.grid_forget()
-            del self._widget
+            if self.SCROLLBAR_X:
+                grid_params_xsb = self.xsb.grid_info()
+                self.xsb.grid_forget()
+            if self.SCROLLBAR_Y:
+                grid_params_ysb = self.ysb.grid_info()
+                self.ysb.grid_forget()
             row_numbers = min(self._get_number_rows(), self._GRID_ROW_NUMBERS)
             self._create_widget(row_numbers)
             if grid_params:
                 self._widget.grid(**grid_params)
+                if self.SCROLLBAR_X:
+                    self.xsb.grid(**grid_params_xsb)
+                if self.SCROLLBAR_Y:
+                    self.ysb.grid(**grid_params_ysb)
 
     def _refresh_columns(self):
         columns = []

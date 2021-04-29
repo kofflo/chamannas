@@ -7,7 +7,7 @@ from src.view.abstract.frames import AbstractWaitingMessage, \
     AbstractSelectedInfoView, AbstractHutsTableView, AbstractHutsMapView, \
     AbstractMessageDialog, AbstractFilterDialog, AbstractAboutDialog, AbstractUpdateDialog, ROOM_TYPES
 from src.gui_library.wx.frames import WxFrame, WxDialog
-from src.gui_library.wx.widgets import HBoxLayout, VBoxLayout, GridLayout, Align
+from src.gui_library.wx.layouts import HBoxLayout, VBoxLayout, GridLayout, Align
 
 from src import i18n
 
@@ -86,8 +86,8 @@ class HutsTableView(AbstractHutsTableView, HutsView):
             box_right.add(self._longitude_widget, align=Align.EXPAND, border=(0, 10, 5, 10))
             box_right.add(self._set_location_button, align=Align.EXPAND, border=(0, 10, 10, 10))
             box_right.add(self._close_button, align=Align.EXPAND, border=10)
-            main_sizer.add(box_left, stretch=1)
-            main_sizer.add(box_right)
+            main_sizer.add(box_left, stretch=1, align=Align.EXPAND)
+            main_sizer.add(box_right, align=Align.EXPAND)
             return main_sizer
         else:
             main_sizer = wx.BoxSizer(wx.HORIZONTAL)

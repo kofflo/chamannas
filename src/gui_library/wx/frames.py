@@ -68,7 +68,8 @@ class WxFrame(AbstractIconFrame, wx.Frame):
     @icon.setter
     def icon(self, icon):
         super(WxFrame, WxFrame).icon.__set__(self, icon)
-        self.SetIcon(wx.Icon(self.icon))
+        if self.icon is not None:
+            self.SetIcon(wx.Icon(self.icon))
 
     def show(self):
         self.Show()

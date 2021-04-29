@@ -75,8 +75,9 @@ class QtFrame(AbstractIconFrame, PySide2.QtWidgets.QMainWindow):
     @icon.setter
     def icon(self, icon):
         super(QtFrame, QtFrame).icon.__set__(self, icon)
-        app_icon = PySide2.QtGui.QIcon(self.icon)
-        self.setWindowIcon(app_icon)
+        if self.icon is not None:
+            app_icon = PySide2.QtGui.QIcon(self.icon)
+            self.setWindowIcon(app_icon)
 
     def show(self):
         PySide2.QtWidgets.QMainWindow.show(self)

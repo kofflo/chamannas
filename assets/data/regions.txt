@@ -1,0 +1,26 @@
+Appenzell Innerrhoden	Appenzell Innerrhoden	Appenzello Interno	Appenzell Innerrhoden
+Baden-Württemberg	Baden-Württemberg	Baden-Württemberg	Baden-Württemberg
+Bayern	Bavaria	Baviera	Bayern
+Bern	Bern	Berna	Bern
+Freiburg	Fribourg	Friburgo	Freiburg
+Glarus	Glarus	Glarona	Glarus
+Gorenjska	Upper Carniola	Alta Carniola	Gorenjska
+Goriška	Gorizia	Goriziano	Goriška
+Graubünden	Grisons	Grigioni	Graubünden
+Kärnten	Carinthia	Carinzia	Kärnten
+Niederösterreich	Lower Austria	Bassa Austria	Niederösterreich
+Niedersachsen	Lower Saxony	Bassa Sassonia	Niedersachsen
+Nordrhein-Westfalen	North Rhine-Westphalia	Renania Settentrionale-Vestfalia	Nordrhein-Westfalen
+Oberösterreich	Upper Austria	Alta Austria	Oberösterreich
+Obwalden	Obwalden	Obvaldo	Obwalden
+Sachsen	Saxony	Sassonia	Sachsen
+Salzburg	Salzburg	Salisburghese	Salzburg
+St.Gallen	St.Gallen	San Gallo	St.Gallen
+Steiermark	Styria	Stiria	Steiermark
+Südtirol	South Tyrol	Alto Adige	Südtirol
+Tessin	Ticino	Ticino	Tessin
+Tirol	Tyrol	Tirolo	Tirol
+Uri	Uri	Uri	Uri
+Waadt	Vaud	Vaud	Vaud
+Vorarlberg	Vorarlberg	Vorarlberg	Vorarlberg
+Wallis	Valais	Vallese	Wallis

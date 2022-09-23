@@ -1,0 +1,9 @@
+# Requirements file for Chamannas
+PyYAML
+wxPython
+requests
+PySide2
+pillow
+tkcalendar
+numpy==1.19.3  # Version 1.19.4 contains a bug
+PyInstaller

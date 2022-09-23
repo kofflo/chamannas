@@ -1,0 +1,63 @@
+RESULTS_DICTIONARY:
+  1:
+    error: null
+    places:
+      2021-03-09:
+        dormitory: 0
+        shared: 10
+      2021-03-10:
+        dormitory: 0
+        shared: 10
+      2021-03-11:
+        dormitory: 0
+        shared: 10
+      2021-03-12:
+        dormitory: 0
+        shared: 10
+      2021-03-13:
+        dormitory: 0
+        shared: 8
+      2021-03-14:
+        dormitory: 0
+        shared: 10
+      2021-03-15:
+        dormitory: 0
+        shared: 10
+      2021-03-16:
+        dormitory: 0
+        shared: 10
+      2021-03-17:
+        dormitory: 0
+        shared: 10
+      2021-03-18:
+        dormitory: 0
+        shared: 10
+      2021-03-19:
+        dormitory: 0
+        shared: 10
+      2021-03-20:
+        dormitory: 0
+        shared: 10
+      2021-03-21:
+        dormitory: 0
+        shared: 10
+      2021-03-22:
+        dormitory: 0
+        shared: 10
+    request_time: 2021-03-08 10:46:45.889345
+    requested_dates: !!set
+      2021-03-09: null
+      2021-03-10: null
+      2021-03-11: null
+      2021-03-12: null
+      2021-03-13: null
+      2021-03-14: null
+      2021-03-15: null
+      2021-03-16: null
+      2021-03-17: null
+      2021-03-18: null
+      2021-03-19: null
+      2021-03-20: null
+      2021-03-21: null
+      2021-03-22: null
+    warning: null

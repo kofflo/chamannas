@@ -8,19 +8,24 @@ Gorenjska	Upper Carniola	Alta Carniola	Gorenjska
 Goriška	Gorizia	Goriziano	Goriška
 Graubünden	Grisons	Grigioni	Graubünden
 Kärnten	Carinthia	Carinzia	Kärnten
+Namur	Namur	Namur	Namur
 Niederösterreich	Lower Austria	Bassa Austria	Niederösterreich
 Niedersachsen	Lower Saxony	Bassa Sassonia	Niedersachsen
 Nordrhein-Westfalen	North Rhine-Westphalia	Renania Settentrionale-Vestfalia	Nordrhein-Westfalen
 Oberösterreich	Upper Austria	Alta Austria	Oberösterreich
 Obwalden	Obwalden	Obvaldo	Obwalden
+Osrednjeslovenska	Central Slovenia	Slovenia Centrale	Osrednjeslovenska
+Piemont	Piedmont	Piemonte	Piemont
 Sachsen	Saxony	Sassonia	Sachsen
 Salzburg	Salzburg	Salisburghese	Salzburg
+Schwyz	Schwyz	Svitto	Schwyz
 St.Gallen	St.Gallen	San Gallo	St.Gallen
 Steiermark	Styria	Stiria	Steiermark
 Südtirol	South Tyrol	Alto Adige	Südtirol
 Tessin	Ticino	Ticino	Tessin
 Tirol	Tyrol	Tirolo	Tirol
 Uri	Uri	Uri	Uri
-Waadt	Vaud	Vaud	Vaud
 Vorarlberg	Vorarlberg	Vorarlberg	Vorarlberg
+Venetien	Veneto	Veneto	Venetien
+Waadt	Vaud	Vaud	Vaud
 Wallis	Valais	Vallese	Wallis

@@ -103,17 +103,6 @@ class HutsModel:
         self._selected = []
         self._filter_displayed_keys = {}
         self._filter_selected_keys = {}
-        self._keys = ['name',
-                      'country',
-                      'region',
-                      'mountain_range',
-                      'self_catering',
-                      'height',
-                      'distance',
-                      'data_requested',
-                      'response',
-                      'open',
-                      'available'] + ROOM_TYPES
         self._ascending_order_for_key = {'name': True,
                                          'country': True,
                                          'region': True,
@@ -237,6 +226,7 @@ class HutsModel:
         self.sort_selected()
         return {'displayed': self._get_displayed(),
                 'selected': self.get_selected(),
+                'huts_data': self._huts_data_table,
                 'reference_location': self.get_reference_location()}
 
     def set_reference_location_from_hut(self, hut_number):

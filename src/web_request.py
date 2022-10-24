@@ -31,6 +31,7 @@ _WEB_DATE_FORMAT = '%d.%m.%Y'
 _DAY_DELTA = datetime.timedelta(days=1.0)
 _HUT_PAGE = 'calendar?hut_id={0}&lang={1}'
 _BOOK_PAGE = 'wizard?hut_id={0}&selectedDate={1}&lang={2}'
+_TIMEOUT = 5.0
 
 _max_nights = 0
 _last_request = None
@@ -129,14 +130,14 @@ def perform_web_request_for_hut(index, hut, start_date):
         try:
             # Retrieve the web page for the hut
             lang_code = 'de_' + hut['lang_code']
-            web_page = session.get(_base_url + f'calendar?hut_id={index}&lang={lang_code}', timeout=2.0)
+            web_page = session.get(_base_url + f'calendar?hut_id={index}&lang={lang_code}', timeout=_TIMEOUT, verify=False)
             if web_page.status_code != requests.codes.ok:
                 errors.append({'type': f"Requests error on {web_page.url}",
                                'message': f"Status code: {web_page.status_code}"})
 
             # Retrieve the booking data in JSON format for the hut
             json_data = session.get(_base_url + 'selectDate?date=' + start_date.strftime(_WEB_DATE_FORMAT),
-                                    timeout=2.0)
+                                    timeout=_TIMEOUT, verify=False)
             if json_data.status_code != requests.codes.ok:
                 errors.append({'type': f"Requests error on {json_data.url}",
                                'message': f"Status code: {json_data.status_code}"})
@@ -161,7 +162,7 @@ def perform_web_request_for_hut(index, hut, start_date):
                         result['places'][book_date]['closed'] = 0
                         break
                     else:
-                        room_type = parser.rooms[room['bedCategoryId']]
+                        room_type = parser.rooms[room['bedCategoryId']].strip()
                         if room_type in _room_basic_types:
                             room_type = _room_basic_types[room_type]
                         else:
@@ -210,7 +211,7 @@ def open_book_page(index, date, lang_code):
 
 def search_for_updates(temp_folder, initial, observer, final_observer):
     """Search for application updates.
-    
+
     :param temp_folder: temporary folder where to download the update files
     :param initial: function to be executed at the beginning of the search process
     :param observer: function to be executed during the search process (signature: (string))
@@ -228,7 +229,7 @@ def search_for_updates(temp_folder, initial, observer, final_observer):
 
 def _cancel_update(obj):
     """Cancel the application update request by setting the dedicated flag.
-    
+
     :param obj: GUI object generating the cancel request
     """
     global _update_cancelled
@@ -272,7 +273,7 @@ def _perform_update_request(temp_folder, observer, final_observer):
 def _perform_data_update_request(session, temp_folder, update_data_files):
     """
     Perform the web requests for data files updates.
-    
+
     This method executes in a secondary thread.
 
     :param session: a request Session object to be used to retrieve data
@@ -289,7 +290,7 @@ def _perform_data_update_request(session, temp_folder, update_data_files):
                 with open(str(ASSETS_PATH_DATA / filename), 'rb') as old_file:
                     old_content = old_file.read()
                     old_md5 = hashlib.md5(old_content).digest()
-                updated_file = session.get(config.UPDATES_URL + folder + filename, timeout=2.0)
+                updated_file = session.get(config.UPDATES_URL + folder + filename, timeout=_TIMEOUT)
                 if updated_file.status_code == requests.codes.ok:
                     content = updated_file.content
                     update_md5 = hashlib.md5(content).digest()
@@ -324,7 +325,7 @@ def _perform_tiles_update_request(session, temp_folder, update_tiles):
             if _update_cancelled:
                 break
             try:
-                updated_file = session.get(config.UPDATES_URL + folder + filename, timeout=2.0)
+                updated_file = session.get(config.UPDATES_URL + folder + filename, timeout=_TIMEOUT)
                 if updated_file.status_code == requests.codes.ok:
                     content = updated_file.content
                     update_path = pathlib.Path(temp_folder) / filename

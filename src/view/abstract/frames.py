@@ -621,7 +621,7 @@ class AbstractHutsMapView(AbstractHutsView):
 
     _STYLE = FrameStyle.FIXED_SIZE
 
-    _DEFAULT_MAP_WINDOW = [46.0, 52.0, 6.5, 16.5]  # [degrees]
+    _DEFAULT_MAP_WINDOW = [46.0, 52.0, 4.5, 16.5]  # [degrees]
     _MAP_X_PIXEL_DIMENSION = 550
     _MAP_Y_PIXEL_DIMENSION = 550
     _DEFAULT_MAP_ZOOM = 6

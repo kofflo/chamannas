@@ -1,2 +1,2 @@
 # Activate the Python environment required to run the app Chamannas
-source .\chamannas\scripts\activate
+source .\.venv\scripts\activate

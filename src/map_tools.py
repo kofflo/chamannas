@@ -118,7 +118,7 @@ def _load_icon(filename, size, backup_size, backup_colour,
         if backup_symbol is not None:
             text = backup_symbol
             draw = ImageDraw.Draw(icon, 'RGBA')
-            tw, th = draw.textsize(text, font=backup_font)
+            tw, th = textsize(draw, text, font=backup_font)
             text_position = (size[0] - tw) // 2, (size[1] - th) // 2 + 1
             draw.text(text_position, text,
                       fill=backup_text_color, font=backup_font)
@@ -453,7 +453,7 @@ class _TilesCluster:
         :param image: the image to which the copyright string has to be added
         """
         draw = ImageDraw.Draw(image, 'RGBA')
-        tw, th = draw.textsize(_TilesCluster._COPYRIGHT_STRING, font=_TilesCluster._copyright_font)
+        tw, th = textsize(draw, _TilesCluster._COPYRIGHT_STRING, font=_TilesCluster._copyright_font)
         size_x, size_y = image.size
         text_position = size_x - tw, size_y - th
         draw.rectangle((text_position, (size_x, size_y)), fill=_TilesCluster._COPYRIGHT_BG_COLOUR)
@@ -596,7 +596,7 @@ class _TilesCluster:
 
             draw = ImageDraw.Draw(tile, 'RGBA')
             text = f'{zoom}_{x_tile}_{y_tile}'
-            tw, th = draw.textsize(text, font=_TilesCluster._tiles_font)
+            tw, th = textsize(draw, text, font=_TilesCluster._tiles_font)
             text_position = (_TILE_SIZE - tw) // 2, (_TILE_SIZE - th) // 2 + 1
             draw.text(text_position, text,
                       fill=_TilesCluster._TILES_STRING_COLOUR,
@@ -639,7 +639,7 @@ class _TilesCluster:
                 y_pixel_min = (y_tile % 2) * _TILE_SIZE / 2
                 tile_out = tile_out.crop((x_pixel_min, y_pixel_min,
                                           x_pixel_min + _TILE_SIZE / 2, y_pixel_min + _TILE_SIZE / 2))
-                tile = tile_out.resize((_TILE_SIZE, _TILE_SIZE), Image.ANTIALIAS)
+                tile = tile_out.resize((_TILE_SIZE, _TILE_SIZE), Image.Resampling.LANCZOS)
 
         if tile is None:
             tile = _TilesCluster._create_empty_tile(x_tile, y_tile, zoom)
@@ -732,7 +732,7 @@ class _GenericMap:
         if self._cluster is not None:
             draw = ImageDraw.Draw(zoom_image, 'RGBA')
             text = str(self._zoom)
-            tw, th = draw.textsize(text, font=_zoom_font)
+            tw, th = textsize(draw, text, font=_zoom_font)
             text_position = (zoom_image.size[0] - tw) // 2, (zoom_image.size[1] - th) // 2 - 1
             draw.text(text_position, text, fill=_ZOOM_TEXT_COLOUR, font=_zoom_font)
         image.paste(zoom_image, (image.size[0] - zoom_image.size[0], _plus_icon.size[1]), zoom_image)
@@ -1184,7 +1184,7 @@ class NavigableMap(_GenericMap):
             draw.ellipse((x_pixel_pin - delta_pixel, y_pixel_pin - delta_pixel,
                           x_pixel_pin + delta_pixel, y_pixel_pin + delta_pixel), outline=NavigableMap._RANGES_COLOUR)
             text = "%d km" % (range_value//1000)
-            tw, th = draw.textsize(text, font=NavigableMap._ranges_font)
+            tw, th = textsize(draw, text, font=NavigableMap._ranges_font)
             test_position = (x_pixel_pin - tw//2, y_pixel_pin - delta_pixel - th)
             draw.text(test_position, text,
                       fill=NavigableMap._RANGES_TEXT_COLOUR,
@@ -1226,7 +1226,7 @@ class NavigableMap(_GenericMap):
         x_pixel_mean = (x_pixel_start + x_pixel_end)//2
         y_pixel_mean = (y_pixel_start + y_pixel_end)//2
         text = "{0:.1f} km".format(measured_distance/1000)
-        tw, th = draw.textsize(text, font=NavigableMap._ranges_font)
+        tw, th = textsize(draw, text, font=NavigableMap._ranges_font)
         text_position = x_pixel_mean - tw//2, y_pixel_mean - th//2
         draw.text(text_position, text,
                   fill=NavigableMap._RANGES_TEXT_COLOUR,
@@ -1247,7 +1247,7 @@ class NavigableMap(_GenericMap):
             group_bitmap = Image.Image.copy(_hut_icons['group'])
             draw = ImageDraw.Draw(group_bitmap, 'RGBA')
             text = str(len(hut_group))
-            tw, th = draw.textsize(text, font=NavigableMap._group_font)
+            tw, th = textsize(draw, text, font=NavigableMap._group_font)
             text_position = (_HUT_ICON_SIZE[0] - tw) // 2, (_HUT_ICON_SIZE[1] - th) // 2 + 1
             draw.text(text_position, text,
                       fill=NavigableMap._GROUP_TEXT_COLOUR,
@@ -1257,9 +1257,16 @@ class NavigableMap(_GenericMap):
             hut_bitmap = Image.Image.copy(_hut_icons[hut_status])
             if hut_self_catering:
                 draw = ImageDraw.Draw(hut_bitmap, 'RGBA')
-                tw, th = draw.textsize(NavigableMap._SELF_TEXT_STRING, font=NavigableMap._self_font)
+                tw, th = textsize(draw, NavigableMap._SELF_TEXT_STRING, font=NavigableMap._self_font)
                 text_position = (_HUT_ICON_SIZE[0] - tw) // 2, (_HUT_ICON_SIZE[1] - th) // 2 + 1
                 draw.text(text_position, NavigableMap._SELF_TEXT_STRING,
                           fill=NavigableMap._SELF_TEXT_COLOUR,
                           font=NavigableMap._self_font)
             image.paste(hut_bitmap, offset, hut_bitmap)
+
+
+def textsize(draw, text, font):
+    left, top, right, bottom = draw.textbbox((0, 0), text, font=font)
+    tw = right - left
+    th = bottom - top
+    return tw, th

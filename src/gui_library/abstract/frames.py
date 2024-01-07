@@ -1,5 +1,8 @@
 from enum import Enum, auto
-from src.gui_library import event_create
+from .. import event_create
+from src.config import ASSETS_PATH_ICONS
+
+_APP_ICON_FILENAME = str(ASSETS_PATH_ICONS / "app_icon.png")
 
 
 class FrameStyle(Enum):
@@ -103,6 +106,11 @@ class AbstractFrame:
         self.event_trigger(self._update_gui_event, data=data)
 
 
+class AbstractIconFrame(AbstractFrame):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs, icon=_APP_ICON_FILENAME)
+
+
 class AbstractDialog:
 
     def __init__(self, *, title):
@@ -132,3 +140,18 @@ class AbstractDialog:
 
     def _create_widgets(self, panel):
         raise NotImplementedError
+
+
+class AbstractMessageDialog(AbstractDialog):
+
+    def __init__(self, message, **kwargs):
+        self.message = message
+        super().__init__(**kwargs)
+
+    @property
+    def message(self):
+        return self._message
+
+    @message.setter
+    def message(self, message):
+        self._message = message

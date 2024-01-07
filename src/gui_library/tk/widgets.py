@@ -7,11 +7,11 @@ from tkinter import DISABLED, NORMAL, END
 from PIL import ImageTk
 from threading import Timer
 
-from src.gui_library.abstract.widgets import AbstractWidget, AbstractMouseEventsWidget, AbstractLabelledWidget, \
+from ..abstract.widgets import AbstractWidget, AbstractMouseEventsWidget, AbstractLabelledWidget, \
     AbstractButton, AbstractCheckBox, AbstractRadioBox, AbstractBitmap, \
     AbstractText, AbstractCalendar, AbstractSpinControl, AbstractMenu, TextStyle, AbstractTextTimedMenu
 
-from src.gui_library.tk import ttk_style
+from ..tk import ttk_style
 
 
 def rgb2hex(r, g, b, *args):

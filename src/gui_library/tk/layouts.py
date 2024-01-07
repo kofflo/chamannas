@@ -1,25 +1,24 @@
 import tkinter
 
-from src.gui_library.abstract.layouts import AbstractBoxLayout, AbstractGridLayout, Align
-from src.gui_library.tk.tables import TkAbstractGrid
+from ..abstract.layouts import AbstractBoxLayout, AbstractGridLayout, Align
+from .tables import Grid
 
 
-class TkLayout:
+class Layout:
 
     def create_layout(self, parent):
         raise NotImplementedError()
 
-    def apply_border(self, border_tuple):
-        return [border_tuple[3], border_tuple[1]], [border_tuple[0], border_tuple[2]]
-
     def apply_align(self, align):
         raise NotImplementedError()
 
+    @staticmethod
+    def _get_border(border_tuple):
+        return [border_tuple[3], border_tuple[1]], [border_tuple[0], border_tuple[2]]
 
-class BoxLayout(AbstractBoxLayout, TkLayout):
+
+class BoxLayout(AbstractBoxLayout, Layout):
     _DIRECTION = None
-    i = 0
-    colors = ['red', 'blue', 'green', 'yellow']
 
     def __init__(self):
         self._delta_row = 0
@@ -27,11 +26,8 @@ class BoxLayout(AbstractBoxLayout, TkLayout):
         super().__init__()
 
     def create_layout(self, parent):
-        frame = tkinter.Frame(parent, bg=self.colors[BoxLayout.i])
-        print("creo frame", self.colors[BoxLayout.i])
-        BoxLayout.i += 1
-        if BoxLayout.i > 3:
-            BoxLayout.i = 0
+        frame = tkinter.Frame(parent)
+        frame.pack_propagate(0)
         for index, widget_dict in enumerate(self._widgets):
             widget = widget_dict['type']
 
@@ -48,18 +44,18 @@ class BoxLayout(AbstractBoxLayout, TkLayout):
                 widget_border = widget_dict['border']
                 if isinstance(widget_border, int):
                     widget_border = [widget_border] * 4
-                padx, pady = self.apply_border(widget_border)
-                if isinstance(widget, TkLayout):
+                padx, pady = self._get_border(widget_border)
+                if isinstance(widget, Layout):
                     widget = widget.create_layout(frame)
                     widget.grid(row=row, column=col, padx=padx, pady=pady, sticky=sticky)
-                elif isinstance(widget, TkAbstractGrid):
+                elif isinstance(widget, Grid):
                     frame_grid = tkinter.Frame(frame)
                     widget.set_frame(frame_grid)
-                    if widget.SCROLLBAR_X:
+                    if not widget._AVOID_HORIZONTAL_SCROLL:
                         pady_grid = 0
                     else:
                         pady_grid = pady[1]
-                    if widget.SCROLLBAR_Y:
+                    if not widget._AVOID_VERTICAL_SCROLL:
                         padx_grid = 0
                     else:
                         padx_grid = padx[1]
@@ -67,10 +63,10 @@ class BoxLayout(AbstractBoxLayout, TkLayout):
                     pippo_col = col
                     row = 0
                     col = 0
-                    if widget.SCROLLBAR_X:
+                    if not widget._AVOID_HORIZONTAL_SCROLL:
                         widget.xsb.grid(row=row+1, column=col, padx=(padx[0], padx_grid), pady=(5, pady[1]), sticky='new')
 #                        self._delta_row += 1
-                    if widget.SCROLLBAR_Y:
+                    if not widget._AVOID_VERTICAL_SCROLL:
                         widget.ysb.grid(row=row, column=col+1, padx=(5, padx[1]), pady=(pady[0], pady_grid), sticky='nsw')
 #                        self._delta_col += 1
                     widget.grid(row=row, column=col, padx=(padx[0], padx_grid), pady=(pady[0], pady_grid), sticky=sticky)
@@ -97,6 +93,12 @@ class BoxLayout(AbstractBoxLayout, TkLayout):
 
 
 class VBoxLayout(BoxLayout):
+
+    def create_layout(self, parent):
+        frame = super().create_layout(parent)
+        frame.grid_columnconfigure(0, weight=1)
+        return frame
+
     def create_space(self, frame, index, space):
         frame.grid_rowconfigure(index, minsize=space)
 
@@ -120,6 +122,11 @@ class VBoxLayout(BoxLayout):
 
 class HBoxLayout(BoxLayout):
 
+    def create_layout(self, parent):
+        frame = super().create_layout(parent)
+        frame.grid_rowconfigure(0, weight=1)
+        return frame
+
     def create_space(self, frame, index, space):
         frame.grid_columnconfigure(index, minsize=space)
 
@@ -141,7 +148,7 @@ class HBoxLayout(BoxLayout):
         return ""
 
 
-class GridLayout(AbstractGridLayout, TkLayout):
+class GridLayout(AbstractGridLayout, Layout):
 
     def create_layout(self, parent):
         frame = tkinter.Frame(parent)
@@ -164,7 +171,7 @@ class GridLayout(AbstractGridLayout, TkLayout):
                     widget_align = widget_dict['align']
                     sticky = self.apply_align(widget_align)
 
-                    if isinstance(widget, TkLayout):
+                    if isinstance(widget, Layout):
                         widget = widget.create_layout(frame)
                     else:
                         widget.set_frame(frame)
@@ -172,7 +179,7 @@ class GridLayout(AbstractGridLayout, TkLayout):
                     widget_border = widget_dict['border']
                     if isinstance(widget_border, int):
                         widget_border = [widget_border] * 4
-                    padx, pady = self.apply_border(widget_border)
+                    padx, pady = self._get_border(widget_border)
 
                     if row != 0:
                         pady[0] += self._vgap / 2

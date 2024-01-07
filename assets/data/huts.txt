@@ -98,7 +98,7 @@
 98	Edmund-Graf-Hütte, Sektion TK Innsbruck	AT	Tirol	Verwall	FALSE	47.1061	10.3557	2375	AT
 99	Bergheim Au, DAV Sektion Überlingen	AT	Vorarlberg	Bregenzerwald Gebirge	TRUE	47.3180	9.9630	824	DE
 100	Gaudeamushütte, DAV Sektion Main-Spessart	AT	Tirol	Kaiser Gebirge	FALSE	47.5492	12.3245	1263	DE
-101	Saupsdorfer Hütte, DAV Sektion Sächischer Bergsteigerbund	DE	Sachsen	Erzgebirge	FALSE	50.9278	14.3350	285	DE
+101	Saupsdorfer Hütte, DAV Sektion Sächsischer Bergsteigerbund	DE	Sachsen	Erzgebirge	FALSE	50.9278	14.3350	285	DE
 102	Bielatalhütte, DAV Sektion Sächischer Bergsteigerbund	DE	Sachsen	Erzgebirge	TRUE	50.8339	14.0517	380	DE
 103	Neue Heilbronner Hütte, DAV Sektion Heilbronn	AT	Vorarlberg	Verwall	FALSE	47.0074	10.1390	2320	AT
 104	Rotwandhaus, DAV Sektion Turner Alpenkränzchen	DE	Bayern	Bayerische Voralpen	FALSE	47.6461	11.9347	1737	DE
@@ -111,7 +111,7 @@
 111	Hofpürglhütte, Alpenverein Linz	AT	Salzburg	Dachstein Gebirge	FALSE	47.4822	13.5191	1703	AT
 112	Linzerhaus / Wurzeralm, Alpenverein Linz	AT	Oberösterreich	Totes Gebirge	FALSE	47.6479	14.2876	1371	AT
 113	Linzer Tauplitz-Haus, Alpenverein Linz	AT	Steiermark	Totes Gebirge	FALSE	47.5949	14.0106	1645	AT
-114	Alpenrosenhütte, DAV Sektion Schorndorf	AT	Tirol	Kitzbüheler Alpen	FALSE	47.4200	12.2376	1555	AT
+114	Alpenrosenhütte im Brixental, DAV Sektion Schorndorf	AT	Tirol	Kitzbüheler Alpen	FALSE	47.4200	12.2376	1555	AT
 115	Rüsselsheimer Hütte, DAV Sektion Rüsselsheim	AT	Tirol	Ötztaler Alpen	FALSE	46.9939	10.8881	2323	DE
 116	Bamberger Hütte, DAV Sektion Bamberg	AT	Tirol	Kitzbüheler Alpen	FALSE	47.3089	12.1506	1756	DE
 117	Mödlinger Hütte, Alpenverein Mödling	AT	Steiermark	Ennstaler Alpen	FALSE	47.5291	14.5532	1523	AT
@@ -143,8 +143,8 @@
 143	Bremer Hütte, DAV Sektion Bremen	AT	Tirol	Stubaier Alpen	FALSE	46.9952	11.2632	2413	AT
 144	Ingolstädter Haus, DAV Sektion Ingolstadt	AT	Salzburg	Berchtesgadener Alpen	FALSE	47.5017	12.8871	2119	AT
 145	Riemannhaus, DAV Sektion Ingolstadt	AT	Salzburg	Berchtesgadener Alpen	FALSE	47.4579	12.9147	2177	AT
-146	Annaberger Haus, Österreichischer Gebirgsverein	AT	Niederösterreich	Türnitzer Alpen	FALSE	47.8716	15.4209	1377	AT
-147	Julius-Seitner-Hütte, Österreichischer Gebirgsverein	AT	Niederösterreich	Türnitzer Alpen	FALSE	47.9600	15.4406	1185	AT
+146	Annaberger Haus, Alpenverein Gebirgsverein	AT	Niederösterreich	Türnitzer Alpen	FALSE	47.8716	15.4209	1377	AT
+147	Julius-Seitner-Hütte, Alpenverein Gebirgsverein	AT	Niederösterreich	Türnitzer Alpen	FALSE	47.9600	15.4406	1185	AT
 148	Gufferthütte, DAV Sektion Kaufering	AT	Tirol	Bayerische Voralpen	FALSE	47.5816	11.7995	1475	DE
 149	Knorrhütte, DAV Sektion München	DE	Bayern	Wetterstein Gebirge	FALSE	47.4100	11.0125	2051	DE
 150	Münchner Haus, DAV Sektion München	DE	Bayern	Wetterstein Gebirge	FALSE	47.4209	10.9849	2959	DE
@@ -175,7 +175,7 @@
 175	Bietschhornhütte AACB	CH	Wallis	Berner Alpen	FALSE	46.3951	7.8171	2565	CH
 176	Calandahütte SAC, SAC Rätia	CH	Graubünden	Glarner Alpen	FALSE	46.8830	9.4822	2073	CH
 177	Kampthalerhütte, Alpenverein Edelweiss	AT	Niederösterreich	Wienerwald	FALSE	48.1332	16.1967	313	AT
-178	Kasseler Hütte, DAV Sektion Kassel	AT	Tirol	Zillertaler Alpen	FALSE	47.0592	11.9483	2177	DE
+178	Kasseler Hütte (im Zillertal), DAV Sektion Kassel	AT	Tirol	Zillertaler Alpen	FALSE	47.0592	11.9483	2177	DE
 179	Pfeishütte, Alpenverein Innsbruck	AT	Tirol	Karwendel	FALSE	47.3301	11.4255	1922	AT
 180	Furtschaglhaus, DAV Sektion Berlin	AT	Tirol	Zillertaler Alpen	FALSE	47.0011	11.7472	2295	AT
 181	Brandenburger Haus, DAV Sektion Berlin	AT	Tirol	Ötztaler Alpen	FALSE	46.8445	10.7781	3277	AT
@@ -198,7 +198,7 @@
 198	Capanna d'Alzasca CAS, CAS Locarno	CH	Tessin	Tessiner Alpen	FALSE	46.2713	8.5893	1734	CH
 199	Sepp-Ruf-Hütte, DAV Sektion Hamburg	DE	Niedersachsen	Harz	FALSE	51.8024	10.2965	469	DE
 200	Straubinger Haus, DAV Sektion Straubing	AT	Tirol	Chiemgauer Alpen	FALSE	47.6203	12.4994	1551	DE
-201	Bayreuther Hütte, DAV Sektion Bayreuth	AT	Tirol	Rofan Gebirge	FALSE	47.4447	11.8208	1576	DE
+201	Bayreuther Hütte, DAV Sektion Bayreuth	AT	Tirol	Brandenberger Alpen	FALSE	47.4447	11.8208	1576	DE
 202	Nördlinger Hütte, DAV Sektion Nördlingen	AT	Tirol	Karwendel	FALSE	47.3200	11.2368	2238	AT
 203	Karl-von-Edel-Hütte, DAV Sektion Würzburg	AT	Tirol	Zillertaler Alpen	FALSE	47.1306	11.8975	2238	AT
 204	Schreckhornhütte SAC, SAC Basel	CH	Bern	Berner Alpen	FALSE	46.5817	8.0988	2530	CH
@@ -279,7 +279,7 @@
 279	Cabane d'Orny CAS, CAS Diablerets	CH	Wallis	Mont-Blanc Gruppe	FALSE	46.0019	7.0628	2826	CH
 280	Cabane Rambert CAS, CAS Diablerets	CH	Wallis	Berner Alpen	FALSE	46.2302	7.1342	2580	CH
 281	Cabane du Trient CAS, CAS Diablerets	CH	Wallis	Mont-Blanc Gruppe	FALSE	45.9996	7.0437	3170	CH
-282	Haus Hammer, DAV Sektion München	DE	Bayern	Bayerische Voralpen	TRUE	47.7037	11.9401	750	DE
+282	Haus und Hütte Hammer, DAV Sektion München	DE	Bayern	Bayerische Voralpen	TRUE	47.7037	11.9401	750	DE
 283	Potsdamer Hütte, DAV Sektion Dinkelsbühl	AT	Tirol	Stubaier Alpen	FALSE	47.1430	11.2088	2009	DE
 284	Schlernbödelehütte, AVS Bozen + Schlern	IT	Südtirol	Dolomiten	FALSE	46.5221	11.5838	1693	DE
 285	Radlseehütte, AVS Brixen	IT	Südtirol	Sarntaler Alpen	FALSE	46.7079	11.5801	2284	DE
@@ -320,7 +320,7 @@
 320	Innsbrucker Hütte, Alpenverein TK Innsbruck	AT	Tirol	Stubaier Alpen	FALSE	47.0432	11.3108	2369	AT
 321	SKIP
 322	Capanna Pairolo	CH	Tessin	Tambogruppe	FALSE	46.0628	9.0449	1347	CH
-323	Erfurter Hütte, DAV Sektion Ettlingen	AT	Tirol	Rofan Gebirge	FALSE	47.4417	11.7631	1834	DE
+323	Erfurter Hütte, DAV Sektion Ettlingen	AT	Tirol	Brandenberger Alpen	FALSE	47.4417	11.7631	1834	DE
 324	Traunsteiner Skihütte/ Winklmoosalm, DAV Sektion Traunstein	DE	Bayern	Chiemgauer Alpen	FALSE	47.6590	12.5857	1160	DE
 325	Mittenwalder Hütte, DAV Sektion Mittenwald	DE	Bayern	Karwendel	FALSE	47.4338	11.2825	1515	DE
 326	Sunnehüsi, SAC Blümlisalp	CH	Bern	Berner Alpen	TRUE	46.6429	7.4463	1125	CH
@@ -328,7 +328,7 @@
 328	Hochweißsteinhaus, Alpenverein Austria	AT	Kärnten	Karnischer Hauptkamm	FALSE	46.6431	12.7403	1868	AT
 329	Herrmann-von-Barth-Hütte, DAV Sektion Düsseldorf	AT	Tirol	Allgäuer Alpen	FALSE	47.3094	10.3986	2131	AT
 330	Clubhaus Metsch, SAC Huttwil	CH	Bern	Berner Alpen	TRUE	46.5085	7.6114	1774	CH
-331	Berggasthof Rofan	AT	Tirol	Rofan Gebirge	FALSE	47.4412	11.7639	1840	AT
+331	Berggasthof Rofan	AT	Tirol	Brandenberger Alpen	FALSE	47.4412	11.7639	1840	AT
 332	Medelserhütte SAC, SAC Uto	CH	Graubünden	Adula Alpen	FALSE	46.6405	8.9138	2524	CH
 333	Cabane du Fenestral, Ski Club Chavalard	CH	Wallis	Berner Alpen	TRUE	46.1890	7.1001	2453	CH
 334	Rothornhütte SAC, SAC Oberaargau	CH	Wallis	Walliser Alpen	FALSE	46.0486	7.6974	3198	CH
@@ -390,10 +390,10 @@
 390	Rudolf Schober Hütte, Alpenverein Stuhlecker	AT	Steiermark	Schladminger Tauern	FALSE	47.2519	13.9740	1667	AT
 391	Chamanna da Boval CAS, SAC Bernina	CH	Graubünden	Bernina Alpen	FALSE	46.4152	9.9251	2495	CH
 392	SKIP
-393	Douglasshütte	AT	Vorarlberg	Rätikon	FALSE	47.0597	9.7548	1979	AT
+393	Douglasshütte, Privat	AT	Vorarlberg	Rätikon	FALSE	47.0597	9.7548	1979	AT
 394	Cabane d’Essertze, Ski Club Hérémencia	CH	Wallis	Walliser Alpen	FALSE	46.1481	7.3719	2191	CH
 395	Anhalter Hütte, DAV Sektion Oberer Neckar	AT	Tirol	Lechtaler Alpen	FALSE	47.3013	10.6679	2042	DE
-396	Valentinalm	AT	Kärnten	Karnischer Hauptkamm	FALSE	46.6228	12.9304	1205	AT
+396	Valentinalm, Privat	AT	Kärnten	Karnischer Hauptkamm	FALSE	46.6228	12.9304	1205	AT
 397	Skihütte Obererbs, Ski Club Elm	CH	Glarus	Glarner Alpen	FALSE	46.8997	9.1129	1700	CH
 398	Etzlihütte SAC, SAC Thurgau	CH	Uri	Glarner Alpen	FALSE	46.7182	8.7206	2052	CH
 399	Capanna Piansecco CAS, CAS Bellinzona e Valli	CH	Tessin	Gotthardmassiv	FALSE	46.4945	8.4714	1982	CH
@@ -436,7 +436,7 @@
 436	Cabane de la Dent Blanche CAS, CAS Jaman	CH	Wallis	Walliser Alpen	FALSE	46.0202	7.6009	3507	CH
 437	Lamsenjochhütte, DAV Sektion Oberland	AT	Tirol	Karwendel	FALSE	47.3801	11.6035	1953	DE
 438	Berghaus Kleinwalsertal, DAV Sektion Memmingen	AT	Vorarlberg	Allgäuer Alpen	TRUE	47.3488	10.1457	1250	DE
-439	Haus Wäldle, DAV Sektion Memmingen	AT	Vorarlberg	Allgäuer Alpen	TRUE	47.3486	10.1456	1250	DE
+439	Haus Wäldele, DAV Sektion Memmingen	AT	Vorarlberg	Allgäuer Alpen	TRUE	47.3486	10.1456	1250	DE
 440	Landshuter Europahütte, DAV Sektion Landshut	IT	Südtirol	Zillertaler Alpen	FALSE	46.9971	11.5806	2693	DE
 441	Goldeckhütte, Alpenverein Spittal an der Drau	AT	Kärnten	Gailtaler Alpen	FALSE	46.7611	13.4694	1945	AT
 442	Marteller Hütte, AVS Martell	IT	Südtirol	Ortler Gruppe	FALSE	46.4697	10.6732	2585	DE
@@ -537,13 +537,117 @@
 537	Hanslberghütte, DAV Sektion Regensburg	DE	Bayern	Oberpfälzer Jura	TRUE	48.9528	12.0057	344	DE
 538	Berg- und Skiheim Brixen im Thale - Ferienwohnung, DAV Sektion Regensburg	AT	Tirol	Kitzbüheler Alpen	TRUE	47.4542	12.2605	850	DE
 539	Rifugio Alpe Fontana, Patriziato di Prato	CH	Tessin	Tessiner Alpen	TRUE	46.4069	8.6780	2190	CH
-540	Capanna Gesero, CAS Bellinzona / Sektion Bellinzona der Unione Ticinese Operai Escursionisti (UTOE)	CH	Tessin	Tambogruppe	FALSE	46.1778	9.1316	2003	CH
+540	Capanna Gesero, Sektion Bellinzona der Unione Ticinese Operai Escursionisti (UTOE)	CH	Tessin	Tambogruppe	FALSE	46.1778	9.1316	2003	CH
 541	Westfalenhaus, DAV Sektion Münster	AT	Tirol	Stubaier Alpen	FALSE	47.1079	11.1001	2273	DE
 542	SKIP
 543	Munt la Reita	CH	Tessin	Tessiner Alpen	FALSE	46.2816	8.4820	1430	CH
 544	Sadnighaus, Alpenverein Großkirchheim-Heiligenblut	AT	Kärnten	Goldberggruppe	FALSE	46.9549	12.9610	1880	AT
-545	Reichenberger Hütte (neue), Reichenberg	AT	Tirol	Venediger Gruppe	FALSE	46.9713	12.2796	2586	AT
+545	Reichenberger Hütte (neue), Sektion Reichenberg	AT	Tirol	Venediger Gruppe	FALSE	46.9713	12.2796	2586	AT
 546	Ludwigsburger Hütte, DAV Sektion Ludwigsburg	AT	Tirol	Ötztaler Alpen	FALSE	47.1147	10.8236	1935	DE
 547	Steinwaldhütte, DAV Sektion Regensburg	DE	Bayern	Fichtelgebirge	TRUE	49.8775	12.0354	701	DE
 548	Lonza Biwak, Zermatters	CH	Wallis	Walliser Alpen	TRUE	45.9857	7.6362	2973	CH
 549	Berghütte Hohsaas	CH	Wallis	Walliser Alpen	FALSE	46.1393	7.9916	3130	CH
+550	Agroturissem Alp d'Err, Parc Ela Trek	CH	Graubünden	Albula Alpen	FALSE	46.5716	9.6928	2178	CH
+551	Cesa da Sett, Parc Ela Trek	CH	Graubünden	Albula Alpen	FALSE	46.4155	9.6370	2303	CH
+552	Sägässähenki Jenisberg, Parc Ela Trek	CH	Graubünden	Albula Alpen	FALSE	46.6950	9.7267	1504	CH
+553	Tigias Plang Faller, Parc Ela Trek	CH	Graubünden	Albula Alpen	FALSE	46.5217	9.6555	1922	CH
+554	Chesa sut Baselgia, Stugl, Parc Ela Trek	CH	Graubünden	Albula Alpen	FALSE	46.6506	9.7314	1550	CH
+555	Gamskarkogelhütte, Alpenverein Bad Hofgastein	AT	Salzburg	Ankogel Gruppe	FALSE	47.1612	13.1584	2467	AT
+556	Ischler Hütte, Sektion Salzkammergut	AT	Steiermark	Totes Gebirge	FALSE	47.6999	13.7607	1368	AT
+557	Schönfeldhütte, DAV Sektion München	DE	Bayern	Bayerische Voralpen	FALSE	47.6651	11.9062	1410	DE
+558	Lauteraarhütte SAC, SAC Sektion Zofingen	CH	Bern	Berner Alpen	FALSE	46.57	8.2222	2393	CH
+559	Salbitschijenbiwak SAC, SAC Mythen	CH	Uri	Urner Alpen	TRUE	46.6762	8.5237	2400	CH
+560	SKIP
+561	Karlsbader Hütte, DAV Sektion Karlsbad	AT	Tirol	Gailtaler Alpen	FALSE	46.7630	12.8012	2260	DE
+562	Schwarzenberghütte (DAV), DAV Sektion Illertissen	DE	Bayern	Allgäuer Alpen	FALSE	47.4292	10.4068	1380	DE
+563	Giessener Hütte, DAV Sektion Giessen	AT	Kärnten	Ankogel Gruppe	FALSE	46.9928	13.3291	2215	DE
+564	Hintergrathütte (Rif. Coston)	IT	Südtirol	Ortler Gruppe	FALSE	46.5016	10.5833	2661	DE
+565	Capanna Brogoldone	CH	Tessin	Adula Alpen	FALSE	46.2629	9.0633	1904	CH
+566	Cabane de Sorniot, Ski-Club Chavalard	CH	Wallis	Berner Alpen	FALSE	46.1693	7.0949	2064	CH
+567	Grassenbiwak SAC, SAC Engelberg	CH	Obwalden	Urner Alpen	TRUE	46.7702	8.4466	2647	CH
+568	Clubhütte Grubenalp, SAC Sektion Saas	CH	Wallis	Walliser Alpen	TRUE	46.1604	7.9470	2300	CH
+569	Cabane de la Tourche, CAS St-Maurice	CH	Waadt	Berner Alpen	FALSE	46.2145	7.0618	2198	CH
+570	Müllerhütte - Rif. Cima Libera, CAI Alto Adige	IT	Südtirol	Stubaier Alpen	FALSE	46.9631	11.1778	3145	DE
+571	Gauenhütte, DAV Sektion Konstanz	AT	Vorarlberg	Rätikon	TRUE	47.0593	9.8644	1235	DE
+572	Bielefelder Hütte, DAV Sektion Bielefeld	AT	Tirol	Stubaier Alpen	FALSE	47.2072	10.9330	2112	DE
+573	Cabane de Bounavaux, CAS La Gruyère	CH	Freiburg	Freiburger Alpen	FALSE	46.5330	7.1324	1620	CH
+574	Cabane des Marindes, CAS La Gruyère	CH	Freiburg	Freiburger Alpen	FALSE	46.5359	7.1620	1868	CH
+575	Cabane des Clés, CAS La Gruyère	CH	Freiburg	Freiburger Alpen	FALSE	46.5677	7.0248	1352	CH
+576	Enzianhütte/Rhön, DAV Sektion Fulda	DE	Hessen	Rhön	FALSE	50.5221	9.9133	760	DE
+577	Ignaz-Mattis-Hütte, Alpenverein Wien	AT	Steiermark	Schladminger Tauern	FALSE	47.2849	13.6485	1986	AT
+578	Lucknerhütte, Privat	AT	Tirol	Glockner Gruppe	FALSE	47.0397	12.6905	2241	AT
+579	Balmhornhütte SAC, SAC Altels	CH	Bern	Berner Alpen	FALSE	46.4512	7.6896	1955	CH
+580	Capanna Cava	CH	Tessin	Adula Alpen	FALSE	46.3575	9.0304	2066	CH
+581	Rifugio Giümela	CH	Tessin	Adula Alpen	TRUE	46.3724	9.0808	1811	CH
+582	Capanna Quarnei	CH	Tessin	Adula Alpen	FALSE	46.4731	9.0236	2108	CH
+583	Capanna Adula UTOE	CH	Tessin	Adula Alpen	FALSE	46.4953	9.0077	2393	CH
+584	Rifugio Scaradra	CH	Tessin	Adula Alpen	TRUE	46.5557	9.0059	2173	CH
+585	Ostello GiovaniBosco	CH	Tessin	Tessiner Alpen	FALSE	46.3165	8.4941	1500	CH
+586	Stubenberg-Haus, Alpenverein Graz	AT	Steiermark	Randgebirge östlich der Mur	FALSE	47.1977	15.4664	1445	AT
+587	SKIP
+588	Donauland-Hütte, Alpenverein Edelweiss	AT	Steiermark	Mürzsteger Alpen	TRUE	47.7220	15.5153	1440	AT
+589	Äugstenhütte	CH	Glarus	Glarner Alpen	FALSE	47.0272	9.1067	1500	CH
+590	Capanna Barone	CH	Tessin	Tessiner Alpen	TRUE	46.3958	8.7489	2172	CH
+591	Obere Maxlraineralm, Private Hütte	DE	Bayern	Bayerische Voralpen	FALSE	47.6579	11.9166	1520	DE
+592	Refuge du lac de Derborence	CH	Wallis	Berner Alpen	FALSE	46.2799	7.2147	1480	CH
+593	Rifugio Lago, Ufficio patriziale Biasca	CH	Tessin	Tessiner Alpen	TRUE	46.3522	8.8764	2130	CH
+594	Rifugio Biasagn, Ufficio patriziale Biasca	CH	Tessin	Adula Alpen	TRUE	46.3934	9.0370	2023	CH
+595	Rifugio Alpe Compiett, Ufficio patriziale Biasca	CH	Tessin	Adula Alpen	TRUE	46.3554	9.0020	1518	CH
+596	Bosruck-Hütte, Alpenverein Spital am Pyhrn	AT	Oberösterreich	Ennstaler Alpen	FALSE	47.6394	14.3664	1036	AT
+597	Klagenfurter Hütte, Alpenverein Klagenfurt	AT	Kärnten	Karawanken	FALSE	46.4470	14.1831	1664	AT
+598	Bivacco Piano della Parete	CH	Tessin	Adula Alpen	TRUE	46.4386	9.0800	2750	CH
+599	Buchacker Alm, Privat	AT	Tirol	Brandenberger Alpen	FALSE	47.5334	12.0189	1450	AT
+600	SKIP
+601	Enzian-Hütte am Kieneck, Alpenverein Enzian	AT	Niederösterreich	Gutensteiner Alpen	FALSE	47.9608	15.8743	1.107	AT
+602	Biwak - Enzianhütte Rhön, DAV Sektion Fulda	DE	Hessen	Rhön	FALSE	50.5221	9.9133	760	DE
+603	Aarbiwak SAC, SAC Pilatus	CH	Bern	Berner Alpen	TRUE	46.5555	8.1522	2731	CH
+604	Dobratsch-Gipfelhaus, Alpenverein Villach	AT	Kärnten	Gailtaler Alpen	FALSE	46.6033	13.6720	2143	AT
+605	Defreggerhaus, Privat	AT	Tirol	Venediger Gruppe	FALSE	47.0836	12.3622	2964	AT
+606	Kölner Haus, DAV Sektion Köln	AT	Tirol	Samnaun Gruppe	FALSE	47.0393	10.5633	1965	DE
+607	SKIP
+608	Boé	IT	Trentino	Dolomiten	FALSE	46.5147	11.8238	2871	DE
+609	Monzoni "Torquato Taramelli"	IT	Trentino	Dolomiten	FALSE	46.3945	11.7406	2043	DE
+610	Haus Unken, DAV Sektion Gangkofen	AT	Salzburg	Chiemgauer Alpen	TRUE	47.6616	12.7446	564	DE
+611	Haus Don Bosco, DAV Sektion Pfullendorf	AT	Vorarlberg	Allgäuer Alpen	TRUE	47.3233	9.9974	851	DE
+612	Hohenzollernhaus, DAV Sektion Starnberg	AT	Tirol	Ötztaler Alpen	FALSE	46.9018	10.6348	2123	DE
+613	August-Schuster-Haus, DAV Sektion Bergland	DE	Bayern	Ammergauer Alpen	FALSE	47.5838	10.9924	1564	DE
+614	Sidelenhütte	CH	Uri	Urner Alpen	FALSE	46.5975	8.4267	2708	CH
+615	Martinsmadhütte SAC, SAC Randen	CH	Glarus	Glarner Alpen	FALSE	46.8926	9.1883	2002	CH
+616	Haldenseehaus, DAV Sektion Göppingen/ Hohenstaufen	AT	Tirol	Allgäuer Alpen	TRUE	47.4876	10.5979	1150	DE
+617	Ostpreussenhütte, DAV Sektion Königsberg	AT	Salzburg	Berchtesgadener Alpen	FALSE	47.4603	13.1159	1630	DE
+618	Amstettner Hütte, Alpenverein Amstetten	AT	Niederösterreich	Ybbstaler Alpen	FALSE	47.8863	14.7707	922	AT
+619	Rosetta "Giovanni Pedrotti"	IT	Trentino	Dolomiten	FALSE	46.2672	11.8387	2581	DE
+620	Velo della Madonna	IT	Trentino	Dolomiten	FALSE	46.2314	11.8428	2358	DE
+621	Antermoia	IT	Trentino	Dolomiten	FALSE	46.4768	11.6635	2497	DE
+622	Vajolet	IT	Trentino	Dolomiten	FALSE	46.4586	11.6326	2243	DE
+623	Ciampedié	IT	Trentino	Dolomiten	FALSE	46.4338	11.6642	1998	DE
+624	Roda di Vael	IT	Trentino	Dolomiten	FALSE	46.4202	11.6301	2283	DE
+625	Altissimo "Damiano Chiesa"	IT	Trentino	Gardaseeberge	FALSE	45.8104	10.8906	2059	DE
+626	Cima d'Asta "Ottone Brentari"	IT	Trentino	Fleimstaler Alpen	FALSE	46.1705	11.6044	2473	DE
+627	Sette Selle	IT	Trentino	Fleimstaler Alpen	FALSE	46.1322	11.3920	2014	DE
+628	Casarota "Livio Ciola"	IT	Trentino	Vizentiner Alpen	FALSE	45.9545	11.1956	1572	DE
+629	Finonchio "Fratelli Filzi"	IT	Trentino	Vizentiner Alpen	FALSE	45.9004	11.1148	1589	DE
+630	Alpe Pozza "Vincenzo Lancia"	IT	Trentino	Vizentiner Alpen	FALSE	45.8272	11.1447	1825	DE
+631	Bocca di Trat "Nino Pernici"	IT	Trentino	Gardaseeberge	FALSE	45.9266	10.7688	1600	DE
+632	Stivo "Prospero Marchetti"	IT	Trentino	Gardaseeberge	FALSE	45.9215	10.9619	2012	DE
+633	Peller	IT	Trentino	Brentagruppe	FALSE	46.3221	10.9526	2020	DE
+634	Giorgio Graffer al Grosté	IT	Trentino	Brentagruppe	FALSE	46.2196	10.8892	2261	DE
+635	F.F. Tuckett e Q. Sella	IT	Trentino	Brentagruppe	FALSE	46.1920	10.8821	2272	DE
+636	Tosa "Tommaso Pedrotti"	IT	Trentino	Brentagruppe	FALSE	46.1541	10.8988	2491	DE
+637	Val d'Ambiez "Silvio Agostini"	IT	Trentino	Brentagruppe	FALSE	46.1424	10.8694	2410	DE
+638	XII Apostoli "Fratelli Garbari"	IT	Trentino	Brentagruppe	FALSE	46.1506	10.8474	2489	DE
+639	Stavèl "Francesco Denza"	IT	Trentino	Adamellogruppe	FALSE	46.2434	10.6553	2298	DE
+640	Val d'Amola "Giovanni Segantini"	IT	Trentino	Adamellogruppe	FALSE	46.2092	10.7108	2373	DE
+641	Mandron "Città di Trento"	IT	Trentino	Adamellogruppe	FALSE	46.2025	10.5713	2449	DE
+642	Caré Alto "Dante Ongari"	IT	Trentino	Adamellogruppe	FALSE	46.1076	10.6261	2459	DE
+643	Val di Fumo	IT	Trentino	Adamellogruppe	FALSE	46.0844	10.5625	1997	DE
+644	Vioz "Mantova"	IT	Trentino	Ortler Gruppe	FALSE	46.3992	10.6358	3535	DE
+645	Cevedale "Guido Larcher"	IT	Trentino	Ortler Gruppe	FALSE	46.4368	10.6661	2582	DE
+646	Saènt "Silvio Dorigoni"	IT	Trentino	Ortler Gruppe	FALSE	46.4607	10.7519	2436	DE
+647	Monte Casale "Don Zio Pisoni"	IT	Trentino	Gardaseeberge	FALSE	46.0301	10.9247	1610	DE
+648	Sulzenauhütte, DAV Sektion Leipzig	AT	Tirol	Stubaier Alpen	FALSE	46.9958	11.1819	2191	DE
+649	Berta-Hütte, Alpenverein Villach	AT	Kärnten	Karawanken	FALSE	46.5182	13.9605	1567	AT
+650	Elberfelder Hütte, DAV Sektion Wuppertal	AT	Kärnten	Schobergruppe	FALSE	46.9780	12.7605	2346	DE
+651	Monte Calino "San Pietro"	IT	Trentino	Gardaseeberge	FALSE	45.9327	10.8387	974	DE
+652	Rifugio Alpe di Caviano	CH	Tessin	Tambogruppe	TRUE	45.8771	9.0084	670	CH
+653	Berggasthaus Alp Catrina	CH	Uri	Gotthardmassiv	FALSE	 46.8439	8.6022	1525	CH

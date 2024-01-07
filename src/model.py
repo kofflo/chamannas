@@ -11,7 +11,6 @@ Classes:
 import sys
 import datetime
 import csv
-import distutils.util
 from threading import Thread
 from enum import Enum, auto
 
@@ -590,8 +589,12 @@ class HutsModel:
                             continue
                         id_no, name, country, region, mountain_range, self_catering, lat, lon, height, lang_code = line
                         hut = {'name': name, 'country': country, 'region': region, 'mountain_range': mountain_range,
-                               'self_catering': distutils.util.strtobool(self_catering),
+                               'self_catering': strtobool(self_catering),
                                'lat': float(lat), 'lon': float(lon), 'height': float(height), 'lang_code': lang_code}
+                        if hut['lat'] < -90.0 or hut['lat'] > 90.0:
+                            raise ValueError
+                        if hut['lon'] < -180.0 or hut['lon'] > 180.0:
+                            raise ValueError
                         self._huts_dictionary[int(id_no)] = hut
                     except ValueError as e:
                         self.errors.append({'type': type(e), 'message': str(line) + ';' + str(e)})
@@ -1198,3 +1201,18 @@ class HutsModel:
         :return: a list with the current key and direction used to sort the list of selected huts
         """
         return [self._sort_selected_key, self._sort_selected_ascending]
+
+
+def strtobool(val):
+    """Convert a string representation of truth to true (1) or false (0).
+    True values are 'y', 'yes', 't', 'true', 'on', and '1'; false values
+    are 'n', 'no', 'f', 'false', 'off', and '0'.  Raises ValueError if
+    'val' is anything else.
+    """
+    val = val.lower()
+    if val in ('y', 'yes', 't', 'true', 'on', '1'):
+        return 1
+    elif val in ('n', 'no', 'f', 'false', 'off', '0'):
+        return 0
+    else:
+        raise ValueError("invalid truth value %r" % (val,))

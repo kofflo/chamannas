@@ -64,7 +64,7 @@ class _HutHTMLParser(HTMLParser):
         :param tag: the tag
         :param attrs: the tag attributes
         """
-        if tag == 'h4':
+        if tag == 'h4' and not self.name:
             # Hut name is contained in a 'h4' tag
             self._is_hut_name = True
         elif tag == 'div':
@@ -130,14 +130,15 @@ def perform_web_request_for_hut(index, hut, start_date):
         try:
             # Retrieve the web page for the hut
             lang_code = 'de_' + hut['lang_code']
-            web_page = session.get(_base_url + f'calendar?hut_id={index}&lang={lang_code}', timeout=_TIMEOUT, verify=False)
+            web_page = session.get(_base_url + f'calendar?hut_id={index}&lang={lang_code}', timeout=_TIMEOUT,
+                                   verify=True)
             if web_page.status_code != requests.codes.ok:
                 errors.append({'type': f"Requests error on {web_page.url}",
                                'message': f"Status code: {web_page.status_code}"})
 
             # Retrieve the booking data in JSON format for the hut
             json_data = session.get(_base_url + 'selectDate?date=' + start_date.strftime(_WEB_DATE_FORMAT),
-                                    timeout=_TIMEOUT, verify=False)
+                                    timeout=_TIMEOUT, verify=True)
             if json_data.status_code != requests.codes.ok:
                 errors.append({'type': f"Requests error on {json_data.url}",
                                'message': f"Status code: {json_data.status_code}"})

@@ -1,7 +1,7 @@
 import wx
 import wx.adv
 import datetime
-from src.gui_library.abstract.widgets import AbstractWidget, AbstractMouseEventsWidget, AbstractLabelledWidget, \
+from ..abstract.widgets import AbstractWidget, AbstractMouseEventsWidget, AbstractLabelledWidget, \
     AbstractButton, AbstractCheckBox, AbstractRadioBox, AbstractBitmap, \
     AbstractText, AbstractCalendar, AbstractSpinControl, AbstractMenu, TextStyle, AbstractTextTimedMenu
 

@@ -6,9 +6,9 @@ from src import model, map_tools, config
 # Create the model instance
 huts_model = model.HutsModel()
 
-_TILES_SOURCE_PATH = r'C:\Users\alco\chamannas\tiles'
+_TILES_SOURCE_PATH = r'C:\Users\PC\tiles'
 _SCRIPT_FILE = "chamannas.mscript"
-_MAPERITIVE_PATH = r'C:\Users\alco\Documents\Maperitive\Maperitive.exe'
+_MAPERITIVE_PATH = r'"C:\Users\PC\Maperitive\Maperitive.exe"'
 _MAPERITIVE_SCRIPT_STRING = "add-web-map\ngenerate-tiles bounds={minlon},{minlat},{maxlon},{maxlat} minzoom={zoom} maxzoom={zoom} tilesdir={tiles_source}\n"
 _MAPERITIVE_OPTIONS = "-exitafter"
 
@@ -35,13 +35,14 @@ for error in map_tools.errors:
 if not missing_tiles:
     print("No tiles missing")
 else:
-
+    print(str(len(missing_tiles)), " missing tiles")
     # create script
     tiles_source = Path(_TILES_SOURCE_PATH)
     tiles_source.mkdir(parents=True, exist_ok=True)
     script = tiles_source / _SCRIPT_FILE
     with open(script, "w") as f:
-        for missing_tile in missing_tiles:
+        for i, missing_tile in enumerate(missing_tiles):
+            print("Generating tile ", str(i), "/", str(len(missing_tiles)))
             zoom, x, y = list(map(int, missing_tile.split('_')))
             maxlat, minlon = map_tools.WebMercator.tile_2_deg(x, y, zoom)
             minlat, maxlon = map_tools.WebMercator.tile_2_deg(x + 1, y + 1, zoom)

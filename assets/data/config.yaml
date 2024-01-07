@@ -7,15 +7,16 @@ ABOUT:
     - "Ricerca di letti liberi nei rifugi alpini"
     - "Suche von verfügbaren Plätzen in Berghütten"
   copyright: "(C) 2020"
-  website: http://github.com/kofflo/chamannashttp://raw.github.com/kofflo/chamannas/master/
+  website: http://github.com/kofflo/chamannas
   developer: "Alessandro Conti"
 BASE_URL: http://www.alpsonline.org/reservation/
-UPDATES_URL: http://127.0.0.1:8000/
+UPDATES_URL: http://raw.githubusercontent.com/kofflo/chamannas/master/
 ROOM_BASIC_TYPES:
   'Matratzenlager': 'dormitory'
   'Massenlager': 'dormitory'
   'Mehrbettzimmer': 'shared'
   'Zimmer': 'shared'
+  'Zimmern': 'shared'
   'Dreibettzimmer': 'shared'
   'Spezialzimmer': 'shared'
   '4-er Zimmer': 'shared'
@@ -35,6 +36,7 @@ ROOM_BASIC_TYPES:
   '13+ Bettzimmer': 'shared'
   'default_type': 'shared'
   'Unbewarteter Betrieb': 'dormitory'
+  'Unbewarterer Betrieb': 'dormitory'
   'Unbewirtschafteter Modus': 'dormitory'
   'Wohnheim': 'dormitory'
   'Zelt': 'dormitory'
@@ -59,6 +61,6 @@ UPDATE_TILES:
     tiles.tar: 'tiles archive'
 SUPPORTED_GUIS:
   - 'wx'
-  - 'qt5'
+  - 'qt'
   - 'tk'
 DEFAULT_GUI: 'wx'

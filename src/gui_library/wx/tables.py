@@ -1,25 +1,20 @@
 import wx.grid
 
-from src.view.abstract.tables import Align, TextStyle, Renderer, AbstractGrid
-from src.gui_library.wx.widgets import Widget
+from ..abstract.tables import Align, TextStyle, Renderer, AbstractGrid
+from .widgets import Widget
 
 
 class GridTable(wx.grid.GridTableBase):
     pass
 
 
-class WxAbstractGrid(AbstractGrid, Widget, wx.grid.Grid):
-    _FONT_SIZE = 10
-    _ROW_HEIGHT = 22
-    _COL_WIDTH = 80
-    _MAX_COL_WIDTH = 400
-    _COL_LABEL_HEIGHT = 32
-    _ROW_LABEL_WIDTH = 80
+class Grid(AbstractGrid, Widget, wx.grid.Grid):
 
     def __init__(self, panel):
         super().__init__()
         wx.grid.Grid.__init__(self, panel)
-
+        self.SetLabelTextColour(wx.Colour(self._get_header_colour()[0]))
+        self.SetLabelBackgroundColour(wx.Colour(self._get_header_colour()[1]))
         self._wx_font = wx.Font(wx.FontInfo(self._FONT_SIZE))
         self._wx_font_bold = wx.Font(wx.FontInfo(self._FONT_SIZE).Bold())
         self._wx_font_italic = wx.Font(wx.FontInfo(self._FONT_SIZE).Italic())

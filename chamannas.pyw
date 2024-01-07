@@ -2,7 +2,7 @@
 Main script which runs the application.
 
 Run with:
-python chamannas.pyw [-v (table | map)] [-g (wx | qt5 | tk)]
+python chamannas.pyw [-v (table | map)] [-g (wx | qt | tk)]
 
 Options:
 -v (--view): selects the main view
@@ -10,7 +10,7 @@ Options:
     map: opens the map window as main wiew
 -g (--graphics): selects the graphic library for the GUI
     wx: wxPython
-    qt5: Qt 5
+    qt: Qt 5
     tk: Tkinter
 
 The following data files are used by the application:
@@ -46,7 +46,7 @@ The following data files are used by the application:
 """
 import argparse
 
-_SUPPORTED_GRAPHICS = ['wx', 'qt5', 'tk']
+_SUPPORTED_GRAPHICS = ['wx', 'qt', 'tk']
 
 # Define the command line arguments
 parser = argparse.ArgumentParser(description="Search for available beds in mountain huts.")
@@ -57,12 +57,32 @@ parser.add_argument('-v', '--view', type=str, nargs=1, choices=['table', 'map'],
 
 args = parser.parse_args()
 
+import src.gui_library
 from src import config
+from src.view import errors
 
 # Load the configuration
 config.load(args)
 
-from src import model, controller, i18n, map_tools, web_request, view
+_config_GUI = config.GUI
+
+# Select the GUI to use based on the configuration,
+# using a default GUI if the required one is not supported
+if _config_GUI is None:
+    _GUI = config.DEFAULT_GUI
+elif config.SUPPORTED_GUIS and _config_GUI not in config.SUPPORTED_GUIS:
+    errors.append({
+        'type': 'Wrong GUI',
+        'message': f"The required GUI '{config.GUI}' is not valid;"
+                   f" '{config.DEFAULT_GUI}' is selected as default"
+    })
+    _GUI = config.DEFAULT_GUI
+else:
+    _GUI = _config_GUI
+
+src.gui_library.initialize(_GUI)
+
+from src import model, controller, i18n, map_tools, web_request
 
 # Load the internationalization features
 i18n.load()
@@ -88,7 +108,7 @@ else:
     huts_controller = controller.HutsController(huts_model, 'table')
 
 # Start the app main loop
-view.app.run()
+src.gui_library.app.run()
 
 # On exit, save the preferences and the results dictionary
 _, all_selected = huts_model.get_selected()

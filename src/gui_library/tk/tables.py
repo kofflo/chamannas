@@ -2,9 +2,9 @@ import tkinter
 import tkinter.ttk
 import tkinter.font
 
-from src.view.abstract.tables import Align, TextStyle, Renderer, AbstractGrid
-from src.gui_library.tk.widgets import Widget
-from src.gui_library.tk import ttk_style
+from ..abstract.tables import Align, TextStyle, Renderer, AbstractGrid
+from .widgets import Widget
+from ..tk import ttk_style
 
 _UNCHECKED_BOX_SYMBOL = '\u2610'
 _CHECKED_BOX_SYMBOL = '\u2611'
@@ -26,22 +26,17 @@ def fixed_map(style, option):
     return [element for element in style.map("Treeview", query_opt=option) if element[:2] != ("!disabled", "!selected")]
 
 
-class TkAbstractGrid(AbstractGrid, Widget):
+class Grid(AbstractGrid, Widget):
 
-    _FONT_SIZE = 10
     _FONT_FAMILY = 'Helvetica'
-    _ROW_HEIGHT = 22
     _COL_WIDTH = 100
     _COL_LABEL_HEIGHT = 42
-    _ROW_LABEL_WIDTH = 80
     _MAX_COL_WIDTH = 600
     _MAX_ROW_LABEL_WIDTH = 200
-    _HEADER_FOREGROUND_COLOR = (0, 0, 0)
-    _HEADER_BACKGROUND_COLOR = (220, 220, 220)
     _GRID_ROW_NUMBERS = 10
     _FIXED_ROW_NUMBERS = True
-    SCROLLBAR_X = True
-    SCROLLBAR_Y = True
+    _AVOID_HORIZONTAL_SCROLL = False
+    _AVOID_VERTICAL_SCROLL = False
     _row_colour = True
 
     ttk_style.map("Treeview",
@@ -77,8 +72,8 @@ class TkAbstractGrid(AbstractGrid, Widget):
         ttk_style.configure(str(id(self)) + '.Treeview.Heading',
                             font=(self._FONT_FAMILY, self._FONT_SIZE, 'bold'),
                             padding=(self._COL_LABEL_HEIGHT - self._ROW_HEIGHT) // 2,
-                            foreground=rgb2hex(*self._HEADER_FOREGROUND_COLOR),
-                            background=rgb2hex(*self._HEADER_BACKGROUND_COLOR))
+                            foreground=rgb2hex(*self._get_header_colour()[0]),
+                            background=rgb2hex(*self._get_header_colour()[1]))
         self._current_xview = None
         self._current_yview = None
         self._frame = None
@@ -87,14 +82,14 @@ class TkAbstractGrid(AbstractGrid, Widget):
         super().hide(is_hidden)
         if self._widget is not None:
             if self._is_hidden:
-                if self.SCROLLBAR_X:
+                if not self._AVOID_HORIZONTAL_SCROLL:
                     self.xsb.grid_remove()
-                if self.SCROLLBAR_Y:
+                if not self._AVOID_VERTICAL_SCROLL:
                     self.ysb.grid_remove()
             else:
-                if self.SCROLLBAR_X:
+                if not self._AVOID_HORIZONTAL_SCROLL:
                     self.xsb.grid()
-                if self.SCROLLBAR_Y:
+                if not self._AVOID_VERTICAL_SCROLL:
                     self.ysb.grid()
 
     def _create_widget(self, row_numbers):
@@ -106,10 +101,10 @@ class TkAbstractGrid(AbstractGrid, Widget):
         self._widget.bind("<Button-3>", self._on_right_click)
         self._widget.bind("<Double-3>", self._on_right_double_click)
         self._widget.bind("<Motion>", self._on_motion)
-        if self.SCROLLBAR_X:
+        if not self._AVOID_HORIZONTAL_SCROLL:
             self.xsb = tkinter.ttk.Scrollbar(self._frame, orient='horizontal', command=self.xview)
             self.configure(xscrollcommand=self.xsb.set)
-        if self.SCROLLBAR_Y:
+        if not self._AVOID_VERTICAL_SCROLL:
             self.ysb = tkinter.ttk.Scrollbar(self._frame, orient='vertical', command=self.yview)
             self.configure(yscrollcommand=self.ysb.set)
 
@@ -117,6 +112,7 @@ class TkAbstractGrid(AbstractGrid, Widget):
         self._frame = frame
         self._font_for_measure = tkinter.font.Font(family=self._FONT_FAMILY, size=self._FONT_SIZE, weight='bold')
         self._dummy_text = tkinter.Text(self._frame, font=self._font_for_measure)
+        print("creo con row number", self._GRID_ROW_NUMBERS)
         self._create_widget(self._GRID_ROW_NUMBERS)
 
     def _on_motion(self, event):
@@ -184,19 +180,20 @@ class TkAbstractGrid(AbstractGrid, Widget):
         if not self._FIXED_ROW_NUMBERS:
             grid_params = self._widget.grid_info()
             self._widget.grid_forget()
-            if self.SCROLLBAR_X:
+            if not self._AVOID_HORIZONTAL_SCROLL:
                 grid_params_xsb = self.xsb.grid_info()
                 self.xsb.grid_forget()
-            if self.SCROLLBAR_Y:
+            if not self._AVOID_VERTICAL_SCROLL:
                 grid_params_ysb = self.ysb.grid_info()
                 self.ysb.grid_forget()
             row_numbers = min(self._get_number_rows(), self._GRID_ROW_NUMBERS)
+            print("ricreo con ", row_numbers)
             self._create_widget(row_numbers)
             if grid_params:
                 self._widget.grid(**grid_params)
-                if self.SCROLLBAR_X:
+                if not self._AVOID_HORIZONTAL_SCROLL:
                     self.xsb.grid(**grid_params_xsb)
-                if self.SCROLLBAR_Y:
+                if not self._AVOID_VERTICAL_SCROLL:
                     self.ysb.grid(**grid_params_ysb)
 
     def _refresh_columns(self):

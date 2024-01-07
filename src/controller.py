@@ -9,12 +9,12 @@ import os
 import tempfile
 import tarfile
 
-from src.view import HutsTableView, HutsMapView, DetailedInfoView, SelectedInfoView, DeveloperInfoView, \
-    AboutDialog, UpdateDialog, view_errors
+from src.view.frames import HutsTableView, HutsMapView, DetailedInfoView, SelectedInfoView, DeveloperInfoView, \
+    AboutDialog, UpdateDialog
+from src import view
 from src import i18n
 from src import map_tools
 from src import config
-from src.config import ASSETS_PATH_DATA, ASSETS_PATH_TILES
 from src import web_request
 
 
@@ -307,7 +307,7 @@ class HutsController:
         self._add_to_developer_info(errors, map_tools.errors, 'Map')
         self._add_to_developer_info(errors, config.errors, 'Config')
         self._add_to_developer_info(errors, web_request.errors, 'Web')
-        self._add_to_developer_info(errors, view_errors, 'View')
+        self._add_to_developer_info(errors, view.errors, 'View')
         self._command_open_developer_frame(parent, errors, 'error')
 
     def command_search_for_updates(self):
@@ -349,11 +349,11 @@ class HutsController:
             if result and updates:
                 for filename, update_path in updates.items():
                     if filename in all_updates['data_files']:
-                        shutil.copy(update_path, str(ASSETS_PATH_DATA / filename))
+                        shutil.copy(update_path, str(config.ASSETS_PATH_DATA / filename))
                     elif filename in all_updates['tiles']:
-                        dest_file = str(ASSETS_PATH_TILES / filename)
+                        dest_file = str(config.ASSETS_PATH_TILES / filename)
                         shutil.copy(update_path, dest_file)
-                        tarfile.open(dest_file).extractall(ASSETS_PATH_TILES)
+                        tarfile.open(dest_file).extractall(config.ASSETS_PATH_TILES)
                         os.remove(dest_file)
 
                 # Reload the configuration and data files and reconfigure the modules

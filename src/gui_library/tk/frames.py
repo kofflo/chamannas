@@ -2,19 +2,14 @@ import tkinter
 import tkinter.ttk
 import tkinter.messagebox
 
-from src.view.abstract.frames import AbstractIconFrame, FrameStyle, CursorStyle, AbstractDialog
+from ..abstract.frames import AbstractIconFrame, FrameStyle, CursorStyle, AbstractDialog, AbstractMessageDialog
 
 
-_TABLE_VIEW_SIZE = (1000, 600)
-
-
-class TkFrame(AbstractIconFrame):
-
-    _NEW_VERSION = False
+class Frame(AbstractIconFrame):
 
     def __init__(self, *, parent, pos=None, size=None, **kwargs):
 
-        if not isinstance(parent, TkFrame):
+        if not isinstance(parent, Frame):
             logical_parent = None
             tk_parent = parent
         else:
@@ -23,6 +18,8 @@ class TkFrame(AbstractIconFrame):
         self._toplevel = tkinter.Toplevel(tk_parent)
         self._toplevel.bind('<<CloseFrame>>', lambda event: self._on_close())
         self._toplevel.bind('<<UpdateGui>>', lambda event: self.update_gui(self._update_gui_data))
+        self._toplevel.grid_columnconfigure(0, weight=1)
+        self._toplevel.grid_rowconfigure(0, weight=1)
 
         geometry_string = ''
         if size is not None:
@@ -46,12 +43,8 @@ class TkFrame(AbstractIconFrame):
 
         super().__init__(parent=logical_parent, **kwargs)
         self._create_widgets(None)
-        if self._NEW_VERSION:
-            print("NEW VERSION", self._toplevel, id(self._toplevel))
-            layout = self._create_gui().create_layout(self._toplevel)
-            layout.grid(row=0, column=0, sticky="nsew")
-        else:
-            self._create_gui()
+        layout = self._create_gui().create_layout(self._toplevel)
+        layout.grid(row=0, column=0, sticky="nsew")
         self._create_menu()
 
     def event_connect(self, event, on_event):
@@ -74,20 +67,20 @@ class TkFrame(AbstractIconFrame):
 
     @property
     def title(self):
-        return super(TkFrame, TkFrame).title.__get__(self)
+        return super(Frame, Frame).title.__get__(self)
 
     @title.setter
     def title(self, title):
-        super(TkFrame, TkFrame).title.__set__(self, title)
+        super(Frame, Frame).title.__set__(self, title)
         self._toplevel.title(self.title)
 
     @property
     def icon(self):
-        return super(TkFrame, TkFrame).icon.__get__(self)
+        return super(Frame, Frame).icon.__get__(self)
 
     @icon.setter
     def icon(self, icon):
-        super(TkFrame, TkFrame).icon.__set__(self, icon)
+        super(Frame, Frame).icon.__set__(self, icon)
         if self.icon is not None:
             self._toplevel.iconphoto(True, tkinter.PhotoImage(file=self.icon))
 
@@ -132,13 +125,11 @@ class TkFrame(AbstractIconFrame):
         self._toplevel.lift()
 
 
-class TkDialog(AbstractDialog):
-
-    _NEW_VERSION = False
+class Dialog(AbstractDialog):
 
     def __init__(self, *, parent, **kwargs):
 
-        if not isinstance(parent, TkFrame):
+        if not isinstance(parent, Frame):
             tk_parent = parent
         else:
             tk_parent = parent._toplevel
@@ -152,11 +143,8 @@ class TkDialog(AbstractDialog):
         super().__init__(**kwargs)
         self._create_widgets(self._toplevel)
 
-        if self._NEW_VERSION:
-            layout = self._create_gui().create_layout(self._toplevel)
-            layout.pack()
-        else:
-            self._create_gui()
+        layout = self._create_gui().create_layout(self._toplevel)
+        layout.pack()
 
     def _create_gui(self):
         raise NotImplementedError
@@ -167,11 +155,11 @@ class TkDialog(AbstractDialog):
 
     @property
     def title(self):
-        return super(TkDialog, TkDialog).title.__get__(self)
+        return super(Dialog, Dialog).title.__get__(self)
 
     @title.setter
     def title(self, title):
-        super(TkDialog, TkDialog).title.__set__(self, title)
+        super(Dialog, Dialog).title.__set__(self, title)
         self._toplevel.title(self.title)
 
     def show_modal(self):
@@ -194,3 +182,36 @@ class TkDialog(AbstractDialog):
     def __exit__(self, exc_type, exc_value, exc_traceback):
         #
         pass
+
+class MessageDialog(AbstractMessageDialog):
+
+    def __init__(self, parent, message, caption):
+        super().__init__(message, title=caption)
+
+    def __enter__(self):
+        return self
+
+    def __exit__(self, exc_type, exc_value, exc_traceback):
+        #
+        pass
+
+    @property
+    def title(self):
+        return super(MessageDialog, MessageDialog).title.__get__(self)
+
+    @title.setter
+    def title(self, title):
+        super(MessageDialog, MessageDialog).title.__set__(self, title)
+
+    @property
+    def message(self):
+        return super(MessageDialog, MessageDialog).message.__get__(self)
+
+    @message.setter
+    def message(self, message):
+        super(MessageDialog, MessageDialog).message.__set__(self, message)
+
+    def show_modal(self):
+        self.update_gui({})
+        return_value = tkinter.messagebox.showerror(title=self.title, message=self.message)
+        return return_value == tkinter.messagebox.OK

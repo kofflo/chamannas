@@ -1,6 +1,6 @@
 from enum import Enum, auto
 
-from src.gui_library.abstract.widgets import AbstractWidget, TextStyle
+from .widgets import AbstractWidget, TextStyle
 
 
 class Align(Enum):
@@ -13,10 +13,6 @@ class Renderer(Enum):
     NORMAL = auto()
     BOOLEAN = auto()
     AUTO_WRAP = auto()
-
-
-# COLOUR FOR TABLE ROWS: [foreground, background]
-_NORMAL_COLOUR = [(0, 0, 0), (255, 255, 255)]
 
 
 class AbstractGrid(AbstractWidget):
@@ -32,6 +28,17 @@ class AbstractGrid(AbstractWidget):
     _MAXIMUM_WIDTH = None
     _MINIMUM_HEIGHT = None
     _MINIMUM_WIDTH = None
+    _FONT_SIZE = 10
+    _ROW_HEIGHT = 22
+    _ROW_LABEL_WIDTH = 80
+    _COL_WIDTH = 80
+    _COL_LABEL_HEIGHT = 32
+    _MAX_COL_WIDTH = 400
+    # COLOUR FOR TABLE ROWS: [foreground, background]
+    _NORMAL_COLOUR = [(0, 0, 0), (255, 255, 255)]
+    _NORMAL_HEADER_COLOUR = [(0, 0, 0), (220, 220, 220)]
+    _AVOID_HORIZONTAL_SCROLL = False
+    _AVOID_VERTICAL_SCROLL = False
 
     def __init__(self, **kwargs):
         self._col_widths = None
@@ -59,10 +66,13 @@ class AbstractGrid(AbstractWidget):
             return self._get_row_col_colour(row, col)
 
     def _get_row_col_colour(self, row, col):
-        return _NORMAL_COLOUR
+        return self._NORMAL_COLOUR
 
     def _get_row_colour(self, row):
         return self._get_row_col_colour(row, 0)
+
+    def _get_header_colour(self):
+        return self._NORMAL_HEADER_COLOUR
 
     def _get_style(self, row, col):
         return TextStyle.NORMAL

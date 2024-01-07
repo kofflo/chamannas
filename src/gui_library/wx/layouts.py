@@ -1,15 +1,22 @@
 import wx
 
-from src.gui_library.abstract.layouts import AbstractBoxLayout, AbstractGridLayout, Align
+from ..abstract.layouts import AbstractBoxLayout, AbstractGridLayout, Align
 
 
-class WxLayout:
+class Layout:
     _BORDER_FLAGS = [wx.TOP, wx.RIGHT, wx.BOTTOM, wx.LEFT]
 
     def create_layout(self, parent):
         raise NotImplementedError()
 
-    def apply_border(self, widget, border_tuple, align):
+    def apply_align(self, align):
+        if align & Align.EXPAND:
+            flag = wx.EXPAND
+        else:
+            flag = 0
+        return flag
+
+    def _apply_border(self, widget, border_tuple, align):
         min_border = float('inf')
         flag = 0
         for index, b in enumerate(border_tuple):
@@ -21,7 +28,7 @@ class WxLayout:
         border_tuple = tuple(max(0, b - min_border) for b in border_tuple)
 
         if any(b != 0 for b in border_tuple):
-            widget, widget_border, flag_border = self.apply_border(widget, border_tuple, align)
+            widget, widget_border, flag_border = self._apply_border(widget, border_tuple, align)
             box = wx.BoxSizer(wx.VERTICAL)
             if align & Align.EXPAND:
                 flag_border |= wx.EXPAND
@@ -30,15 +37,8 @@ class WxLayout:
 
         return widget, min_border, flag
 
-    def apply_align(self, align):
-        if align & Align.EXPAND:
-            flag = wx.EXPAND
-        else:
-            flag = 0
-        return flag
 
-
-class BoxLayout(AbstractBoxLayout, WxLayout):
+class BoxLayout(AbstractBoxLayout, Layout):
     _DIRECTION = None
 
     def create_layout(self, parent):
@@ -53,14 +53,14 @@ class BoxLayout(AbstractBoxLayout, WxLayout):
                 widget_align = widget_dict['align']
                 flag = self.apply_align(widget_align)
 
-                if isinstance(widget, WxLayout):
+                if isinstance(widget, Layout):
                     widget = widget.create_layout(None)
 
                 widget_border = widget_dict['border']
                 if isinstance(widget_border, int):
                     flag |= wx.ALL
                 elif any(b != 0 for b in widget_border):
-                    widget, widget_border, flag_border = self.apply_border(widget, widget_border, widget_align)
+                    widget, widget_border, flag_border = self._apply_border(widget, widget_border, widget_align)
                     flag |= flag_border
                 else:
                     widget_border = 0
@@ -102,7 +102,7 @@ class HBoxLayout(BoxLayout):
         return flag
 
 
-class GridLayout(AbstractGridLayout, WxLayout):
+class GridLayout(AbstractGridLayout, Layout):
 
     def create_layout(self, parent):
         sizer = wx.FlexGridSizer(self._rows, self._cols, self._vgap, self._hgap)
@@ -126,14 +126,14 @@ class GridLayout(AbstractGridLayout, WxLayout):
                     widget_align = widget_dict['align']
                     flag = self.apply_align(widget_align)
 
-                    if isinstance(widget, WxLayout):
+                    if isinstance(widget, Layout):
                         widget = widget.create_layout(None)
 
                     widget_border = widget_dict['border']
                     if isinstance(widget_border, int):
                         flag |= wx.ALL
                     elif any(b != 0 for b in widget_border):
-                        widget, widget_border, flag_border = self.apply_border(widget, widget_border, widget_align)
+                        widget, widget_border, flag_border = self._apply_border(widget, widget_border, widget_align)
                         flag |= flag_border
                     else:
                         widget_border = 0

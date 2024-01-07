@@ -7,6 +7,7 @@ Glarus	Glarus	Glarona	Glarus
 Gorenjska	Upper Carniola	Alta Carniola	Gorenjska
 Goriška	Gorizia	Goriziano	Goriška
 Graubünden	Grisons	Grigioni	Graubünden
+Hessen	Hesse	Assia	Hessen
 Kärnten	Carinthia	Carinzia	Kärnten
 Namur	Namur	Namur	Namur
 Niederösterreich	Lower Austria	Bassa Austria	Niederösterreich
@@ -24,6 +25,7 @@ Steiermark	Styria	Stiria	Steiermark
 Südtirol	South Tyrol	Alto Adige	Südtirol
 Tessin	Ticino	Ticino	Tessin
 Tirol	Tyrol	Tirolo	Tirol
+Trentino	Trentino	Trentino	Trentino
 Uri	Uri	Uri	Uri
 Vorarlberg	Vorarlberg	Vorarlberg	Vorarlberg
 Venetien	Veneto	Veneto	Venetien

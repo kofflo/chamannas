@@ -2,12 +2,12 @@ import wx
 import wx.adv
 import wx.lib.newevent
 
-from src.view.abstract.frames import AbstractIconFrame, FrameStyle, CursorStyle, AbstractDialog
+from ..abstract.frames import AbstractIconFrame
+from ..abstract.frames import FrameStyle, CursorStyle, AbstractDialog, AbstractMessageDialog
 
 
-class WxFrame(AbstractIconFrame, wx.Frame):
+class Frame(AbstractIconFrame, wx.Frame):
 
-    _NEW_VERSION = False
     def __init__(self, *, parent, pos=None, size=None, **kwargs):
 
         if self._STYLE is FrameStyle.FIXED_SIZE:
@@ -31,11 +31,7 @@ class WxFrame(AbstractIconFrame, wx.Frame):
         self._frame_sizer.Add(self._panel)
         super().__init__(parent=parent, **kwargs)
         self._create_widgets(self._panel)
-        if self._NEW_VERSION is True:
-            print('NEW VERSION')
-            self._create_gui().create_layout(self._panel)
-        else:
-            self._create_gui()
+        self._create_gui().create_layout(self._panel)
         self._create_menu()
 
     def event_connect(self, event, on_event):
@@ -54,20 +50,20 @@ class WxFrame(AbstractIconFrame, wx.Frame):
 
     @property
     def title(self):
-        return super(WxFrame, WxFrame).title.__get__(self)
+        return super(Frame, Frame).title.__get__(self)
 
     @title.setter
     def title(self, title):
-        super(WxFrame, WxFrame).title.__set__(self, title)
+        super(Frame, Frame).title.__set__(self, title)
         self.SetTitle(title)
 
     @property
     def icon(self):
-        return super(WxFrame, WxFrame).icon.__get__(self)
+        return super(Frame, Frame).icon.__get__(self)
 
     @icon.setter
     def icon(self, icon):
-        super(WxFrame, WxFrame).icon.__set__(self, icon)
+        super(Frame, Frame).icon.__set__(self, icon)
         if self.icon is not None:
             self.SetIcon(wx.Icon(self.icon))
 
@@ -101,21 +97,15 @@ class WxFrame(AbstractIconFrame, wx.Frame):
         self.SetFocus()
 
 
-class WxDialog(AbstractDialog, wx.Dialog):
-
-    _NEW_VERSION = False
+class Dialog(AbstractDialog, wx.Dialog):
 
     def __init__(self, parent, **kwargs):
         wx.Dialog.__init__(self, parent)
         super().__init__(**kwargs)
         self._create_widgets(self)
-        if self._NEW_VERSION is True:
-            print('NEW VERSION')
-            self._create_gui().create_layout(self)
-            self.Fit()
-            self.SetSizeHints(self.GetSize().x, self.GetSize().y, self.GetMaxWidth(), self.GetMaxHeight())
-        else:
-            self._create_gui()
+        self._create_gui().create_layout(self)
+        self.Fit()
+        self.SetSizeHints(self.GetSize().x, self.GetSize().y, self.GetMaxWidth(), self.GetMaxHeight())
         self.SetIcon(wx.Icon(parent.icon))
 
     def _create_gui(self):
@@ -123,15 +113,16 @@ class WxDialog(AbstractDialog, wx.Dialog):
 
     @property
     def title(self):
-        return super(WxDialog, WxDialog).title.__get__(self)
+        return super(Dialog, Dialog).title.__get__(self)
 
     @title.setter
     def title(self, title):
-        super(WxDialog, WxDialog).title.__set__(self, title)
+        super(Dialog, Dialog).title.__set__(self, title)
         self.SetTitle(title)
 
     def show_modal(self):
         self.update_gui({})
+        self.Fit()
         return self.ShowModal() == 1
 
     def _on_ok(self, obj):
@@ -141,3 +132,32 @@ class WxDialog(AbstractDialog, wx.Dialog):
     def _on_cancel(self, obj):
         super()._on_cancel(obj)
         self.EndModal(self._return_value)
+
+
+class MessageDialog(AbstractMessageDialog, wx.MessageDialog):
+
+    def __init__(self, parent, message, title):
+        wx.MessageDialog.__init__(self, parent, "", "", wx.OK | wx.ICON_ERROR)
+        super().__init__(message, title=title)
+
+    @property
+    def title(self):
+        return super(MessageDialog, MessageDialog).title.__get__(self)
+
+    @title.setter
+    def title(self, title):
+        super(MessageDialog, MessageDialog).title.__set__(self, title)
+        self.SetTitle(title)
+
+    @property
+    def message(self):
+        return super(MessageDialog, MessageDialog).message.__get__(self)
+
+    @message.setter
+    def message(self, message):
+        super(MessageDialog, MessageDialog).message.__set__(self, message)
+        self.SetMessage(message)
+
+    def show_modal(self):
+        self.update_gui({})
+        return self.ShowModal() == wx.ID_OK

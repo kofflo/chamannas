@@ -1,3 +1,4 @@
+Adamellogruppe	Adamello Group	Gruppo dell'Adamello	Adamellogruppe
 Adula Alpen	Adula Alps	Alpi dell'Adula	Adula Alpen
 Albula Alpen	Albula Alps	Alpi dell'Albula	Albula Alpen
 Allgäuer Alpen	Allgäu Alps	Alpi dell'Algovia	Allgäuer Alpen
@@ -8,7 +9,9 @@ Bayerische Voralpen	Bavarian Prealps	Alpi Bavaresi	Bayerische Voralpen
 Berchtesgadener Alpen	Berchtesgaden Alps	Alpi di Berchtesgaden	Berchtesgadener Alpen
 Berner Alpen	Bernese Alps	Alpi Bernesi	Berner Alpen
 Bernina Alpen	Bernina Alps	Alpi del Bernina	Bernina Alpen
+Brandenberger Alpen	Brandenberg Alps	Alpi di Brandenberg	Brandenberger Alpen
 Bregenzerwald Gebirge	Bregenz Forest Mountains	Prealpi di Bregenz	Bregenzerwald Gebirge
+Brentagruppe	Brenta Group	Gruppo del Brenta	Brentagruppe
 Chiemgauer Alpen	Chiemgau Alps	Alpi del Chiemgau	Chiemgauer Alpen
 Dachstein Gebirge	Dachstein Mountains	Monti del Dachstein	Dachstein Gebirge
 Dolomiten	Dolomites	Dolomiti	Dolomiten
@@ -17,9 +20,11 @@ Emmentaler Alpen	Emmental Alps	Alpi dell'Emmental	Emmentaler Alpen
 Ennstaler Alpen	Ennstal Alps	Alpi dell'Ennstal	Ennstaler Alpen
 Erzgebirge	Ore Mountains	Monti Metalliferi	Erzgebirge
 Fichtelgebirge	Fichtel Mountains	Fichtelgebirge	Fichtelgebirge
+Fleimstaler Alpen	Fiemme Mountains	Dolomiti di Fiemme	Fleimstaler Alpen
 Freiburger Alpen	Fribourg Alps	Prealpi di Friburgo	Freiburger Alpen
 Fränkische Alb	Franconia Jura	Giura Francone	Fränkische Alb
 Gailtaler Alpen	Gailtal Alps	Alpi della Gail	Gailtaler Alpen
+Gardaseeberge	Garda Mountains	Prealpi Gardesane	Gardaseeberge
 Glarner Alpen	Glarus Alps	Alpi Glaronesi	Glarner Alpen
 Glockner Gruppe	Glockner Group	Gruppo del Glockner	Glockner Gruppe
 Goldberggruppe	Goldberg Group	Gruppo del Goldberg	Goldberggruppe
@@ -55,8 +60,8 @@ Radstädter Tauern	Radstadt Tauern	Tauri di Radstadt 	Radstädter Tauern
 Randgebirge östlich der Mur	Prealps East of the Mur	Prealpi ad est della Mura	Randgebirge östlich der Mur
 Rätikon	Rätikon	Catena del Rätikon	Rätikon
 Rax-Schneeberg-Gruppe	Rax-Schneeberg Group	Catena Rax-Schneeberg	Rax-Schneeberg-Gruppe
+Rhön	Rhön Mountains	Monti Rhön	Rhön
 Rieserfernergruppe	Rieserferner Group	Vedrette di Ries	Rieserfernergruppe
-Rofan Gebirge	Brandenberg Alps	Alpi di Brandenberg	Rofan Gebirge
 Rottenmanner und Wölzer Tauern	Rottenmanner and Wölzer Tauern	Tauri di Wölz e di Rottenmann	Rottenmanner und Wölzer Tauern
 Salzkammergut Berge	Salzkammergut Mountains	Monti del Salzkammergut	Salzkammergut Berge
 Samnaun Gruppe	Samnaun Alps	Gruppo del Samnaun	Samnaun Gruppe
@@ -82,6 +87,7 @@ Tuxer Alpen	Tux Alps	Prealpi del Tux	Tuxer Alpen
 Urner Alpen	Uri Alps	Alpi Urane	Urner Alpen
 Venediger Gruppe	Venediger Group	Gruppo del Venediger	Venediger Gruppe
 Verwall	Verwall Alps	Gruppo del Verwall	Verwall
+Vizentiner Alpen	Prealpi Vicentine	Vicentine Alps	Vizentiner Alpen
 Waldviertel	Waldviertel	Waldviertel	Waldviertel
 Walliser Alpen	Pennine Alps	Alpi Pennine	Walliser Alpen
 Wetterstein Gebirge	Wetterstein Mountains	Monti del Wetterstein	Wetterstein Gebirge

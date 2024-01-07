@@ -2,23 +2,32 @@ import sys
 
 app = None
 event_create = None
-Button, CheckBox, RadioBox, Bitmap, Text, TextControl,\
+Button, CheckBox, RadioBox, Bitmap, Text, TextControl, \
     Calendar, SpinControl, Menu, TextTimedMenu = [None] * 10
+Grid = None
+Frame, Dialog, MessageDialog = [None] * 3
+VBoxLayout, HBoxLayout, GridLayout = [None] * 3
 
 
-def import_gui_library(gui):
+def initialize(gui):
 
     global app, event_create
     global Button, CheckBox, RadioBox, Bitmap, Text, TextControl, Calendar, SpinControl, Menu, TextTimedMenu
+    global Grid
+    global Frame, Dialog, MessageDialog
+    global VBoxLayout, HBoxLayout, GridLayout
 
     if gui == 'wx':
         # Import WxPython GUI
         try:
             from wx import App
 
-            from src.gui_library.wx import event_create
-            from src.gui_library.wx.widgets import Button, CheckBox, RadioBox, Bitmap, Text, TextControl,\
+            from .wx import event_create
+            from .wx.widgets import Button, CheckBox, RadioBox, Bitmap, Text, TextControl,\
                 Calendar, SpinControl, Menu, TextTimedMenu
+            from .wx.layouts import VBoxLayout, HBoxLayout, GridLayout
+            from .wx.frames import Frame, Dialog, MessageDialog
+            from .wx.tables import Grid
 
             app = App()
             app.run = app.MainLoop
@@ -28,20 +37,23 @@ def import_gui_library(gui):
             print(e)
             sys.exit(1)
 
-    elif gui == 'qt5':
-        # Import Qt5 GUI
+    elif gui == 'qt':
+        # Import Qt GUI
         try:
-            from PySide2.QtWidgets import QApplication
+            from PySide6.QtWidgets import QApplication
 
-            from src.gui_library.qt5 import event_create
-            from src.gui_library.qt5.widgets import Button, CheckBox, RadioBox, Bitmap, Text, TextControl,\
+            from .qt import event_create
+            from .qt.widgets import Button, CheckBox, RadioBox, Bitmap, Text, TextControl,\
                 Calendar, SpinControl, Menu, TextTimedMenu
+            from .qt.tables import Grid
+            from .qt.frames import Frame, Dialog, MessageDialog
+            from .qt.layouts import VBoxLayout, HBoxLayout, GridLayout
 
             app = QApplication([])
-            app.run = app.exec_
+            app.run = app.exec
 
         except ImportError as e:
-            print("Fatal error: the required GUI 'qt5' cannot be loaded correctly")
+            print("Fatal error: the required GUI 'qt' cannot be loaded correctly")
             print(e)
             sys.exit(1)
 
@@ -51,9 +63,12 @@ def import_gui_library(gui):
             from tkinter import Tk, ttk
             app = Tk()
 
-            from src.gui_library.tk import event_create
-            from src.gui_library.tk.widgets import Button, CheckBox, RadioBox, Bitmap, Text, TextControl,\
+            from .tk import event_create
+            from .tk.widgets import Button, CheckBox, RadioBox, Bitmap, Text, TextControl,\
                 Calendar, SpinControl, Menu, TextTimedMenu
+            from .tk.tables import Grid
+            from .tk.frames import Frame, Dialog, MessageDialog
+            from .tk.layouts import VBoxLayout, HBoxLayout, GridLayout
 
             app.withdraw()
             app.run = app.mainloop

@@ -120,5 +120,5 @@ tiles	map tiles	tile per la mappa	Tiles für die Karte
 table	Table view	Vista a tabelle	Tabellenansicht
 map	Map	Mappa	Karte
 wx	wxPython	wxPython	wxPython
-qt5	Qt 5	Qt 5	Qt 5
+qt	Qt	Qt	Qt
 tk	TkInter	TkInter	TkInter

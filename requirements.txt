@@ -2,8 +2,8 @@
 PyYAML
 wxPython
 requests
-PySide2
+pyside6
 pillow
 tkcalendar
-numpy==1.19.3  # Version 1.19.4 contains a bug
+numpy
 PyInstaller

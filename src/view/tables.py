@@ -3,8 +3,8 @@ import datetime
 from src.model import ROOM_TYPES, HutStatus
 from src import i18n
 from src.view import errors
-from src.gui_library.tables import Align, Renderer, TextStyle
-from src.gui_library.tables import Grid
+from prettysusi.tables import Align, Renderer, TextStyle
+from prettysusi.tables import Grid
 
 _WHITE = (255, 255, 255)
 _LIGHT_GRAY = (220, 220, 220)

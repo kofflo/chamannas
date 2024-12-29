@@ -43,7 +43,7 @@ def meters_to_degrees(x, y, lat):
 
     :param x: distance along the meridian [m]
     :param y: distance along the parallel [m]
-    :param lat: latitude of the mid point [degrees]
+    :param lat: latitude of the mid-point [degrees]
     :return: a tuple containing the difference in latitude and longitude [degrees]
     """
     d_lat = math.degrees(y / _EARTH_RADIUS)

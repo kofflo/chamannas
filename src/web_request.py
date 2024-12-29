@@ -22,7 +22,6 @@ import hashlib
 from threading import Thread
 
 from src import config
-from src.config import ASSETS_PATH_DATA
 
 errors = []
 
@@ -32,10 +31,14 @@ _DAY_DELTA = datetime.timedelta(days=1.0)
 _HUT_PAGE = 'calendar?hut_id={0}&lang={1}'
 _BOOK_PAGE = 'wizard?hut_id={0}&selectedDate={1}&lang={2}'
 _TIMEOUT = 5.0
+_DEFAULT_MAX_NIGHTS = 14
+_DEFAULT_ROOM_BASIC_TYPES = {'default_type': 'shared'}
 
+_configured = False
 _max_nights = 0
 _last_request = None
 _base_url = ""
+_updates_url = ""
 _room_basic_types = {}
 _update_cancelled = False
 
@@ -61,8 +64,8 @@ class _HutHTMLParser(HTMLParser):
     def handle_starttag(self, tag, attrs):
         """Handle an HTML tag, identifying the key information about the hut.
 
-        :param tag: the tag
-        :param attrs: the tag attributes
+        :param tag: the HTML tag
+        :param attrs: the HTML tag attributes
         """
         if tag == 'h4' and not self.name:
             # Hut name is contained in a 'h4' tag
@@ -97,13 +100,18 @@ class _HutHTMLParser(HTMLParser):
 
 
 def configure():
-    """Configure the necessary data for the web requests (URL, maximum number of nights, room types)."""
-    global _base_url, _max_nights, _room_basic_types
+    """Configure the necessary data for the web requests (URLs, maximum number of nights, room types)."""
+    global _base_url, _updates_url, _max_nights, _room_basic_types, _configured
+
     _base_url = config.get('BASE_URL', True)
-    _max_nights = config.get('MAX_NIGHTS', True)
+    _updates_url = config.get('UPDATES_URL', True)
+    _max_nights = config.MAX_NIGHTS
+    if _max_nights is None:
+        _max_nights = _DEFAULT_MAX_NIGHTS
     _room_basic_types = config.ROOM_BASIC_TYPES
     if _room_basic_types is None:
-        _room_basic_types = {'default_type': 'shared'}
+        _room_basic_types = _DEFAULT_ROOM_BASIC_TYPES
+    _configured = True
 
 
 def perform_web_request_for_hut(index, hut, start_date):
@@ -118,6 +126,9 @@ def perform_web_request_for_hut(index, hut, start_date):
     :return: dictionary containing the retrieved information about free beds
     """
     global _last_request
+
+    if not _configured:
+        configure()
 
     # Limit the rate of web requests by delaying the execution of the function if required
     if _last_request is not None:
@@ -185,27 +196,33 @@ def perform_web_request_for_hut(index, hut, start_date):
 
 
 def open_hut_page(index, lang_code):
-    """Open the the web page of a hut in the browser.
+    """Open the web page of a hut in the browser.
 
     :param index: id no of the hut
     :param lang_code: locale code to be used in the browser
     """
+    if not _configured:
+        configure()
+
     try:
-        webbrowser.open(config.BASE_URL + _HUT_PAGE.format(index, lang_code), new=2)
+        webbrowser.open(_base_url + _HUT_PAGE.format(index, lang_code), new=2)
     except Exception as e:
         errors.append({'type': type(e), 'message': str(e)})
 
 
 def open_book_page(index, date, lang_code):
-    """Open the the booking page of a hut in the browser.
+    """Open the booking page of a hut in the browser.
 
     :param index: id no of the hut
     :param date: required booking date
     :param lang_code: locale code to be used in the browser
     """
+    if not _configured:
+        configure()
+
     date_string = date.strftime(_WEB_DATE_FORMAT)
     try:
-        webbrowser.open(config.BASE_URL + _BOOK_PAGE.format(index, date_string, lang_code), new=2)
+        webbrowser.open(_base_url + _BOOK_PAGE.format(index, date_string, lang_code), new=2)
     except Exception as e:
         errors.append({'type': type(e), 'message': str(e)})
 
@@ -282,16 +299,19 @@ def _perform_data_update_request(session, temp_folder, update_data_files):
     :param update_data_files: dictionary describing the data files for which updates should be searched
     :return: dictionary containing the information about the downloaded update files
     """
+    if not _configured:
+        configure()
+
     available_updates = {}
     for folder, files_dict in update_data_files.items():
         for filename, description in files_dict.items():
             if _update_cancelled:
                 break
             try:
-                with open(str(ASSETS_PATH_DATA / filename), 'rb') as old_file:
+                with open(str(config.ASSETS_PATH_DATA / filename), 'rb') as old_file:
                     old_content = old_file.read()
                     old_md5 = hashlib.md5(old_content).digest()
-                updated_file = session.get(config.UPDATES_URL + folder + filename, timeout=_TIMEOUT)
+                updated_file = session.get(_updates_url + folder + filename, timeout=_TIMEOUT)
                 if updated_file.status_code == requests.codes.ok:
                     content = updated_file.content
                     update_md5 = hashlib.md5(content).digest()
@@ -320,13 +340,16 @@ def _perform_tiles_update_request(session, temp_folder, update_tiles):
     :param update_tiles: dictionary describing the tiles files for which updates should be searched
     :return: dictionary containing the information about the downloaded update files
     """
+    if not _configured:
+        configure()
+
     available_updates = {}
     for folder, files_dict in update_tiles.items():
         for filename, description in files_dict.items():
             if _update_cancelled:
                 break
             try:
-                updated_file = session.get(config.UPDATES_URL + folder + filename, timeout=_TIMEOUT)
+                updated_file = session.get(_updates_url + folder + filename, timeout=_TIMEOUT)
                 if updated_file.status_code == requests.codes.ok:
                     content = updated_file.content
                     update_path = pathlib.Path(temp_folder) / filename

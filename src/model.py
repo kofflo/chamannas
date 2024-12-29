@@ -535,7 +535,7 @@ class HutsModel:
         :return: a dictionary of all huts data for the specified huts and dates
         """
         data_requested = index in self._results_dictionary and \
-                         all([d in self._results_dictionary[index]['requested_dates'] for d in request_dates])
+            all([d in self._results_dictionary[index]['requested_dates'] for d in request_dates])
         try:
             response = self._results_dictionary[index]['error'] is None
         except KeyError:
@@ -860,7 +860,7 @@ class HutsModel:
         """Filter a list of huts keeping only those whose with the specified self-catering flag.
 
         :param original_list: a list of hut indexes
-        :param filter_self_catering: the self catering flag to be used to filter [boolean]
+        :param filter_self_catering: the self-catering flag to be used to filter [boolean]
         :return: the updated list of hut indexes
         """
         filtered_list = []
@@ -914,7 +914,7 @@ class HutsModel:
 
     def _filter_by_open(self, original_list, dates):
         """
-        Filter a list of huts keeping only those which are open in all of the specified dates.
+        Filter a list of huts keeping only those which are open in all the specified dates.
 
         Huts for which no web request has been performed are not filtered out.
 

@@ -25,6 +25,7 @@ ROOM_BASIC_TYPES:
   '10-er Zimmer': 'shared'
   'Doppelzimmer': 'double'
   'Zweierzimmer': 'double'
+  'Zweibettzimmer': 'double'
   'Einzelzimmer': 'single'
   '2 Bettzimmer': 'double'
   '3-6 Bettzimmer': 'shared'
@@ -38,6 +39,7 @@ ROOM_BASIC_TYPES:
   'Unbewarteter Betrieb': 'dormitory'
   'Unbewarterer Betrieb': 'dormitory'
   'Unbewirtschafteter Modus': 'dormitory'
+  'Unbewirtschafteter Betrieb': 'dormitory'
   'Wohnheim': 'dormitory'
   'Zelt': 'dormitory'
   'Winterraum, Biwak, SV': 'dormitory'
@@ -45,7 +47,7 @@ ROOM_BASIC_TYPES:
 LANGUAGES:
   - 'English': 'en'
   - 'Italiano': 'it'
-  - 'Deutsch': 'de_{0}'
+  - 'Deutsch': 'de'
 RESULTS_CACHE_EXPIRATION: 7
 TILES_CACHE: 300
 MAX_NIGHTS: 14

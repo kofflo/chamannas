@@ -118,7 +118,7 @@ def _load_icon(filename, size, backup_size, backup_colour,
         if backup_symbol is not None:
             text = backup_symbol
             draw = ImageDraw.Draw(icon, 'RGBA')
-            tw, th = textsize(draw, text, font=backup_font)
+            tw, th = text_size(draw, text, font=backup_font)
             text_position = (size[0] - tw) // 2, (size[1] - th) // 2 + 1
             draw.text(text_position, text,
                       fill=backup_text_color, font=backup_font)
@@ -342,7 +342,7 @@ class _TilesCluster:
 
     @staticmethod
     def check_available_tiles():
-        """Check which zoom levels of tiles are available in the assets folder.
+        """Check which zoom levels of tiles are available in the assets' folder.
 
         :return: tuple of minimum and maximum zoom
         """
@@ -431,7 +431,7 @@ class _TilesCluster:
         Convert a shift in pixel coordinates to the corresponding shift in latitude/longitude.
 
         The algorithm uses the center of the currently defined limits as reference point;
-        due to the distortion of distances typical of the webmercator projection, the results are approximate
+        due to the distortion of distances typical of the webmercator projection, the results are approximate,
         and they are more accurate when the shift is applied close to the reference point or at high zoom levels.
 
         :param delta_x_pixel: the x shift in pixel coordinates
@@ -453,7 +453,7 @@ class _TilesCluster:
         :param image: the image to which the copyright string has to be added
         """
         draw = ImageDraw.Draw(image, 'RGBA')
-        tw, th = textsize(draw, _TilesCluster._COPYRIGHT_STRING, font=_TilesCluster._copyright_font)
+        tw, th = text_size(draw, _TilesCluster._COPYRIGHT_STRING, font=_TilesCluster._copyright_font)
         size_x, size_y = image.size
         text_position = size_x - tw, size_y - th
         draw.rectangle((text_position, (size_x, size_y)), fill=_TilesCluster._COPYRIGHT_BG_COLOUR)
@@ -596,7 +596,7 @@ class _TilesCluster:
 
             draw = ImageDraw.Draw(tile, 'RGBA')
             text = f'{zoom}_{x_tile}_{y_tile}'
-            tw, th = textsize(draw, text, font=_TilesCluster._tiles_font)
+            tw, th = text_size(draw, text, font=_TilesCluster._tiles_font)
             text_position = (_TILE_SIZE - tw) // 2, (_TILE_SIZE - th) // 2 + 1
             draw.text(text_position, text,
                       fill=_TilesCluster._TILES_STRING_COLOUR,
@@ -732,7 +732,7 @@ class _GenericMap:
         if self._cluster is not None:
             draw = ImageDraw.Draw(zoom_image, 'RGBA')
             text = str(self._zoom)
-            tw, th = textsize(draw, text, font=_zoom_font)
+            tw, th = text_size(draw, text, font=_zoom_font)
             text_position = (zoom_image.size[0] - tw) // 2, (zoom_image.size[1] - th) // 2 - 1
             draw.text(text_position, text, fill=_ZOOM_TEXT_COLOUR, font=_zoom_font)
         image.paste(zoom_image, (image.size[0] - zoom_image.size[0], _plus_icon.size[1]), zoom_image)
@@ -924,7 +924,7 @@ class NavigableMap(_GenericMap):
             'lat': latitude [degrees]
             'lon': longitude [degrees]
             'status': hut status as a HutStatus enum
-            'self_catering': boolean defining if the hut is self catering
+            'self_catering': boolean defining if the hut is self-catering
 
         :param huts_data: a list of huts data
         """
@@ -1184,7 +1184,7 @@ class NavigableMap(_GenericMap):
             draw.ellipse((x_pixel_pin - delta_pixel, y_pixel_pin - delta_pixel,
                           x_pixel_pin + delta_pixel, y_pixel_pin + delta_pixel), outline=NavigableMap._RANGES_COLOUR)
             text = "%d km" % (range_value//1000)
-            tw, th = textsize(draw, text, font=NavigableMap._ranges_font)
+            tw, th = text_size(draw, text, font=NavigableMap._ranges_font)
             test_position = (x_pixel_pin - tw//2, y_pixel_pin - delta_pixel - th)
             draw.text(test_position, text,
                       fill=NavigableMap._RANGES_TEXT_COLOUR,
@@ -1226,7 +1226,7 @@ class NavigableMap(_GenericMap):
         x_pixel_mean = (x_pixel_start + x_pixel_end)//2
         y_pixel_mean = (y_pixel_start + y_pixel_end)//2
         text = "{0:.1f} km".format(measured_distance/1000)
-        tw, th = textsize(draw, text, font=NavigableMap._ranges_font)
+        tw, th = text_size(draw, text, font=NavigableMap._ranges_font)
         text_position = x_pixel_mean - tw//2, y_pixel_mean - th//2
         draw.text(text_position, text,
                   fill=NavigableMap._RANGES_TEXT_COLOUR,
@@ -1247,7 +1247,7 @@ class NavigableMap(_GenericMap):
             group_bitmap = Image.Image.copy(_hut_icons['group'])
             draw = ImageDraw.Draw(group_bitmap, 'RGBA')
             text = str(len(hut_group))
-            tw, th = textsize(draw, text, font=NavigableMap._group_font)
+            tw, th = text_size(draw, text, font=NavigableMap._group_font)
             text_position = (_HUT_ICON_SIZE[0] - tw) // 2, (_HUT_ICON_SIZE[1] - th) // 2 + 1
             draw.text(text_position, text,
                       fill=NavigableMap._GROUP_TEXT_COLOUR,
@@ -1257,7 +1257,7 @@ class NavigableMap(_GenericMap):
             hut_bitmap = Image.Image.copy(_hut_icons[hut_status])
             if hut_self_catering:
                 draw = ImageDraw.Draw(hut_bitmap, 'RGBA')
-                tw, th = textsize(draw, NavigableMap._SELF_TEXT_STRING, font=NavigableMap._self_font)
+                tw, th = text_size(draw, NavigableMap._SELF_TEXT_STRING, font=NavigableMap._self_font)
                 text_position = (_HUT_ICON_SIZE[0] - tw) // 2, (_HUT_ICON_SIZE[1] - th) // 2 + 1
                 draw.text(text_position, NavigableMap._SELF_TEXT_STRING,
                           fill=NavigableMap._SELF_TEXT_COLOUR,
@@ -1265,7 +1265,7 @@ class NavigableMap(_GenericMap):
             image.paste(hut_bitmap, offset, hut_bitmap)
 
 
-def textsize(draw, text, font):
+def text_size(draw, text, font):
     left, top, right, bottom = draw.textbbox((0, 0), text, font=font)
     tw = right - left
     th = bottom - top

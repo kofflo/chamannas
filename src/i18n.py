@@ -16,13 +16,13 @@ Functions:
     get_current_language_code: get the locale code of the current selected language
 """
 import csv
+import sys
 
 from src import config
-from src.config import ASSETS_PATH_DATA
 
-_MOUNTAIN_RANGES_DATA_FILE = str(ASSETS_PATH_DATA / 'mountain_ranges.txt')
-_REGIONS_DATA_FILE = str(ASSETS_PATH_DATA / 'regions.txt')
-_STRINGS_DATA_FILE = str(ASSETS_PATH_DATA / 'strings.txt')
+_MOUNTAIN_RANGES_DATA_FILE = str(config.ASSETS_PATH_DATA / 'mountain_ranges.txt')
+_REGIONS_DATA_FILE = str(config.ASSETS_PATH_DATA / 'regions.txt')
+_STRINGS_DATA_FILE = str(config.ASSETS_PATH_DATA / 'strings.txt')
 
 
 class _LanguageDict(dict):
@@ -57,31 +57,35 @@ mountain_ranges_labels = _LanguageDict()
 regions_labels = _LanguageDict()
 errors = []
 
+_configured = False
 _current_language = 0
 _languages = []
 _language_codes = []
 
 
-def load():
+def configure():
     """
     Load all internationalization-dependent strings (view strings, mountain ranges, regions)
     and set the current active language based on the preferences.
     """
-    try:
+    global _configured
+
+    if _configured:
         old_language = get_current_language_string()
-    except IndexError:
+    else:
         old_language = None
 
     _languages.clear()
     _language_codes.clear()
 
-    config_languages = config.LANGUAGES
-    if config_languages is None:
-        errors.append({'type': 'Configuration Error',
-                       'message': 'LANGUAGES definition missing from configuration file'})
-    else:
-        _languages.extend([list(lang.keys())[0] for lang in config_languages])
-        _language_codes.extend([list(lang.values())[0] for lang in config_languages])
+    config_languages = config.get('LANGUAGES', True)
+    if not len(config_languages):
+        print(f"Fatal error: configuration file does not contain a valid list of languages")
+        sys.exit(1)
+    _languages.extend([list(lang.keys())[0] for lang in config_languages])
+    _language_codes.extend([list(lang.values())[0] for lang in config_languages])
+
+    _configured = True
 
     if old_language is not None and old_language in _languages:
         set_language(_languages.index(old_language))
@@ -93,7 +97,9 @@ def load():
             except ValueError as e:
                 language_index = 0
                 errors.append({'type': type(e), 'message': str(e)})
-            set_language(language_index)
+        else:
+            language_index = 0
+        set_language(language_index)
 
     all_strings.clear()
     mountain_ranges_labels.clear()
@@ -109,6 +115,10 @@ def set_language(language_index):
     :param language_index: the index of the language to be set as active
     """
     global _current_language
+
+    if not _configured:
+        configure()
+
     if language_index in range(len(_languages)):
         _current_language = language_index
     else:
@@ -120,6 +130,9 @@ def get_languages_list():
 
     :return: list of available languages
     """
+    if not _configured:
+        configure()
+
     return _languages.copy()
 
 
@@ -128,6 +141,9 @@ def get_current_language():
 
     :return: current selected language (as an integer)
     """
+    if not _configured:
+        configure()
+
     return _current_language
 
 
@@ -136,6 +152,9 @@ def get_current_language_string():
 
     :return: current selected language (as a string)
     """
+    if not _configured:
+        configure()
+
     return _languages[_current_language]
 
 
@@ -144,6 +163,9 @@ def get_current_language_code():
 
     :return: locale code of the current selected language
     """
+    if not _configured:
+        configure()
+
     return _language_codes[_current_language]
 
 

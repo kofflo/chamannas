@@ -5,16 +5,19 @@ from src.map_tools import NavigableMap, HutMap
 from src import i18n
 from src import config
 from src.model import ROOM_TYPES
-from src.gui_library.widgets import Button, CheckBox, RadioBox, Bitmap, Text, Calendar, SpinControl, Menu, TextControl, \
-    TextTimedMenu
-from src.gui_library import event_create
-from src.gui_library.frames import FrameStyle, CursorStyle
-from src.gui_library.widgets import TextStyle
-from src.gui_library.frames import Frame, Dialog, MessageDialog
-from src.gui_library.layouts import HBoxLayout, VBoxLayout, GridLayout
-from src.gui_library.layouts import Align
+from prettysusi.widgets import Button, CheckBox, RadioBox, Bitmap, Text, Calendar, SpinControl, Menu, TextControl, \
+     TextTimedMenu
+from prettysusi import event_create
+from prettysusi.frames import FrameStyle, CursorStyle
+from prettysusi.widgets import TextStyle
+from prettysusi.frames import Frame, Dialog, MessageDialog
+from prettysusi.layouts import HBoxLayout, VBoxLayout, GridLayout
+from prettysusi.layouts import Align
 
 from src.view.tables import HutsGrid, DetailedGrid, DeveloperGrid, SelectedDetailedGrid
+from src.config import ASSETS_PATH_ICONS
+
+_APP_ICON_FILENAME = str(ASSETS_PATH_ICONS / "app_icon.png")
 
 _CHECKED_SYMBOL = '  \u2713'
 
@@ -25,7 +28,7 @@ class WaitingMessage(Frame):
 
     def __init__(self, *, cancel_function, **kwargs):
         self._on_click = cancel_function
-        super().__init__(**kwargs)
+        super().__init__(icon=_APP_ICON_FILENAME, **kwargs)
 
     def _create_widgets(self, panel):
         self._message = Text(panel)
@@ -33,10 +36,9 @@ class WaitingMessage(Frame):
                                    on_click=self._on_click,
                                    label=i18n.all_strings['cancel'])
 
-    def update_gui(self, data):
+    def on_update_gui(self, data):
         if 'message' in data:
             self._update_message(data['message'])
-        super().update_gui(data)
 
     def _update_message(self, label):
         self._message.label = label
@@ -54,7 +56,7 @@ class HutsInfoFrame(Frame):
         self._controller = controller
         self._menu_chosen_item = None
         self._retrieve_enabled = True
-        super().__init__(**kwargs)
+        super().__init__(icon=_APP_ICON_FILENAME, **kwargs)
 
     def _update_gui_for_retrieve_enabled(self, is_enabled):
         self._retrieve_enabled = is_enabled
@@ -82,7 +84,7 @@ class HutsView(HutsInfoFrame):
 
     def update_waiting_message_huts(self, outstanding):
         label = i18n.all_strings['waiting message huts'].format(outstanding)
-        self._waiting_message.update_gui_from_thread({'message': label})
+        self._waiting_message.update_gui({'message': label})
 
     def show_waiting_message_updates(self, cancel_function, message):
         if self._waiting_message is not None:
@@ -95,10 +97,10 @@ class HutsView(HutsInfoFrame):
 
     def update_waiting_message_updates(self, message):
         label = i18n.all_strings['waiting message updates'].format(i18n.all_strings[message])
-        self._waiting_message.update_gui_from_thread({'message': label})
+        self._waiting_message.update_gui({'message': label})
 
     def close_waiting_message(self):
-        self._waiting_message.close_from_thread()
+        self._waiting_message.close()
         self._waiting_message = None
 
     def _update_gui_for_retrieve_enabled(self, is_enabled):
@@ -218,10 +220,10 @@ class HutsView(HutsInfoFrame):
     def _on_menu_command_close(self):
         self.close()
 
-    def _on_command_close(self, obj):
+    def _on_button_command_close(self, obj):
         self.close()
 
-    def update_gui(self, data):
+    def on_update_gui(self, data):
         if 'displayed' in data:
             self._update_displayed(data['displayed'])
         if 'selected' in data:
@@ -240,7 +242,6 @@ class HutsView(HutsInfoFrame):
             self._update_gui_for_language()
         if 'config' in data:
             self._update_gui_for_config()
-        super().update_gui(data)
 
     def _update_displayed(self, data):
         raise NotImplementedError
@@ -262,7 +263,7 @@ class HutsView(HutsInfoFrame):
         self._number_days_widget.value = len(request_dates)
 
     def _update_gui_for_language(self):
-        self._date_widget.set_language(i18n.get_current_language_string())
+        self._date_widget.set_language(i18n.get_current_language_code())
 
     def _update_gui_for_config(self):
         self._number_days_widget.max_value = config.MAX_NIGHTS
@@ -329,7 +330,7 @@ class HutsTableView(HutsView):
         self._grid_displayed.update_data(keys=self._keys)
         self._grid_selected.update_data(keys=self._keys)
 
-    def update_gui(self, data):
+    def on_update_gui(self, data):
         if 'filter_selected_keys' in data:
             self._update_filter_selected_keys(data['filter_selected_keys'])
         if 'sort_displayed_key' in data:
@@ -338,20 +339,18 @@ class HutsTableView(HutsView):
             self._update_sort_selected_key(data['sort_selected_key'])
         if 'columns_width' in data:
             self._columns_width_to_reset = True
-        super().update_gui(data)
+        super().on_update_gui(data)
+        if self._columns_width_to_reset:
+            self._reset_columns_width()
+            self._columns_width_to_reset = False
+        self._grid_displayed.refresh()
+        self._grid_selected.refresh()
 
     def _reset_columns_width(self):
         self._grid_displayed.unfreeze_cols_width()
         self._grid_displayed.refresh()
         self._grid_displayed.freeze_cols_width()
         self._grid_selected.set_cols_width_as(self._grid_displayed)
-
-    def _refresh_widgets(self):
-        if self._columns_width_to_reset:
-            self._reset_columns_width()
-            self._columns_width_to_reset = False
-        self._grid_displayed.refresh()
-        self._grid_selected.refresh()
 
     def _other_view_menu(self, menu_main):
         label = ast.literal_eval(i18n.all_strings['menu map view'])[0]
@@ -418,7 +417,7 @@ class HutsTableView(HutsView):
                                            on_click=self._on_update_location_button)
 
         self._close_button = Button(panel,
-                                    on_click=self._on_command_close)
+                                    on_click=self._on_button_command_close)
 
     def _update_gui_for_retrieve_enabled(self, is_enabled):
         self._get_displayed_results_button.enable(is_enabled)
@@ -429,8 +428,6 @@ class HutsTableView(HutsView):
         super()._update_gui_for_language()
         self._create_menu()
         self.title = i18n.all_strings['title']
-        self._grid_displayed.update_for_language()
-        self._grid_selected.update_for_language()
         self._checkbox_no_response.label = i18n.all_strings['hide no response']
         self._checkbox_closed.label = i18n.all_strings['hide closed']
         self._selected_huts_label.label = i18n.all_strings['selected huts']
@@ -509,7 +506,8 @@ class HutsTableView(HutsView):
             else:
                 raise ValueError()
         except ValueError:
-            with MessageDialog(self, i18n.all_strings['invalid location'], i18n.all_strings['error']) as dialog:
+            with MessageDialog(parent=self, title=i18n.all_strings['error'],
+                               message=i18n.all_strings['invalid location']) as dialog:
                 dialog.show_modal()
 
     def _command_select(self, obj, row, col):
@@ -714,7 +712,7 @@ class HutsMapView(HutsView):
                                   on_click=self._on_fit_button)
 
         self._close_button = Button(panel,
-                                    on_click=self._on_command_close)
+                                    on_click=self._on_button_command_close)
 
     def _other_view_menu(self, menu_main):
         label = ast.literal_eval(i18n.all_strings['menu table view'])[0]
@@ -752,7 +750,8 @@ class HutsMapView(HutsView):
         data = {'which': 'displayed' if self._huts_choice.selection == 0 else 'selected'}
         self._controller.command_update_results(data)
 
-    def _refresh_widgets(self):
+    def on_update_gui(self, data):
+        super().on_update_gui(data)
         self._update_shown_huts()
 
     def _update_huts_data(self, huts_data):
@@ -825,7 +824,6 @@ class HutsMapView(HutsView):
             self._left_drag_start = position
             self.map_center = self._hut_map.get_lat_lon_map_center()
             self._set_cursor(CursorStyle.SIZING)
-        import threading
 
     def _on_left_up(self, obj, position):
         self._left_drag_start = None
@@ -888,13 +886,13 @@ class HutsMapView(HutsView):
             huts = self._hut_map.get_huts_from_pixel(*position)
             if len(huts) > 0:
                 if self._info_pop_up is None:
-                    self._get_info_pop_up(huts)
+                    self._info_pop_up = self._get_info_pop_up(huts)
                     self._info_pop_up.pop_up()
                 elif huts[0] == self._pop_up_group:
                     self._info_pop_up.prevent_close()
                 else:
                     self._info_pop_up.force_close()
-                    self._get_info_pop_up(huts)
+                    self._info_pop_up = self._get_info_pop_up(huts)
                     self._info_pop_up.pop_up()
             else:
                 if self._info_pop_up is not None:
@@ -918,11 +916,9 @@ class HutsMapView(HutsView):
             menu_items.append((self._huts_data[hut]['name'] + " (" + str(int(self._huts_data[hut]['height'])) + " m)",
                                True, lambda h=hut: self.hut_menu(h)))
         self._pop_up_group = huts[0]
-        self._info_pop_up = TextTimedMenu(self, items=menu_items)
-        self._info_pop_up.on_close = self.on_close_pop_up
-
-    def on_info_pop_up_item(self, obj, choice_id):
-        obj.get_on_item_click(choice_id)()
+        info_pop_up = TextTimedMenu(self, items=menu_items)
+        info_pop_up.on_close = self.on_close_pop_up
+        return info_pop_up
 
     def on_close_pop_up(self, obj):
         self._info_pop_up = None
@@ -1149,6 +1145,7 @@ class DetailedInfoView(HutsInfoFrame):
                                self._DETAILED_MAP_REF_ZOOM, self._DETAILED_MAP_MIN_ZOOM, self._DETAILED_MAP_MAX_ZOOM)
         super().__init__(title=i18n.all_strings['detailed info'], **kwargs)
         self._self_catering_text.hide(not self._hut_info['self_catering'])
+
         self._hut_text.label = self._hut_info['name']
 
     def _create_widgets(self, panel):
@@ -1180,24 +1177,20 @@ class DetailedInfoView(HutsInfoFrame):
         self._close_button = Button(panel,
                                     on_click=self._on_button_close)
 
-    def update_gui(self, data):
+    def on_update_gui(self, data):
         if 'huts_data' in data:
             self._update_huts_data(data['huts_data'])
         if 'retrieve_enabled' in data:
             self._update_gui_for_retrieve_enabled(data['retrieve_enabled'])
         if 'language' in data:
             self._update_gui_for_language()
-
-        super().update_gui(data)
+        self._grid_detailed.refresh()
 
     def _update_huts_data(self, huts_data):
         self._hut_info = huts_data[self._index]
         self._hut_map.set_status(self._hut_info['status'])
         self._grid_detailed.update_data(self._hut_info)
         self._update_bitmap()
-
-    def _refresh_widgets(self):
-        self._grid_detailed.refresh()
 
     def _on_button_close(self, obj):
         self.close()
@@ -1240,7 +1233,6 @@ class DetailedInfoView(HutsInfoFrame):
         self._mountain_text.label = i18n.mountain_ranges_labels[self._hut_info['mountain_range']]
         self._height_text.label = i18n.all_strings['height'] + ": {0} m".format(int(self._hut_info['height']))
         self._self_catering_text.label = i18n.all_strings['self catering']
-        self._grid_detailed.update_for_language()
         self._close_button.label = i18n.all_strings['button close']
 
     def _create_gui(self):
@@ -1280,7 +1272,7 @@ class SelectedInfoView(HutsInfoFrame):
         super().__init__(title=i18n.all_strings['selected info'], **kwargs)
         self._update_rooms()
 
-    def update_gui(self, data):
+    def on_update_gui(self, data):
         if 'dates' in data:
             self._update_dates(data['dates'])
         if 'selected' in data:
@@ -1293,9 +1285,6 @@ class SelectedInfoView(HutsInfoFrame):
             self._update_gui_for_retrieve_enabled(data['retrieve_enabled'])
         if 'language' in data:
             self._update_gui_for_language()
-        super().update_gui(data)
-
-    def _refresh_widgets(self):
         self._grid_selected_detailed.refresh()
 
     def _on_row_left_double_click(self, obj, row, col):
@@ -1409,7 +1398,6 @@ class SelectedInfoView(HutsInfoFrame):
         self._all_rooms_button.label = i18n.all_strings['all rooms']
         for room in ROOM_TYPES:
             self._rooms_checkbox[room].label = i18n.all_strings[room]
-        self._grid_selected_detailed.update_for_language()
         self._retrieve_info_button.label = i18n.all_strings['retrieve selected detailed']
         self._close_button.label = i18n.all_strings['button close']
 
@@ -1440,7 +1428,7 @@ class DeveloperInfoView(Frame):
     def __init__(self, info_type, **kwargs):
         self._developer_info = None
         self._info_type = info_type
-        super().__init__(title=i18n.all_strings['developer info'], **kwargs)
+        super().__init__(title=i18n.all_strings['developer info'], icon=_APP_ICON_FILENAME, **kwargs)
 
     def _create_widgets(self, panel):
         self._main_label = Text(panel, font_size=11)
@@ -1458,14 +1446,11 @@ class DeveloperInfoView(Frame):
     def _save_log(self):
         config.save_log(self._info_type, self._developer_info)
 
-    def update_gui(self, data):
+    def on_update_gui(self, data):
         if 'developer_info' in data:
             self._update_gui_for_developer_info(data['developer_info'])
         if 'language' in data:
             self._update_gui_for_language()
-        super().update_gui(data)
-
-    def _refresh_widgets(self):
         self._grid_developer.refresh()
 
     def _update_gui_for_developer_info(self, data):
@@ -1481,7 +1466,6 @@ class DeveloperInfoView(Frame):
         label_id = f'no {self._info_type}'
         self._no_info_label.label = i18n.all_strings[label_id]
 
-        self._grid_developer.update_for_language()
         self._log_button.label = i18n.all_strings['log']
 
         self._ok_button.label = i18n.all_strings['ok']
@@ -1531,9 +1515,8 @@ class FilterDialog(Dialog):
 
         self._cancel_button = Button(panel, label=i18n.all_strings['cancel'], on_click=self._on_cancel)
 
-    def _on_ok(self, obj):
+    def on_ok(self):
         self.filter_values = self._min_value, self._max_value
-        super()._on_ok(obj)
 
     @property
     def _min_value(self):
@@ -1564,9 +1547,9 @@ class FilterDialog(Dialog):
 
 class AboutDialog(Dialog):
 
-    def __init__(self, dialog_infos, **kwargs):
-        self._dialog_infos = dialog_infos
-        super().__init__(title=f"About {self._dialog_infos['name']}", **kwargs)
+    def __init__(self, dialog_info, **kwargs):
+        self._dialog_info = dialog_info
+        super().__init__(title=f"About {self._dialog_info['name']}", **kwargs)
 
     def _create_widgets(self, panel):
         self._name_label = Text(panel, font_size=14)
@@ -1577,11 +1560,11 @@ class AboutDialog(Dialog):
         self._ok_button = Button(panel, on_click=self._on_ok)
 
     def update_gui(self, data):
-        self._name_label.label = f"{self._dialog_infos['name']} {self._dialog_infos['version']}"
-        self._desc_label.label = self._dialog_infos['description'][i18n.get_current_language()]
-        self._copyright_label.label = self._dialog_infos['copyright']
-        self._website_label.label = self._dialog_infos['website']
-        self._developer_label.label = f"Developer: {self._dialog_infos['developer']}"
+        self._name_label.label = f"{self._dialog_info['name']} {self._dialog_info['version']}"
+        self._desc_label.label = self._dialog_info['description'][i18n.get_current_language()]
+        self._copyright_label.label = self._dialog_info['copyright']
+        self._website_label.label = self._dialog_info['website']
+        self._developer_label.label = f"Developer: {self._dialog_info['developer']}"
         self._ok_button.label = i18n.all_strings['ok']
 
     def _create_gui(self):
@@ -1630,11 +1613,10 @@ class UpdateDialog(Dialog):
             if obj is label:
                 self._checkbox[filename].value = not self._checkbox[filename].value
 
-    def _on_ok(self, obj):
+    def on_ok(self):
         self.approved_updates = {
             filename: path for filename, (path, _) in self._available_updates.items() if self._checkbox[filename].value
         }
-        super()._on_ok(obj)
 
     def _create_gui(self):
         sizer = VBoxLayout()

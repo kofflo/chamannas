@@ -214,7 +214,7 @@ class HutsController:
         :param data: dictionary containing the details about the hut
         """
         index = data['which']
-        lang_code = i18n.get_current_language_code().format(self._model.get_lang_code(index))
+        lang_code = i18n.get_current_language_code()
         web_request.open_hut_page(index, lang_code)
 
     def command_open_book_page(self, data):
@@ -223,7 +223,7 @@ class HutsController:
         :param data: dictionary containing the details about the hut
         """
         index = data['which']
-        lang_code = i18n.get_current_language_code().format(self._model.get_lang_code(index))
+        lang_code = i18n.get_current_language_code()
         web_request.open_book_page(index, self._model.request_dates[0], lang_code)
 
     def command_open_table_view(self, parent=None):
@@ -274,16 +274,17 @@ class HutsController:
         selected_frame.show()
 
     def command_open_about_dialog(self, parent):
-        """Open the about dialog.
+        """Open the about-dialog.
 
-        :param parent: the parent view of the about dialog
+        :param parent: the parent view of the about-dialog
         """
         about_info = config.ABOUT
         if about_info is None:
             config.errors.append({'type': 'Configuration Error',
                                   'message': 'ABOUT information missing from configuration file'})
             return
-        about_dialog = AboutDialog(parent=parent, dialog_infos=about_info)
+        about_dialog = AboutDialog(parent=parent, dialog_info=about_info)
+        about_dialog.update_gui({})
         about_dialog.show_modal()
 
     def command_open_warnings_frame(self, parent):
@@ -358,7 +359,7 @@ class HutsController:
 
                 # Reload the configuration and data files and reconfigure the modules
                 config.load()
-                i18n.load()
+                i18n.configure()
                 map_tools.configure()
                 web_request.configure()
     
@@ -426,7 +427,7 @@ class HutsController:
         update_data = {}
         update_data.update(self._model.enable_retrieve(True))
         update_data.update(self._model.get_all_data_after_retrieve())
-        self._view.update_gui_from_thread(update_data)
+        self._view.update_gui(update_data)
 
     def _update_gui_after_updates(self, all_updates, update_cancelled):
         """

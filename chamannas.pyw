@@ -45,6 +45,7 @@ The following data files are used by the application:
                 /y.png          Tile for row "y"
 """
 import argparse
+import prettysusi
 
 _SUPPORTED_GRAPHICS = ['wx', 'qt', 'tk']
 
@@ -57,7 +58,6 @@ parser.add_argument('-v', '--view', type=str, nargs=1, choices=['table', 'map'],
 
 args = parser.parse_args()
 
-import src.gui_library
 from src import config
 from src.view import errors
 
@@ -80,12 +80,13 @@ elif config.SUPPORTED_GUIS and _config_GUI not in config.SUPPORTED_GUIS:
 else:
     _GUI = _config_GUI
 
-src.gui_library.initialize(_GUI)
+prettysusi.initialize(_GUI)
 
 from src import model, controller, i18n, map_tools, web_request
 
 # Load the internationalization features
-i18n.load()
+i18n.configure()
+prettysusi.set_locale(i18n.get_current_language_code())
 
 # Configure the tiles cache
 map_tools.configure()
@@ -108,7 +109,7 @@ else:
     huts_controller = controller.HutsController(huts_model, 'table')
 
 # Start the app main loop
-src.gui_library.app.run()
+prettysusi.app.run()
 
 # On exit, save the preferences and the results dictionary
 _, all_selected = huts_model.get_selected()

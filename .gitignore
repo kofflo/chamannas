@@ -1,8 +1,11 @@
-/assets/tiles/
-/chamannas/
 *.pyo
 *.pyc
+*.bak
 __pycache__/
+.project
+.pydevproject
 /assets/data/preferences.yaml
 /assets/data/results.yaml
-*.bak
+/assets/tiles/
+/.venv/
+/dist/

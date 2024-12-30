@@ -1,11 +1,12 @@
 *.pyo
 *.pyc
 *.bak
-__pycache__/
 .project
 .pydevproject
+__pycache__/
 /assets/data/preferences.yaml
 /assets/data/results.yaml
 /assets/tiles/
-/.venv/
 /dist/
+/.venv/
+/.idea/

@@ -59,6 +59,8 @@ def load(args=None):
     
     param args: command line arguments to be added to the configuration data
     """
+    # Retrieve the command line arguments saved during the first execution of the function
+    # (necessary in case of configuration reload after an update)
     global _args
     if _args is not None:
         args = _args
@@ -97,7 +99,8 @@ def load(args=None):
     except (IOError, yaml.YAMLError, TypeError) as e:
         errors.append({'type': type(e), 'message': str(e)})
 
-    # Adds the command line parameters to the configuration data if any is available
+    # Add the command line parameters to the configuration data if any is available
+    # Save the command line parameters in the global _args variable to have them available in case of update
     if args is not None:
         _args = args
         for arg, value in (vars(args)).items():

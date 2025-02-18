@@ -1,9 +1,7 @@
 # Requirements file for Chamannas
 PyYAML
-wxPython
 requests
-pyside6
 pillow
-tkcalendar
 numpy
 PyInstaller
+prettysusi

@@ -115,7 +115,7 @@ prettysusi.app.run()
 _, all_selected = huts_model.get_selected()
 reference_location = huts_model.get_reference_location()
 preferences = {
-    'LANGUAGE': i18n.get_current_language_string(),
+    'LANGUAGE': i18n.get_current_language_name(),
     'REFERENCE_LOCATION': [reference_location['lat'], reference_location['lon']],
     'SELECTED': all_selected,
     'GUI': config.GUI,

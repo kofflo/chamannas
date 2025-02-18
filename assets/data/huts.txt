@@ -573,7 +573,7 @@
 573	Cabane de Bounavaux, CAS La Gruyère	CH	Freiburg	Freiburger Alpen	FALSE	46.5330	7.1324	1620	CH
 574	Cabane des Marindes, CAS La Gruyère	CH	Freiburg	Freiburger Alpen	FALSE	46.5359	7.1620	1868	CH
 575	Cabane des Clés, CAS La Gruyère	CH	Freiburg	Freiburger Alpen	FALSE	46.5677	7.0248	1352	CH
-576	Enzianhütte/Rhön, DAV Sektion Fulda	DE	Hessen	Rhön	FALSE	50.5221	9.9133	760	DE
+576	Enzianhütte/Rhön, DAV Sektion Fulda	DE	Hessen	Rhön	FALSE	50.5221	9.9132	760	DE
 577	Ignaz-Mattis-Hütte, Alpenverein Wien	AT	Steiermark	Schladminger Tauern	FALSE	47.2849	13.6485	1986	AT
 578	Lucknerhütte, Privat	AT	Tirol	Glockner Gruppe	FALSE	47.0397	12.6905	2241	AT
 579	Balmhornhütte SAC, SAC Altels	CH	Bern	Berner Alpen	FALSE	46.4512	7.6896	1955	CH
@@ -599,7 +599,7 @@
 599	Buchacker Alm, Privat	AT	Tirol	Brandenberger Alpen	FALSE	47.5334	12.0189	1450	AT
 600	SKIP
 601	Enzian-Hütte am Kieneck, Alpenverein Enzian	AT	Niederösterreich	Gutensteiner Alpen	FALSE	47.9608	15.8743	1.107	AT
-602	Biwak - Enzianhütte Rhön, DAV Sektion Fulda	DE	Hessen	Rhön	FALSE	50.5221	9.9133	760	DE
+602	Biwak - Enzianhütte Rhön, DAV Sektion Fulda	DE	Hessen	Rhön	FALSE	50.5221	9.9139	760	DE
 603	Aarbiwak SAC, SAC Pilatus	CH	Bern	Berner Alpen	TRUE	46.5555	8.1522	2731	CH
 604	Dobratsch-Gipfelhaus, Alpenverein Villach	AT	Kärnten	Gailtaler Alpen	FALSE	46.6033	13.6720	2143	AT
 605	Defreggerhaus, Privat	AT	Tirol	Venediger Gruppe	FALSE	47.0836	12.3622	2964	AT
@@ -685,3 +685,4 @@
 685	Schwarzensteinhütte (Rif. al Sasso Nero)	IT	Südtirol	Zillertaler Alpen	FALSE	47.0130	11.8857	3026	DE
 686	Frederic-Simms-Hütte	AT	Tirol	Lechtaler Alpen	FALSE	47.2103	10.3551	2004	DE
 687	Julius Payer Hütte (Rif. Julius Payer)	IT	Südtirol	Ortler Gruppe	FALSE	46.5277	10.5436	3029	DE
+688	Treschhütte SAC	CH	Uri	Glarner Alpen	FALSE	46.7186	8.6495	1475	CH

@@ -8,11 +8,11 @@ Variables:
     errors: list containing the errors detected in this module
 
 Functions:
-    load: load all the internationalization strings
+    configure: load all internationalization-dependent strings and set the current active language
     set_language: set the new active language
     get_languages_list: get the list of available languages
-    get_current_language: get the current selected language (as an integer)
-    get_current_language_string: get the current selected language (as a string)
+    get_current_language_index: get the index of the current selected language
+    get_current_language_name: get the name of the current selected language
     get_current_language_code: get the locale code of the current selected language
 """
 import csv
@@ -71,7 +71,7 @@ def configure():
     global _configured
 
     if _configured:
-        old_language = get_current_language_string()
+        old_language = get_current_language_name()
     else:
         old_language = None
 
@@ -136,10 +136,10 @@ def get_languages_list():
     return _languages.copy()
 
 
-def get_current_language():
-    """Get the current selected language (as an integer).
+def get_current_language_index():
+    """Get the index of the current selected language.
 
-    :return: current selected language (as an integer)
+    :return: index of current selected language
     """
     if not _configured:
         configure()
@@ -147,10 +147,10 @@ def get_current_language():
     return _current_language
 
 
-def get_current_language_string():
-    """Get the current selected language (as a string).
+def get_current_language_name():
+    """Get the name of the current selected language.
 
-    :return: current selected language (as a string)
+    :return: name of the current selected language
     """
     if not _configured:
         configure()

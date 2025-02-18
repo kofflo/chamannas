@@ -8,6 +8,8 @@ from pathlib import Path
 import shutil
 import os
 from src import model, map_tools, config
+import prettysusi
+prettysusi.initialize('wx')
 from src.view.frames import DetailedInfoView
 
 # Configuration of Maperitive

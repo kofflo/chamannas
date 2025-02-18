@@ -53,7 +53,7 @@ class _HutHTMLParser(HTMLParser):
         handle_data: handle the content of an HTML element, identifying the key information about the hut
     """
     def __init__(self):
-        """Initializes the instance."""
+        """Initialize the instance."""
         super().__init__()
         self.name = ''  # Hut name
         self.rooms = {}  # Available beds for room type
@@ -162,9 +162,9 @@ def perform_web_request_for_hut(index, hut, start_date):
             parser.feed(web_page.text)
             if not parser.rooms:
                 raise ValueError('No rooms found')
-            dict_data = json.loads(json_data.text)
             if parser.name != hut['name']:
                 result['warning'] = 'Unexpected name: ' + parser.name
+            dict_data = json.loads(json_data.text)
             for j in range(_max_nights):
                 book_date = start_date + j * _DAY_DELTA
                 result['requested_dates'].add(book_date)

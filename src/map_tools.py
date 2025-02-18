@@ -26,20 +26,22 @@ from src.model import HutStatus
 
 errors = []
 
+# Definitions for the tiles
 _TILE_FILENAME = str(ASSETS_PATH_TILES / '{0}/{1}/{2}.png')
 _TILE_SIZE = 256
 _EMPTY_TILE_COLOR = (220, 220, 220, 0)
 _EMPTY_TILE_BORDER_COLOR = (0, 0, 0)
 
+# Definitions for the HUT icons
 _HUT_ICON_FILENAME = str(ASSETS_PATH_ICONS / "icon_{0}.png")
 _HUT_ICON_SIZE = (25, 25)
 _HUT_ICON_BACKUP_SIZE = (19, 19)
 
+# Definitions for the other icons (pin, plus and minus signs, zoom level)
 _PIN_FILENAME = str(ASSETS_PATH_ICONS / "pin.png")
 _PIN_SIZE = (51, 51)
 _PIN_BACKUP_SIZE = (3, 3)
 _PIN_BACKUP_COLOUR = (0, 0, 0)
-
 _PLUS_FILENAME = str(ASSETS_PATH_ICONS / "plus.png")
 _PLUS_SIZE = (32, 32)
 _PLUS_BACKUP_SIZE = (28, 28)
@@ -57,6 +59,7 @@ _ZOOM_BACKUP_COLOUR = (128, 128, 128)
 _ZOOM_TEXT_SIZE = 20
 _ZOOM_TEXT_COLOUR = (255, 255, 255)
 
+# Font
 _FONT_FILENAME = str(ASSETS_PATH_FONTS / 'GidoleFont/Gidole-Regular.ttf')
 
 # Load the font
@@ -65,7 +68,6 @@ try:
 except IOError as font_error:
     _zoom_font = ImageFont.load_default()
     errors.append({'type': type(font_error), 'message': str(font_error) + ": " + _FONT_FILENAME})
-
 
 # Define the colors for the hut icons
 _HUT_STATUS_COLOURS = {
@@ -92,8 +94,8 @@ def _load_icon(filename, size, backup_size, backup_colour,
     """Load an icon image from a file. If an error occurs, create an image using the backup information.
 
     :param filename: name of the image file to be loaded
-    :param size: size in pixel of the desired image (tuple of two values)
-    :param backup_size: size in pixel of the image created as backup (tuple of two values)
+    :param size: size in pixels of the desired image (tuple of two values)
+    :param backup_size: size in pixels of the image created as backup (tuple of two values)
     :param backup_colour: background colour of the image created as backup (tuple of three RGB values)
     :param backup_symbol: character to be displayed on the image created as backup
     :param backup_font: font used for the character on the image created as backup
@@ -118,7 +120,7 @@ def _load_icon(filename, size, backup_size, backup_colour,
         if backup_symbol is not None:
             text = backup_symbol
             draw = ImageDraw.Draw(icon, 'RGBA')
-            tw, th = text_size(draw, text, font=backup_font)
+            tw, th = _text_size(draw, text, font=backup_font)
             text_position = (size[0] - tw) // 2, (size[1] - th) // 2 + 1
             draw.text(text_position, text,
                       fill=backup_text_color, font=backup_font)
@@ -134,12 +136,25 @@ for _hut_status, _colour in _HUT_STATUS_COLOURS.items():
     _hut_icons[_hut_status] = _hut_icon
 
 _pin_icon = _load_icon(_PIN_FILENAME, _PIN_SIZE, _PIN_BACKUP_SIZE, _PIN_BACKUP_COLOUR)
-
 _plus_icon = _load_icon(_PLUS_FILENAME, _PLUS_SIZE, _PLUS_BACKUP_SIZE, _PLUS_BACKUP_COLOUR,
                         _PLUS_BACKUP_SYMBOL, _zoom_font, _ZOOM_TEXT_COLOUR)
 _minus_icon = _load_icon(_MINUS_FILENAME, _MINUS_SIZE, _MINUS_BACKUP_SIZE, _MINUS_BACKUP_COLOUR,
                          _MINUS_BACKUP_SYMBOL, _zoom_font, _ZOOM_TEXT_COLOUR)
 _zoom_icon = _load_icon(_ZOOM_FILENAME, _ZOOM_SIZE, _ZOOM_BACKUP_SIZE, _ZOOM_BACKUP_COLOUR)
+
+
+def _text_size(draw, text, font):
+    """Compute the size in pixels of a text written with a specific font.
+
+    :param draw: a PIL draw object
+    :param text: the desired text
+    :param font: the desired font
+    :return: tuple of text width and hight in pixels
+    """
+    left, top, right, bottom = draw.textbbox((0, 0), text, font=font)
+    tw = right - left
+    th = bottom - top
+    return tw, th
 
 
 def configure():
@@ -282,7 +297,7 @@ class _TilesCluster:
         get_image: return the image of the tile cluster cropped at the currently defined limits
         deg_2_pixel: convert latitude/longitude to pixel coordinates relative to the currently defined limits
         pixel_2_deg: convert pixel coordinates relative to the currently defined limits to latitude/longitude
-        get_image_size: get the size of the image inside the currently defined limits
+        get_image_size: get the size of the image in pixels inside the currently defined limits
         delta_pixel_2_deg: convert a shift in pixel coordinates to the corresponding shift in latitude/longitude
     """
     _PIXEL_BORDER = 20
@@ -320,16 +335,16 @@ class _TilesCluster:
     def __init__(self, lat_min, lat_max, lon_min, lon_max, zoom,
                  x_pixel_size=None, y_pixel_size=None,
                  size_type='exact'):
-        """Create a cluster covering the specified geographical area; size in pixel can be optionally specified.
+        """Create a cluster covering the specified geographical area; size in pixels can be optionally specified.
 
         :param lat_min: minimum latitude [degrees]
         :param lat_max: maximum latitude [degrees]
         :param lon_min: minimum longitude [degrees]
         :param lon_max: maximum longitude [degrees]
         :param zoom: zoom level
-        :param x_pixel_size: width size in pixel
-        :param y_pixel_size: height size in pixel
-        :param size_type: 'exact' or 'min', defines if cluster size in pixel has to be exactly or at least as specified
+        :param x_pixel_size: width size in pixels
+        :param y_pixel_size: height size in pixels
+        :param size_type: 'exact' or 'min', defines if cluster size in pixels has to be exactly or at least as specified
         """
 
         self.zoom = zoom
@@ -367,15 +382,15 @@ class _TilesCluster:
                        size_type='exact'):
         """
         Update the cluster geographical area, loading additional tiles if necessary;
-        size in pixel can be optionally specified.
+        size in pixels can be optionally specified.
 
         :param lat_min: minimum latitude [degrees]
         :param lat_max: maximum latitude [degrees]
         :param lon_min: minimum longitude [degrees]
         :param lon_max: maximum longitude [degrees]
-        :param x_pixel_size: width size in pixel
-        :param y_pixel_size: height size in pixel
-        :param size_type: 'exact' or 'min', defines if cluster size in pixel has to be exactly or at least as specified
+        :param x_pixel_size: width size in pixels
+        :param y_pixel_size: height size in pixels
+        :param size_type: 'exact' or 'min', defines if cluster size in pixels has to be exactly or at least as specified
         """
         # Compute the limits of the new geographical area in pixels
         self._update_limits(lat_min, lat_max, lon_min, lon_max, x_pixel_size, y_pixel_size, size_type)
@@ -397,9 +412,9 @@ class _TilesCluster:
         return cropped_image
 
     def get_image_size(self):
-        """Get the size of the image inside the currently defined limits.
+        """Get the size of the image in pixels inside the currently defined limits.
 
-        :return: the size of the image inside the currently defined limits (x, y)
+        :return: the size of the image in pixels inside the currently defined limits (x, y)
         """
         return self._x_pixel_crop_max - self._x_pixel_crop_min, self._y_pixel_crop_max - self._y_pixel_crop_min
 
@@ -453,7 +468,7 @@ class _TilesCluster:
         :param image: the image to which the copyright string has to be added
         """
         draw = ImageDraw.Draw(image, 'RGBA')
-        tw, th = text_size(draw, _TilesCluster._COPYRIGHT_STRING, font=_TilesCluster._copyright_font)
+        tw, th = _text_size(draw, _TilesCluster._COPYRIGHT_STRING, font=_TilesCluster._copyright_font)
         size_x, size_y = image.size
         text_position = size_x - tw, size_y - th
         draw.rectangle((text_position, (size_x, size_y)), fill=_TilesCluster._COPYRIGHT_BG_COLOUR)
@@ -464,15 +479,15 @@ class _TilesCluster:
     def _update_limits(self, lat_min, lat_max, lon_min, lon_max,
                        x_pixel_size=None, y_pixel_size=None,
                        size_type='exact'):
-        """Update the limits of the cluster geographical area; size in pixel can be optionally specified.
+        """Update the limits of the cluster geographical area; size in pixels can be optionally specified.
 
         :param lat_min: minimum latitude [degrees]
         :param lat_max: maximum latitude [degrees]
         :param lon_min: minimum longitude [degrees]
         :param lon_max: maximum longitude [degrees]
-        :param x_pixel_size: width size in pixel
-        :param y_pixel_size: height size in pixel
-        :param size_type: 'exact' or 'min', defines if cluster size in pixel has to be exactly or at least as specified
+        :param x_pixel_size: width size in pixels
+        :param y_pixel_size: height size in pixels
+        :param size_type: 'exact' or 'min', defines if cluster size in pixels has to be exactly or at least as specified
         """
         x_pixel_crop_min, y_pixel_crop_min = self._raw_deg_2_pixel(lat_max, lon_min)
         x_pixel_crop_max, y_pixel_crop_max = self._raw_deg_2_pixel(lat_min, lon_max)
@@ -501,14 +516,14 @@ class _TilesCluster:
     def _load_cluster(self, lat_min, lat_max, lon_min, lon_max, min_x_pixel_size=None, min_y_pixel_size=None):
         """
         Load the tile images required to cover the specified geographical area;
-        minimum size in pixel can be optionally specified.
+        minimum size in pixels can be optionally specified.
 
         :param lat_min: minimum latitude [degrees]
         :param lat_max: maximum latitude [degrees]
         :param lon_min: minimum longitude [degrees]
         :param lon_max: maximum longitude [degrees]
-        :param min_x_pixel_size: minimum width size in pixel
-        :param min_y_pixel_size: minimum height size in pixel
+        :param min_x_pixel_size: minimum width size in pixels
+        :param min_y_pixel_size: minimum height size in pixels
         """
         # Compute the tile numbers required to cover the specified geographical area
         x_pixel_web_min, y_pixel_web_max = WebMercator.deg_2_pixel(lat_min, lon_min, self.zoom)
@@ -596,7 +611,7 @@ class _TilesCluster:
 
             draw = ImageDraw.Draw(tile, 'RGBA')
             text = f'{zoom}_{x_tile}_{y_tile}'
-            tw, th = text_size(draw, text, font=_TilesCluster._tiles_font)
+            tw, th = _text_size(draw, text, font=_TilesCluster._tiles_font)
             text_position = (_TILE_SIZE - tw) // 2, (_TILE_SIZE - th) // 2 + 1
             draw.text(text_position, text,
                       fill=_TilesCluster._TILES_STRING_COLOUR,
@@ -675,8 +690,7 @@ class _GenericMap:
         self._minus_box = ((0, 0), (0, 0))
 
     def get_map_image(self):
-        """
-        Get the map image from the tiles cluster with the applicable widgets and a copyright string.
+        """Get the map image from the tiles cluster with the applicable widgets and a copyright string.
 
         :return: the map image
         """
@@ -732,7 +746,7 @@ class _GenericMap:
         if self._cluster is not None:
             draw = ImageDraw.Draw(zoom_image, 'RGBA')
             text = str(self._zoom)
-            tw, th = text_size(draw, text, font=_zoom_font)
+            tw, th = _text_size(draw, text, font=_zoom_font)
             text_position = (zoom_image.size[0] - tw) // 2, (zoom_image.size[1] - th) // 2 - 1
             draw.text(text_position, text, fill=_ZOOM_TEXT_COLOUR, font=_zoom_font)
         image.paste(zoom_image, (image.size[0] - zoom_image.size[0], _plus_icon.size[1]), zoom_image)
@@ -748,13 +762,13 @@ class HutMap(_GenericMap):
 
     Methods:
         get_map_image: get the map image from the tiles cluster with the hut symbol
+        check_zoom: check if the provided position in pixel coordinates corresponds to the zoom widget
         set_status: set the status of the hut
         update_zoom: update the zoom level
     """
 
     def __init__(self, lat_hut, lon_hut, width, height, default_zoom, min_zoom, max_zoom):
-        """
-        Create a new HutMap centered at the specified hut coordinates and with the specified width and height.
+        """Create a new HutMap centered at the specified hut coordinates and with the specified width and height.
 
         :param lat_hut: latitude of the hut [degrees]
         :param lon_hut: longitude of the hut [degrees]
@@ -838,6 +852,8 @@ class NavigableMap(_GenericMap):
     """Class defining a navigable map showing the huts and several additional widgets.
 
     Methods:
+        get_map_image: get the map image from the tiles cluster with all symbols
+        check_zoom: check if the provided position in pixel coordinates corresponds to the zoom widget
         update_huts_data: update the data about the huts to be displayed on the map
         update_zoom_from_point: update the zoom level with new map center point and direction of the zoom level change
         update_zoom_from_widget: update the zoom level specifying the direction of the zoom level change
@@ -897,8 +913,8 @@ class NavigableMap(_GenericMap):
         """Create a new navigable map with the specified pixel size and zoom levels;
         the initial area covered by the map is also specified.
 
-        :param pixel_width: width in pixel
-        :param pixel_height: height in pixel
+        :param pixel_width: width in pixels
+        :param pixel_height: height in pixels
         :param default_zoom: default zoom level
         :param min_zoom: minimum zoom level
         :param max_zoom: maximum zoom level
@@ -1104,7 +1120,8 @@ class NavigableMap(_GenericMap):
         self._compute_huts_groups()
 
     def _compute_huts_groups(self):
-        """Create group of huts wherever they are too close to be correctly displayed on the map.
+        """
+        Create group of huts wherever they are too close to be correctly displayed on the map.
 
         The grouping is not performed at the maximum zoom level.
         """
@@ -1184,7 +1201,7 @@ class NavigableMap(_GenericMap):
             draw.ellipse((x_pixel_pin - delta_pixel, y_pixel_pin - delta_pixel,
                           x_pixel_pin + delta_pixel, y_pixel_pin + delta_pixel), outline=NavigableMap._RANGES_COLOUR)
             text = "%d km" % (range_value//1000)
-            tw, th = text_size(draw, text, font=NavigableMap._ranges_font)
+            tw, th = _text_size(draw, text, font=NavigableMap._ranges_font)
             test_position = (x_pixel_pin - tw//2, y_pixel_pin - delta_pixel - th)
             draw.text(test_position, text,
                       fill=NavigableMap._RANGES_TEXT_COLOUR,
@@ -1226,7 +1243,7 @@ class NavigableMap(_GenericMap):
         x_pixel_mean = (x_pixel_start + x_pixel_end)//2
         y_pixel_mean = (y_pixel_start + y_pixel_end)//2
         text = "{0:.1f} km".format(measured_distance/1000)
-        tw, th = text_size(draw, text, font=NavigableMap._ranges_font)
+        tw, th = _text_size(draw, text, font=NavigableMap._ranges_font)
         text_position = x_pixel_mean - tw//2, y_pixel_mean - th//2
         draw.text(text_position, text,
                   fill=NavigableMap._RANGES_TEXT_COLOUR,
@@ -1247,7 +1264,7 @@ class NavigableMap(_GenericMap):
             group_bitmap = Image.Image.copy(_hut_icons['group'])
             draw = ImageDraw.Draw(group_bitmap, 'RGBA')
             text = str(len(hut_group))
-            tw, th = text_size(draw, text, font=NavigableMap._group_font)
+            tw, th = _text_size(draw, text, font=NavigableMap._group_font)
             text_position = (_HUT_ICON_SIZE[0] - tw) // 2, (_HUT_ICON_SIZE[1] - th) // 2 + 1
             draw.text(text_position, text,
                       fill=NavigableMap._GROUP_TEXT_COLOUR,
@@ -1257,16 +1274,9 @@ class NavigableMap(_GenericMap):
             hut_bitmap = Image.Image.copy(_hut_icons[hut_status])
             if hut_self_catering:
                 draw = ImageDraw.Draw(hut_bitmap, 'RGBA')
-                tw, th = text_size(draw, NavigableMap._SELF_TEXT_STRING, font=NavigableMap._self_font)
+                tw, th = _text_size(draw, NavigableMap._SELF_TEXT_STRING, font=NavigableMap._self_font)
                 text_position = (_HUT_ICON_SIZE[0] - tw) // 2, (_HUT_ICON_SIZE[1] - th) // 2 + 1
                 draw.text(text_position, NavigableMap._SELF_TEXT_STRING,
                           fill=NavigableMap._SELF_TEXT_COLOUR,
                           font=NavigableMap._self_font)
             image.paste(hut_bitmap, offset, hut_bitmap)
-
-
-def text_size(draw, text, font):
-    left, top, right, bottom = draw.textbbox((0, 0), text, font=font)
-    tw = right - left
-    th = bottom - top
-    return tw, th

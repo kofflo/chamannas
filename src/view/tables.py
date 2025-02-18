@@ -1,3 +1,13 @@
+"""
+Definition of different types of data tables for the GUI interface.
+All table classes are derived from the PrettYSUsI Grid class.
+
+Classes:
+    HutsGrid: the table for the main view
+    SelectedDetailedGrid: the table for the detailed information about selected huts
+    DetailedGrid: the table for the detailed information about a hut
+    DeveloperGrid: the table for developer information
+"""
 import datetime
 
 from src.model import ROOM_TYPES, HutStatus
@@ -6,6 +16,7 @@ from src.view import errors
 from prettysusi.tables import Align, Renderer, TextStyle
 from prettysusi.tables import Grid
 
+# Definition of colors
 _WHITE = (255, 255, 255)
 _LIGHT_GRAY = (220, 220, 220)
 _DARK_GRAY = (70, 70, 70)
@@ -14,7 +25,7 @@ _RED = (255, 0, 0)
 _ORANGE = (224, 129, 25)
 _GREEN = (0, 100, 0)
 
-# COLOURS FOR TABLE ROWS: [foreground, background]
+# Definition of colors for table rows: [foreground, background]
 _NEUTRAL_COLOUR = [_BLACK, _WHITE]
 _HUT_STATUS_COLOURS = {
     HutStatus.NO_REQUEST: [_DARK_GRAY, _WHITE],
@@ -24,18 +35,42 @@ _HUT_STATUS_COLOURS = {
     HutStatus.AVAILABLE: [_GREEN, _WHITE]
 }
 
+# Definition of symbols
 _SORT_ASCENDING_SYMBOL = ' \u2191'
 _SORT_DESCENDING_SYMBOL = " \u2193"
 _FILTER_SYMBOL = " Y"
 
 
 class HutsGrid(Grid):
+    """Define the table for the main view.
+
+    Methods:
+        update_data: update the data of the table
+
+        From superclass:
+        on_cell_left_click: executed when a left click is performed on a cell
+        on_cell_left_double_click: executed when a left double click is performed on a cell
+        on_cell_right_click: executed when a right click is performed on a cell
+        on_cell_right_double_click: executed when a right double click is performed on a cell
+        on_label_left_click: executed when a left click is performed on a key label
+        on_label_left_double_click: executed when a left double click is performed on a key label
+        on_label_right_click: executed when a right click is performed on a key label
+        on_label_right_double_click: executed when a right double click is performed on a key label
+        freeze_cols_width: freeze the columns width
+        set_cols_width_as: set the column width with the same size as another table
+        unfreeze_cols_width: unfreeze the columns width
+        refresh: redraw the table applying the updates
+    """
 
     _hide_row_labels = True
     _auto_size_cols = True
     _FIXED_ROW_NUMBERS = True
 
-    def __init__(self, panel):
+    def __init__(self, parent):
+        """Initialize all internal data.
+
+        :param parent: the parent frame
+        """
         self._indexes = None
         self._keys = None
         self._data_dictionary = None
@@ -43,10 +78,20 @@ class HutsGrid(Grid):
         self._sort_key = None
         self._sort_ascending = None
         self._filter_keys = {}
-        super().__init__(panel)
+        super().__init__(parent=parent)
 
     def update_data(self, indexes=None, keys=None, data_dictionary=None, selected=None,
                     sort_key=None, sort_ascending=None, filter_keys=None):
+        """Update the data of the table.
+
+        :param indexes: the indexes of the huts to display in the table
+        :param keys: the keys of the information to display in the table
+        :param data_dictionary: the dictionary with the information about the huts
+        :param selected: the indexes of the selected huts
+        :param sort_key: the key used to sort the huts in the table
+        :param sort_ascending: true for ascending order, false for descending order
+        :param filter_keys: the keys for which a filter is applied
+        """
         if indexes is not None:
             self._indexes = indexes
         if keys is not None:
@@ -63,12 +108,26 @@ class HutsGrid(Grid):
             self._filter_keys = filter_keys
 
     def _get_number_rows(self):
+        """Return the number of rows of the table.
+
+        :return: the number of rows of the table
+        """
         return len(self._indexes)
 
     def _get_number_cols(self):
+        """Return the number of columns of the table.
+
+        :return: the number of columns of the table
+        """
         return len(self._keys)
 
     def _get_value(self, row, col):
+        """Return the value to be displayed in a cell.
+
+        :param row: the row of the cell
+        :param col: the column of the cell
+        :return: the value to be displayed in the cell
+        """
         index = self._indexes[row]
         key = self._keys[col]
         if key == 'height':
@@ -96,6 +155,11 @@ class HutsGrid(Grid):
                 return i18n.all_strings('table error')
 
     def _get_col_label_value(self, col):
+        """Return the value to be displayed as the label of a column.
+
+        :param col: the column
+        :return: the value to be displayed as the label of the column
+        """
         key = self._keys[col]
         if key == self._sort_key:
             if self._sort_ascending:
@@ -111,7 +175,12 @@ class HutsGrid(Grid):
         else:
             return i18n.all_strings[self._keys[col]] + symbol
 
-    def _get_row_col_colour(self, row, col):
+    def _get_row_col_colour(self, row, _col):
+        """Return the colour to be used for a cell.
+
+        :param row: the row of the cell
+        :return: the colour to be used for the cell
+        """
         index = self._indexes[row]
         if not self._data_dictionary[index]['data_requested']:
             colour = _HUT_STATUS_COLOURS[HutStatus.NO_REQUEST]
@@ -125,21 +194,36 @@ class HutsGrid(Grid):
             colour = _HUT_STATUS_COLOURS[HutStatus.AVAILABLE]
         return colour
 
-    def _get_style(self, row, col):
+    def _get_style(self, row, _col):
+        """Return the style to be used for a cell.
+
+        :param row: the row of the cell
+        :return: the style to be used for the cell
+        """
         index = self._indexes[row]
         if index in self._selected:
             return TextStyle.BOLD
         else:
             return TextStyle.NORMAL
 
-    def _get_align(self, row, col):
+    def _get_align(self, _row, col):
+        """Return the alignment to be used for a cell.
+
+        :param col: the column of the cell
+        :return: the alignment to be used for the cell
+        """
         key = self._keys[col]
         if key in ['height', 'distance', 'available'] + ROOM_TYPES:
             return Align.RIGHT
         else:
             return Align.LEFT
 
-    def _get_renderer(self, row, col):
+    def _get_renderer(self, _row, col):
+        """Return the renderer to be used for a cell.
+
+        :param col: the column of the cell
+        :return: the renderer to be used for the cell
+        """
         key = self._keys[col]
         if key in ['self_catering', 'data_requested', 'response', 'open']:
             return Renderer.BOOLEAN
@@ -147,6 +231,11 @@ class HutsGrid(Grid):
             return Renderer.NORMAL
 
     def get_values_for_filter(self, key):
+        """Return the values for a key, to be used in the filter.
+
+        :param key: the key
+        :return: a dictionary with the displayed table values as keys and the corresponding data as value
+        """
         values_dict = {}
         col = self._keys.index(key)
         for row in range(self._get_number_rows()):
@@ -156,6 +245,25 @@ class HutsGrid(Grid):
 
 
 class SelectedDetailedGrid(Grid):
+    """Define the table for the detailed information about selected huts.
+
+    Methods:
+        update_data: update the data of the table
+
+        From superclass:
+        on_cell_left_click: executed when a left click is performed on a cell
+        on_cell_left_double_click: executed when a left double click is performed on a cell
+        on_cell_right_click: executed when a right click is performed on a cell
+        on_cell_right_double_click: executed when a right double click is performed on a cell
+        on_label_left_click: executed when a left click is performed on a key label
+        on_label_left_double_click: executed when a left double click is performed on a key label
+        on_label_right_click: executed when a right click is performed on a key label
+        on_label_right_double_click: executed when a right double click is performed on a key label
+        freeze_cols_width: freeze the columns width
+        set_cols_width_as: set the column width with the same size as another table
+        unfreeze_cols_width: unfreeze the columns width
+        refresh: redraw the table applying the updates
+    """
 
     _hide_row_labels = True
     _auto_size_cols = True
@@ -167,14 +275,25 @@ class SelectedDetailedGrid(Grid):
     _GRID_ROW_NUMBERS = 6
     _FIXED_ROW_NUMBERS = True
 
-    def __init__(self, panel):
+    def __init__(self, parent):
+        """Initialize all internal data.
+
+        :param parent: the parent frame
+        """
         self._indexes = None
         self._keys = None
         self._data_dictionary = None
         self._room_selected = None
-        super().__init__(panel)
+        super().__init__(parent=parent)
 
     def update_data(self, indexes=None, dates=None, data_dictionary=None, room_selected=None):
+        """Update the data of the table.
+
+        :param indexes: the indexes of the huts to display in the table
+        :param dates: the dates for which the information have to be displayed
+        :param data_dictionary: the dictionary with the information about the huts
+        :param room_selected: the selected room for which the information have to be displayed
+        """
         if indexes is not None:
             self._indexes = indexes
         if dates is not None:
@@ -185,12 +304,26 @@ class SelectedDetailedGrid(Grid):
             self._room_selected = room_selected
 
     def _get_number_rows(self):
+        """Return the number of rows of the table.
+
+        :return: the number of rows of the table
+        """
         return len(self._indexes)
 
     def _get_number_cols(self):
+        """Return the number of columns of the table.
+
+        :return: the number of columns of the table
+        """
         return len(self._keys)
 
     def _get_value(self, row, col):
+        """Return the value to be displayed in a cell.
+
+        :param row: the row of the cell
+        :param col: the column of the cell
+        :return: the value to be displayed in the cell
+        """
         index = self._indexes[row]
         key = self._keys[col]
         if isinstance(key, datetime.date):
@@ -203,6 +336,11 @@ class SelectedDetailedGrid(Grid):
                 return i18n.all_strings('table error')
 
     def _get_col_label_value(self, col):
+        """Return the value to be displayed as the label of a column.
+
+        :param col: the column
+        :return: the value to be displayed as the label of the column
+        """
         key = self._keys[col]
         if isinstance(key, datetime.date):
             return key.strftime(self._DATE_FORMAT)
@@ -210,6 +348,12 @@ class SelectedDetailedGrid(Grid):
             return i18n.all_strings[key]
 
     def _get_row_col_colour(self, row, col):
+        """Return the colour to be used for a cell.
+
+        :param row: the row of the cell
+        :param col: the column of the cell
+        :return: the colour to be used for the cell
+        """
         index = self._indexes[row]
         if not self._data_dictionary[index]['response']:
             colour = _HUT_STATUS_COLOURS[HutStatus.NO_RESPONSE]
@@ -227,7 +371,12 @@ class SelectedDetailedGrid(Grid):
                 colour = _HUT_STATUS_COLOURS[HutStatus.AVAILABLE]
         return colour
 
-    def _get_align(self, row, col):
+    def _get_align(self, _row, col):
+        """Return the alignment to be used for a cell.
+
+        :param col: the column of the cell
+        :return: the alignment to be used for the cell
+        """
         key = self._keys[col]
         if isinstance(key, datetime.date):
             return Align.RIGHT
@@ -235,6 +384,12 @@ class SelectedDetailedGrid(Grid):
             return Align.LEFT
 
     def _get_value_for_date(self, index, date):
+        """Return the value to be displayed for a specific hut index and date.
+
+        :param index: the hut index
+        :param date: the date
+        :return: the value to be displayed for the specific hut index and date
+        """
         if date not in self._data_dictionary[index]['detailed_places']:
             return i18n.all_strings['no information available']
         detailed_places = self._data_dictionary[index]['detailed_places'][date]
@@ -250,6 +405,25 @@ class SelectedDetailedGrid(Grid):
 
 
 class DetailedGrid(Grid):
+    """Define the table for the detailed information about a hut.
+
+    Methods:
+        update_data: update the data of the table
+
+        From superclass:
+        on_cell_left_click: executed when a left click is performed on a cell
+        on_cell_left_double_click: executed when a left double click is performed on a cell
+        on_cell_right_click: executed when a right click is performed on a cell
+        on_cell_right_double_click: executed when a right double click is performed on a cell
+        on_label_left_click: executed when a left click is performed on a key label
+        on_label_left_double_click: executed when a left double click is performed on a key label
+        on_label_right_click: executed when a right click is performed on a key label
+        on_label_right_double_click: executed when a right double click is performed on a key label
+        freeze_cols_width: freeze the columns width
+        set_cols_width_as: set the column width with the same size as another table
+        unfreeze_cols_width: unfreeze the columns width
+        refresh: redraw the table applying the updates
+    """
 
     _auto_size_cols = True
     _auto_size_row_labels = True
@@ -259,16 +433,24 @@ class DetailedGrid(Grid):
     _GRID_ROW_NUMBERS = 15
     _FIXED_ROW_NUMBERS = False
 
-    def __init__(self, panel):
+    def __init__(self, parent):
+        """Initialize all internal data.
+
+        :param parent: the parent frame
+        """
         self._indexes = None
         self._keys = None
         self._available_places = None
         self._available_places_for_room = None
         self._detailed_places = None
         self._hut_status = None
-        super().__init__(panel)
+        super().__init__(parent=parent)
 
     def update_data(self, hut_info):
+        """Update the data of the table.
+
+        :param hut_info: the information about the hut
+        """
         self._available_places = hut_info['available']
         self._available_places_for_room = {room: hut_info[room] for room in ROOM_TYPES if hut_info[room] is not None}
         self._detailed_places = hut_info['detailed_places']
@@ -287,12 +469,26 @@ class DetailedGrid(Grid):
         self._keys = list(keys) + ['all rooms']
 
     def _get_number_rows(self):
+        """Return the number of rows of the table.
+
+        :return: the number of rows of the table
+        """
         return len(self._indexes)
 
     def _get_number_cols(self):
+        """Return the number of columns of the table.
+
+        :return: the number of columns of the table
+        """
         return len(self._keys)
 
     def _get_value(self, row, col):
+        """Return the value to be displayed in a cell.
+
+        :param row: the row of the cell
+        :param col: the column of the cell
+        :return: the value to be displayed in the cell
+        """
         index = self._indexes[row]
         key = self._keys[col]
         if index == 'all_dates':
@@ -301,10 +497,20 @@ class DetailedGrid(Grid):
             return self._get_value_for_detailed_places(key, index)
 
     def _get_col_label_value(self, col):
+        """Return the value to be displayed as the label of a column.
+
+        :param col: the column
+        :return: the value to be displayed as the label of the column
+        """
         key = self._keys[col]
         return i18n.all_strings[key]
 
     def _get_row_label_value(self, row):
+        """Return the value to be displayed as the label of a row.
+
+        :param row: the row
+        :return: the value to be displayed as the label of the row
+        """
         index = self._indexes[row]
         if index == 'all_dates':
             return i18n.all_strings['all dates']
@@ -312,6 +518,12 @@ class DetailedGrid(Grid):
             return str(index)
 
     def _get_row_col_colour(self, row, col):
+        """Return the colour to be used for a cell.
+
+        :param row: the row of the cell
+        :param col: the column of the cell
+        :return: the colour to be used for the cell
+        """
         if self._hut_status is HutStatus.NO_RESPONSE:
             return _HUT_STATUS_COLOURS[HutStatus.NO_RESPONSE]
         value = self._get_value(row, col)
@@ -325,7 +537,13 @@ class DetailedGrid(Grid):
             return _HUT_STATUS_COLOURS[HutStatus.AVAILABLE]
 
     def _get_row_colour(self, row):
-        # For GUIs which cannot show a different colour for each column
+        """
+        Return the colour to be used for the cells of a row.
+        For GUIs which don't support a different colour on cells in the same row.
+
+        :param row: the row
+        :return: the colour to be used for the cells of the row
+        """
         if self._hut_status is HutStatus.NO_RESPONSE:
             return _HUT_STATUS_COLOURS[HutStatus.NO_RESPONSE]
         index = self._indexes[row]
@@ -342,10 +560,19 @@ class DetailedGrid(Grid):
         else:
             return _HUT_STATUS_COLOURS[HutStatus.AVAILABLE]
 
-    def _get_align(self, row, col):
+    def _get_align(self, _row, _col):
+        """Return the alignment to be used for a cell.
+
+        :return: the alignment to be used for the cell
+        """
         return Align.RIGHT
 
     def _get_value_for_all_dates(self, key):
+        """Return the information about all dates for a room type.
+
+        :param key: the room type
+        :return: the value to be displayed
+        """
         if self._hut_status is HutStatus.CLOSED:
             return i18n.all_strings['closed']
         elif self._hut_status is HutStatus.NO_RESPONSE:
@@ -361,6 +588,12 @@ class DetailedGrid(Grid):
             return i18n.all_strings['no information available']
 
     def _get_value_for_detailed_places(self, key, index):
+        """Return the information about a single date for a room type.
+
+        :param key: the room type
+        :param index: the index of the date
+        :return: the value to be displayed
+        """
         if key in self._detailed_places[index]:
             return str(self._detailed_places[index][key])
         elif 'closed' in self._detailed_places[index]:
@@ -375,6 +608,25 @@ class DetailedGrid(Grid):
 
 
 class DeveloperGrid(Grid):
+    """Define the table for developer information.
+
+    Methods:
+        update_data: update the data of the table
+
+        From superclass:
+        on_cell_left_click: executed when a left click is performed on a cell
+        on_cell_left_double_click: executed when a left double click is performed on a cell
+        on_cell_right_click: executed when a right click is performed on a cell
+        on_cell_right_double_click: executed when a right double click is performed on a cell
+        on_label_left_click: executed when a left click is performed on a key label
+        on_label_left_double_click: executed when a left double click is performed on a key label
+        on_label_right_click: executed when a right click is performed on a key label
+        on_label_right_double_click: executed when a right double click is performed on a key label
+        freeze_cols_width: freeze the columns width
+        set_cols_width_as: set the column width with the same size as another table
+        unfreeze_cols_width: unfreeze the columns width
+        refresh: redraw the table applying the updates
+    """
 
     _hide_row_labels = True
     _auto_size_rows = True
@@ -385,29 +637,61 @@ class DeveloperGrid(Grid):
     _GRID_ROW_NUMBERS = 4
     _FIXED_ROW_NUMBERS = False
 
-    def __init__(self, panel):
+    def __init__(self, parent):
+        """Initialize all internal data.
+
+        :param parent: the parent frame
+        """
         self._developer_info = None
-        super().__init__(panel)
+        super().__init__(parent=parent)
 
     def update_data(self, developer_info=None):
+        """Update the data of the table.
+
+        :param developer_info: the information for developers
+        """
         if developer_info is not None:
             self._developer_info = developer_info
 
     def _get_number_rows(self):
+        """Return the number of rows of the table.
+
+        :return: the number of rows of the table
+        """
         return len(self._developer_info)
 
     def _get_number_cols(self):
+        """Return the number of columns of the table.
+
+        :return: the number of columns of the table
+        """
         return len(self._keys)
 
     def _get_value(self, row, col):
+        """Return the value to be displayed in a cell.
+
+        :param row: the row of the cell
+        :param col: the column of the cell
+        :return: the value to be displayed in the cell
+        """
         key = self._keys[col]
         return str(self._developer_info[row][key])
 
     def _get_col_label_value(self, col):
+        """Return the value to be displayed as the label of a column.
+
+        :param col: the column
+        :return: the value to be displayed as the label of the column
+        """
         key = self._keys[col]
         return i18n.all_strings[f'developer table {key}']
 
-    def _get_renderer(self, row, col):
+    def _get_renderer(self, _row, col):
+        """Return the renderer to be used for a cell.
+
+        :param col: the column of the cell
+        :return: the renderer to be used for the cell
+        """
         key = self._keys[col]
         if key == 'message':
             return Renderer.AUTO_WRAP

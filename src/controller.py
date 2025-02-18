@@ -44,7 +44,7 @@ class HutsController:
         command_search_for_updates: command the web_request module to search for application updates
         command_open_update_dialog: open a dialog for the application updates
         command_preference_gui: select a gui type in the preferences settings
-        command_preference_view: select a gui type in the preferences settings
+        command_preference_view: select a view type in the preferences settings
     """
     def __init__(self, model, view_type='table'):
         """Initialize the controller and create the main view.
@@ -284,7 +284,6 @@ class HutsController:
                                   'message': 'ABOUT information missing from configuration file'})
             return
         about_dialog = AboutDialog(parent=parent, dialog_info=about_info)
-        about_dialog.update_gui({})
         about_dialog.show_modal()
 
     def command_open_warnings_frame(self, parent):

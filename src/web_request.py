@@ -8,7 +8,6 @@ Functions:
     configure: configure the necessary data for the web requests
     perform_web_request_for_hut: perform the web request retrieving the data about free beds for a hut
     open_hut_page: open the web page of a hut in the browser
-    open_book_page: open the booking page of a hut in the browser
     search_for_updates: search for application updates
 """
 import webbrowser
@@ -16,7 +15,6 @@ import requests
 import json
 import datetime
 import time
-from html.parser import HTMLParser
 import pathlib
 import hashlib
 from threading import Thread
@@ -28,11 +26,17 @@ errors = []
 _REQUEST_DELAY = 1.0  # seconds: determines the minimum delay between two web requests
 _WEB_DATE_FORMAT = '%d.%m.%Y'
 _DAY_DELTA = datetime.timedelta(days=1.0)
-_HUT_PAGE = 'calendar?hut_id={0}&lang={1}'
-_BOOK_PAGE = 'wizard?hut_id={0}&selectedDate={1}&lang={2}'
+_HUT_PAGE = '/reservation/book-hut/{0}/wizard'
+_BOOK_PAGE = '/reservation/book-hut/{0}/wizard'
 _TIMEOUT = 5.0
 _DEFAULT_MAX_NIGHTS = 14
 _DEFAULT_ROOM_BASIC_TYPES = {'default_type': 'shared'}
+_HUT_STATUS_TYPES = ['SERVICED', 'UNSERVICED', 'CLOSED']
+_HEADERS = {
+    "User-Agent":
+        "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/129.0.0.0 "
+        "Safari/537.36",
+}
 
 _configured = False
 _max_nights = 0
@@ -41,62 +45,6 @@ _base_url = ""
 _updates_url = ""
 _room_basic_types = {}
 _update_cancelled = False
-
-
-class _HutHTMLParser(HTMLParser):
-    """
-    Class used to parse the HTML hut page and extract the information about the available beds.
-    Subclass of the Python standard HTMLParser class.
-
-    Methods:
-        handle_starttag: handle an HTML tag, identifying the key information about the hut
-        handle_data: handle the content of an HTML element, identifying the key information about the hut
-    """
-    def __init__(self):
-        """Initialize the instance."""
-        super().__init__()
-        self.name = ''  # Hut name
-        self.rooms = {}  # Available beds for room type
-        self._is_hut_name = False
-        self._room_no = None
-        self._is_room_label = False
-
-    def handle_starttag(self, tag, attrs):
-        """Handle an HTML tag, identifying the key information about the hut.
-
-        :param tag: the HTML tag
-        :param attrs: the HTML tag attributes
-        """
-        if tag == 'h4' and not self.name:
-            # Hut name is contained in a 'h4' tag
-            self._is_hut_name = True
-        elif tag == 'div':
-            # Room information is contained in a 'div' tag with 'id' attribute starting with to 'room0-'
-            for attr in attrs:
-                if attr[0] == 'id' and attr[1][0:6] == 'room0-':
-                    self._room_no = int(attr[1][6:])
-                    break
-        elif self._room_no is not None and tag == 'label':
-            # Room label is contained in a 'label' tag with 'class' attribute equal to 'item-label'
-            for attr in attrs:
-                if attr[0] == 'class' and attr[1] == 'item-label':
-                    self._is_room_label = True
-                    break
-
-    def handle_data(self, data):
-        """Handle the content of an HTML element, identifying the key information about the hut.
-
-        :param data: the element content
-        """
-        if self._is_hut_name and data:
-            # The content is the hut name
-            self.name = data
-            self._is_hut_name = False
-        elif self._room_no is not None and self._is_room_label:
-            # The content is the room label
-            self.rooms[self._room_no] = data
-            self._room_no = None
-            self._is_room_label = False
 
 
 def configure():
@@ -114,7 +62,7 @@ def configure():
     _configured = True
 
 
-def perform_web_request_for_hut(index, hut, start_date):
+def perform_web_request_for_hut(index, hut):
     """
     Perform the web request retrieving the data about free beds for a single hut.
 
@@ -122,7 +70,6 @@ def perform_web_request_for_hut(index, hut, start_date):
 
     :param index: id number of the hut
     :param hut: dictionary of information about the hut
-    :param start_date: start date of the request time interval
     :return: dictionary containing the retrieved information about free beds
     """
     global _last_request
@@ -137,92 +84,121 @@ def perform_web_request_for_hut(index, hut, start_date):
             time.sleep(_REQUEST_DELAY - time_from_last_request)
 
     with requests.Session() as session:
-        result = {'warning': None, 'error': None, 'requested_dates': set(), 'places': {}}
+        result = {'warning': None, 'error': None,
+                  'hut_status': {}, 'places': {}, 'request_time': datetime.datetime.now()}
         try:
-            # Retrieve the web page for the hut
-            lang_code = 'de_' + hut['lang_code']
-            web_page = session.get(_base_url + f'calendar?hut_id={index}&lang={lang_code}', timeout=_TIMEOUT,
-                                   verify=True)
-            if web_page.status_code != requests.codes.ok:
-                errors.append({'type': f"Requests error on {web_page.url}",
-                               'message': f"Status code: {web_page.status_code}"})
-
-            # Retrieve the booking data in JSON format for the hut
-            json_data = session.get(_base_url + 'selectDate?date=' + start_date.strftime(_WEB_DATE_FORMAT),
-                                    timeout=_TIMEOUT, verify=True)
-            if json_data.status_code != requests.codes.ok:
-                errors.append({'type': f"Requests error on {json_data.url}",
-                               'message': f"Status code: {json_data.status_code}"})
-
             _last_request = time.time()
-            result['request_time'] = datetime.datetime.now()
 
-            # Analyze the web page and the JSON data to find the required information
-            parser = _HutHTMLParser()
-            parser.feed(web_page.text)
-            if not parser.rooms:
-                raise ValueError('No rooms found')
-            if parser.name != hut['name']:
-                result['warning'] = 'Unexpected name: ' + parser.name
-            dict_data = json.loads(json_data.text)
-            for j in range(_max_nights):
-                book_date = start_date + j * _DAY_DELTA
-                result['requested_dates'].add(book_date)
+            # Retrieve the hut information
+            url_hut_info = _base_url + f"api/v1/reservation/hutInfo/{index}"
+            hut_info = session.get(url_hut_info, headers=_HEADERS, timeout=_TIMEOUT, verify=True)
+            if hut_info.status_code != requests.codes.ok:
+                errors.append({'type': f"Requests error on {hut_info.url}",
+                              'message': f"Status code: {hut_info.status_code}"})
+                raise Exception(f"Hut information error on hut {index}")
+
+            # Retrieve the availability information
+            url_availability = _base_url + f"api/v1/reservation/getHutAvailability?hutId={index}"
+            availability = session.get(url_availability, headers=_HEADERS, timeout=_TIMEOUT, verify=True)
+            if availability.status_code != requests.codes.ok:
+                errors.append({'type': f"Requests error on {availability.url}",
+                              'message': f"Status code: {availability.status_code}"})
+                raise Exception(f"Hut availability error on hut {index}")
+
+            hut_info_json = json.loads(hut_info.text)
+            hut_availability_json = json.loads(availability.text)
+
+            # Analyze the JSON data to find the required information
+            hut_id, hut_name, category_id_list, room_label_list = _parse_hut_info_json(hut_info_json)
+            if hut_id != index:
+                result['warning'] = 'Unexpected index: ' + hut_id
+            if hut_name != hut['name']:
+                result['warning'] = 'Unexpected name: ' + hut_name
+
+            hut_status, availabilities = _parse_hut_availability_json(hut_availability_json,
+                                                                      category_id_list, room_label_list)
+
+            for book_date in hut_status:
+                result['hut_status'][book_date] = hut_status[book_date]
                 result['places'][book_date] = {}
-                for room in dict_data[str(j)]:
-                    if room['closed']:
-                        result['places'][book_date]['closed'] = 0
-                        break
+                if hut_status[book_date] == "CLOSED":
+                    result['places'][book_date]['closed'] = 0
+                    continue
+                for room_label in availabilities[book_date]:
+                    if room_label in _room_basic_types:
+                        room_type = _room_basic_types[room_label]
                     else:
-                        room_type = parser.rooms[room['bedCategoryId']].strip()
-                        if room_type in _room_basic_types:
-                            room_type = _room_basic_types[room_type]
-                        else:
-                            result['warning'] = 'Unexpected room type: ' + room_type
-                            room_type = _room_basic_types['default_type']
-                        if room_type not in result['places'][book_date]:
-                            result['places'][book_date][room_type] = room['freeRoom']
-                        else:
-                            result['places'][book_date][room_type] += room['freeRoom']
+                        result['warning'] = 'Unexpected room type: ' + room_label
+                        room_type = _room_basic_types['default_type']
+                    if room_type not in result['places'][book_date]:
+                        result['places'][book_date][room_type] = availabilities[book_date][room_label]
+                    else:
+                        result['places'][book_date][room_type] += availabilities[book_date][room_label]
 
         except Exception as e:
             result['error'] = f'Error occurred: {e}'
-            result['request_time'] = datetime.datetime.now()
-            for j in range(_max_nights):
-                book_date = start_date + j * _DAY_DELTA
-                result['requested_dates'].add(book_date)
 
     return result
 
 
-def open_hut_page(index, lang_code):
+def _parse_hut_info_json(hut_info_json):
+    hut_id = hut_info_json["hutId"]
+    hut_name = hut_info_json["hutName"]
+    hut_bed_categories = hut_info_json["hutBedCategories"]
+    hut_languages = hut_info_json["hutLanguages"]
+    for i_lang in range(len(hut_languages)):
+        if hut_languages[i_lang].startswith("DE"):
+            preferred_hut_language = hut_languages[i_lang]
+            break
+    else:
+        if "IT" in hut_languages:
+            preferred_hut_language = "IT"
+        elif "FR" in hut_languages:
+            preferred_hut_language = "FR"
+        else:
+            raise Exception("No valid hut language")
+    category_id_list = []
+    room_label_list = []
+    for i_bed in range(len(hut_bed_categories)):
+        category_id_list.append(hut_bed_categories[i_bed]["categoryID"])
+        hut_bed_category_language_data = hut_bed_categories[i_bed]["hutBedCategoryLanguageData"]
+        for i_lang in range(len(hut_bed_category_language_data)):
+            language = hut_bed_category_language_data[i_lang]["language"]
+            if language == preferred_hut_language:
+                room_label_list.append(hut_bed_category_language_data[i_lang]["label"])
+                break
+        else:
+            raise Exception("No valid hut language")
+    return hut_id, hut_name, category_id_list, room_label_list
+
+
+def _parse_hut_availability_json(hut_availability_json, category_id_list, room_label_list):
+    hut_status = {}
+    availabilities = {}
+    for i_day in range(len(hut_availability_json)):
+        availabilities_day = {}
+        date_formatted = hut_availability_json[i_day]["dateFormatted"]
+        date = datetime.datetime.strptime(date_formatted, '%d.%m.%Y').date()
+        if hut_availability_json[i_day]["hutStatus"] not in _HUT_STATUS_TYPES:
+            raise Exception("Invalid hut status")
+        hut_status[date] = hut_availability_json[i_day]["hutStatus"]
+        free_beds_per_category = hut_availability_json[i_day]["freeBedsPerCategory"]
+        for room_label, category_id in zip(room_label_list, category_id_list):
+            availabilities_day[room_label] = free_beds_per_category.get(str(category_id), 0)
+        availabilities[date] = availabilities_day
+    return hut_status, availabilities
+
+
+def open_hut_page(index):
     """Open the web page of a hut in the browser.
 
     :param index: id no of the hut
-    :param lang_code: locale code to be used in the browser
     """
     if not _configured:
         configure()
 
     try:
-        webbrowser.open(_base_url + _HUT_PAGE.format(index, lang_code), new=2)
-    except Exception as e:
-        errors.append({'type': type(e), 'message': str(e)})
-
-
-def open_book_page(index, date, lang_code):
-    """Open the booking page of a hut in the browser.
-
-    :param index: id no of the hut
-    :param date: required booking date
-    :param lang_code: locale code to be used in the browser
-    """
-    if not _configured:
-        configure()
-
-    date_string = date.strftime(_WEB_DATE_FORMAT)
-    try:
-        webbrowser.open(_base_url + _BOOK_PAGE.format(index, date_string, lang_code), new=2)
+        webbrowser.open(_base_url + _HUT_PAGE.format(index), new=2)
     except Exception as e:
         errors.append({'type': type(e), 'message': str(e)})
 

@@ -21,13 +21,15 @@ from src.config import ASSETS_PATH_DATA
 from src import web_request
 
 
-ROOM_TYPES = ['single', 'double', 'shared', 'dormitory']
+ROOM_TYPES = ['single', 'double', 'shared', 'dormitory', 'special', 'unattended']
 
 _HUTS_DATA_FILE = str(ASSETS_PATH_DATA / 'huts.txt')
 _DAY_DELTA = datetime.timedelta(days=1.0)
 _SKIP_CODE = 'SKIP'
 _DEFAULT_REFERENCE_LOCATION = (48.1, - 11.6)
 _DEFAULT_RESULTS_CACHE_EXPIRATION = 7
+_HUT_STATUS_CLOSED = 'CLOSED'
+_HUT_STATUS_UNSERVICED = 'UNSERVICED'
 
 
 class HutStatus(Enum):
@@ -37,6 +39,7 @@ class HutStatus(Enum):
     CLOSED = auto()
     NOT_AVAILABLE = auto()
     AVAILABLE = auto()
+    UNSERVICED = auto()
 
 
 class HutsModel:
@@ -534,16 +537,21 @@ class HutsModel:
         :param request_dates: the dates for which data are required
         :return: a dictionary of all huts data for the specified huts and dates
         """
-        data_requested = index in self._results_dictionary and \
-            all([d in self._results_dictionary[index]['requested_dates'] for d in request_dates])
         try:
             response = self._results_dictionary[index]['error'] is None
         except KeyError:
             response = True
+        try:
+            data_requested = (index in self._results_dictionary
+                              and set(request_dates) <= set(self._results_dictionary[index]['places'].keys()))
+        except KeyError:
+            data_requested = False
         distance_from_ref = distance(self._huts_dictionary[index]['lat'], self._huts_dictionary[index]['lon'],
                                      self._reference_location['lat'], self._reference_location['lon'])
         is_open = self._check_open(self._results_dictionary, index, request_dates)
-        available_places = self._available_places(self._results_dictionary, index, request_dates)
+        is_serviced = self._check_serviced(self._results_dictionary, index, request_dates)
+        available_places_for_date = self._available_places_for_date(self._results_dictionary, index, request_dates)
+        available_places = min(available_places_for_date.values())
         available_places_for_room = self._available_places_for_room(self._results_dictionary, index, request_dates)
         detailed_places = self._detailed_places(self._results_dictionary, index, request_dates)
 
@@ -555,8 +563,28 @@ class HutsModel:
             status = HutStatus.CLOSED
         elif available_places == 0:
             status = HutStatus.NOT_AVAILABLE
+        elif not is_serviced:
+            status = HutStatus.UNSERVICED
         else:
             status = HutStatus.AVAILABLE
+
+        if not response:
+            detailed_status = {date: HutStatus.NO_RESPONSE for date in request_dates}
+        else:
+            detailed_status = {}
+            for date in request_dates:
+                if (index not in self._results_dictionary
+                   or date not in self._results_dictionary[index]['places'].keys()):
+                    status_for_date = HutStatus.NO_REQUEST
+                elif self._results_dictionary[index]['hut_status'][date] == _HUT_STATUS_CLOSED:
+                    status_for_date = HutStatus.CLOSED
+                elif available_places_for_date[date] == 0:
+                    status_for_date = HutStatus.NOT_AVAILABLE
+                elif self._results_dictionary[index]['hut_status'][date] == _HUT_STATUS_UNSERVICED:
+                    status_for_date = HutStatus.UNSERVICED
+                else:
+                    status_for_date = HutStatus.AVAILABLE
+                detailed_status[date] = status_for_date
 
         hut_info = {
             'name': self._huts_dictionary[index]['name'],
@@ -573,7 +601,8 @@ class HutsModel:
             'open': is_open,
             'available': available_places,
             'detailed_places': detailed_places,
-            'status': status
+            'status': status,
+            'detailed_status': detailed_status
         }
         for room in ROOM_TYPES:
             hut_info[room] = available_places_for_room[room] if room in available_places_for_room else None
@@ -633,7 +662,7 @@ class HutsModel:
                 observer(outstanding_requests)
             if self._results_cancelled:
                 break
-            results[index] = web_request.perform_web_request_for_hut(index, self._huts_dictionary[index], start_date)
+            results[index] = web_request.perform_web_request_for_hut(index, self._huts_dictionary[index])
             outstanding_requests -= 1
 
         if observer is not None:
@@ -662,36 +691,59 @@ class HutsModel:
         check_dates = set(dates) if dates is not None else available_dates
         if not check_dates <= available_dates:
             return False
-        is_open = True
         for date in check_dates:
-            is_open = is_open and 'closed' not in results_dictionary[index]['places'][date]
-        return is_open
+            if results_dictionary[index]['hut_status'][date] == _HUT_STATUS_CLOSED:
+                return False
+        return True
 
     @staticmethod
-    def _available_places(results_dictionary, index, dates=None):
+    def _check_serviced(results_dictionary, index, dates=None):
+        """Check if the specified hut is serviced at all specified dates
+        (or at all available date if no date is provided).
+
+        :param results_dictionary: the dictionary containing the information about free places
+        :param index: the index of the hut for which the check is required
+        :param dates: the dates for which the check is required; if not provided, all available dates are considered
+        :return: True if the hut is serviced, False otherwise
+        """
+        if index not in results_dictionary:
+            return False
+        response = results_dictionary[index]['error'] is None
+        if not response:
+            return False
+        available_dates = set(results_dictionary[index]['places'].keys())
+        check_dates = set(dates) if dates is not None else available_dates
+        if not check_dates <= available_dates:
+            return False
+        for date in check_dates:
+            if results_dictionary[index]['hut_status'][date] == _HUT_STATUS_UNSERVICED:
+                return False
+        return True
+
+    @staticmethod
+    def _available_places_for_date(results_dictionary, index, dates):
         """Return the number of available places for a hut for all specified dates.
 
         :param results_dictionary: the dictionary containing the information about free places
         :param index: the index of the hut for which the number of available places is required
         :param dates: the dates for which the value is required; if not provided, all available dates are considered
-        :return: the number of available places
+        :return: the dictionary with the number of available places for each date
         """
+        check_dates = set(dates)
         if index not in results_dictionary:
-            return 0
+            return {date: 0 for date in check_dates}
+        available_dates = set(results_dictionary[index]['places'].keys())
         response = results_dictionary[index]['error'] is None
         if not response:
-            return 0
-        available_dates = set(results_dictionary[index]['places'].keys())
-        check_dates = set(dates) if dates is not None else available_dates
-        if not check_dates <= available_dates:
-            return 0
+            return {date: 0 for date in check_dates}
         available_places_for_date = {}
         for date in check_dates:
             available_places = 0
-            for room_places in results_dictionary[index]['places'][date].values():
-                available_places += room_places
+            if date in available_dates:
+                for room_places in results_dictionary[index]['places'][date].values():
+                    available_places += room_places
             available_places_for_date[date] = available_places
-        return min(available_places_for_date.values())
+        return available_places_for_date
 
     @staticmethod
     def _available_places_for_room(results_dictionary, index, dates=None):
@@ -926,9 +978,8 @@ class HutsModel:
         for index in original_list:
             if index in self._results_dictionary:
                 response = self._results_dictionary[index]['error'] is None
-                data_requested = all([d in self._results_dictionary[index]['requested_dates'] for d in dates])
                 is_open = self._check_open(self._results_dictionary, index, dates)
-                if response and data_requested and not is_open:
+                if response and not is_open:
                     continue
             filtered_list.append(index)
         return filtered_list
@@ -953,7 +1004,8 @@ class HutsModel:
             filter_available_max = 1000.
         filtered_list = []
         for index in original_list:
-            available_places = self._available_places(self._results_dictionary, index, dates)
+            available_places_for_date = self._available_places_for_date(self._results_dictionary, index, dates)
+            available_places = min(available_places_for_date.values())
             if filter_available_min <= available_places <= filter_available_max:
                 filtered_list.append(index)
         return filtered_list
@@ -1105,7 +1157,8 @@ class HutsModel:
         :return: the sorted list of hut indexes
         """
         def f_key(index):
-            return self._available_places(self._results_dictionary, index, dates)
+            available_places_for_date = self._available_places_for_date(self._results_dictionary, index, dates)
+            return min(available_places_for_date.values())
         return sorted(original_list, key=f_key, reverse=not ascending)
 
     def _sort_by_room(self, original_list, room, dates=None, ascending=False):
@@ -1133,8 +1186,8 @@ class HutsModel:
             else:
                 self._results_dictionary[index]['error'] = result['error']
                 self._results_dictionary[index]['warning'] = result['warning']
-                self._results_dictionary[index]['requested_dates'].update(result['requested_dates'])
                 self._results_dictionary[index]['request_time'] = result['request_time']
+                self._results_dictionary[index]['hut_status'] = result['hut_status']
                 for book_date, rooms in result['places'].items():
                     self._results_dictionary[index]['places'][book_date] = rooms
 

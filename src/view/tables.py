@@ -24,6 +24,7 @@ _BLACK = (0, 0, 0)
 _RED = (255, 0, 0)
 _ORANGE = (224, 129, 25)
 _GREEN = (0, 100, 0)
+_BLUE = (0, 0, 255)
 
 # Definition of colors for table rows: [foreground, background]
 _NEUTRAL_COLOUR = [_BLACK, _WHITE]
@@ -32,7 +33,8 @@ _HUT_STATUS_COLOURS = {
     HutStatus.NO_RESPONSE: [_WHITE, _ORANGE],
     HutStatus.CLOSED: [_BLACK, _LIGHT_GRAY],
     HutStatus.NOT_AVAILABLE: [_BLACK, _RED],
-    HutStatus.AVAILABLE: [_GREEN, _WHITE]
+    HutStatus.AVAILABLE: [_GREEN, _WHITE],
+    HutStatus.UNSERVICED: [_BLUE, _WHITE]
 }
 
 # Definition of symbols
@@ -182,16 +184,7 @@ class HutsGrid(Grid):
         :return: the colour to be used for the cell
         """
         index = self._indexes[row]
-        if not self._data_dictionary[index]['data_requested']:
-            colour = _HUT_STATUS_COLOURS[HutStatus.NO_REQUEST]
-        elif not self._data_dictionary[index]['response']:
-            colour = _HUT_STATUS_COLOURS[HutStatus.NO_RESPONSE]
-        elif not self._data_dictionary[index]['open']:
-            colour = _HUT_STATUS_COLOURS[HutStatus.CLOSED]
-        elif self._data_dictionary[index]['available'] == 0:
-            colour = _HUT_STATUS_COLOURS[HutStatus.NOT_AVAILABLE]
-        else:
-            colour = _HUT_STATUS_COLOURS[HutStatus.AVAILABLE]
+        colour = _HUT_STATUS_COLOURS[self._data_dictionary[index]['status']]
         return colour
 
     def _get_style(self, row, _col):
@@ -271,7 +264,7 @@ class SelectedDetailedGrid(Grid):
     _DATE_FORMAT = '%d\n%m\n%Y'
     _FONT_SIZE = 9
     _AVOID_HORIZONTAL_SCROLL = True
-    _AVOID_VERTICAL_SCROLL = True
+    _AVOID_VERTICAL_SCROLL = False
     _GRID_ROW_NUMBERS = 6
     _FIXED_ROW_NUMBERS = True
 
@@ -360,15 +353,23 @@ class SelectedDetailedGrid(Grid):
         elif col == 0:
             colour = _NEUTRAL_COLOUR
         else:
-            value = self._get_value(row, col)
-            if value == i18n.all_strings['no information available']:
-                colour = _HUT_STATUS_COLOURS[HutStatus.NO_REQUEST]
-            elif value == i18n.all_strings['closed']:
-                colour = _HUT_STATUS_COLOURS[HutStatus.CLOSED]
-            elif value == 0:
-                colour = _HUT_STATUS_COLOURS[HutStatus.NOT_AVAILABLE]
-            else:
-                colour = _HUT_STATUS_COLOURS[HutStatus.AVAILABLE]
+            date = self._keys[col]
+            colour = _HUT_STATUS_COLOURS[self._data_dictionary[index]['detailed_status'][date]]
+        return colour
+
+    def _get_row_colour(self, row):
+        """
+        Return the colour to be used for the cells of a row.
+        For GUIs which don't support a different colour on cells in the same row.
+
+        :param row: the row of the cell
+        :return: the colour to be used for the cell
+        """
+        index = self._indexes[row]
+        if not self._data_dictionary[index]['response']:
+            colour = _HUT_STATUS_COLOURS[HutStatus.NO_RESPONSE]
+        else:
+            colour = _HUT_STATUS_COLOURS[self._data_dictionary[index]['status']]
         return colour
 
     def _get_align(self, _row, col):
@@ -444,6 +445,7 @@ class DetailedGrid(Grid):
         self._available_places_for_room = None
         self._detailed_places = None
         self._hut_status = None
+        self._detailed_status = None
         super().__init__(parent=parent)
 
     def update_data(self, hut_info):
@@ -455,6 +457,7 @@ class DetailedGrid(Grid):
         self._available_places_for_room = {room: hut_info[room] for room in ROOM_TYPES if hut_info[room] is not None}
         self._detailed_places = hut_info['detailed_places']
         self._hut_status = hut_info['status']
+        self._detailed_status = hut_info['detailed_status']
 
         keys = set()
         for detailed_places_for_date in self._detailed_places.values():
@@ -526,6 +529,7 @@ class DetailedGrid(Grid):
         """
         if self._hut_status is HutStatus.NO_RESPONSE:
             return _HUT_STATUS_COLOURS[HutStatus.NO_RESPONSE]
+        date = self._indexes[row]
         value = self._get_value(row, col)
         if value == i18n.all_strings['closed']:
             return _HUT_STATUS_COLOURS[HutStatus.CLOSED]
@@ -533,6 +537,13 @@ class DetailedGrid(Grid):
             return _HUT_STATUS_COLOURS[HutStatus.NO_REQUEST]
         elif int(value) == 0:
             return _HUT_STATUS_COLOURS[HutStatus.NOT_AVAILABLE]
+        elif date == 'all_dates':
+            if self._hut_status == HutStatus.UNSERVICED:
+                return _HUT_STATUS_COLOURS[HutStatus.UNSERVICED]
+            else:
+                return _HUT_STATUS_COLOURS[HutStatus.AVAILABLE]
+        elif self._detailed_status[date] == HutStatus.UNSERVICED:
+            return _HUT_STATUS_COLOURS[HutStatus.UNSERVICED]
         else:
             return _HUT_STATUS_COLOURS[HutStatus.AVAILABLE]
 
@@ -557,6 +568,13 @@ class DetailedGrid(Grid):
             return _HUT_STATUS_COLOURS[HutStatus.NO_REQUEST]
         elif int(value) == 0:
             return _HUT_STATUS_COLOURS[HutStatus.NOT_AVAILABLE]
+        elif index == 'all_dates':
+            if self._hut_status == HutStatus.UNSERVICED:
+                return _HUT_STATUS_COLOURS[HutStatus.UNSERVICED]
+            else:
+                return _HUT_STATUS_COLOURS[HutStatus.AVAILABLE]
+        elif self._detailed_status[index] == HutStatus.UNSERVICED:
+            return _HUT_STATUS_COLOURS[HutStatus.UNSERVICED]
         else:
             return _HUT_STATUS_COLOURS[HutStatus.AVAILABLE]
 

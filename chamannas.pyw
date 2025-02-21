@@ -46,6 +46,8 @@ The following data files are used by the application:
 """
 import argparse
 import prettysusi
+from src import config
+from src.view import errors
 
 _SUPPORTED_GRAPHICS = ['wx', 'qt', 'tk']
 
@@ -57,9 +59,6 @@ parser.add_argument('-v', '--view', type=str, nargs=1, choices=['table', 'map'],
                     help="View at start")
 
 args = parser.parse_args()
-
-from src import config
-from src.view import errors
 
 # Load the configuration
 config.load(args)
@@ -115,16 +114,16 @@ prettysusi.app.run()
 _, all_selected = huts_model.get_selected()
 reference_location = huts_model.get_reference_location()
 preferences = {
-    'LANGUAGE': i18n.get_current_language_name(),
-    'REFERENCE_LOCATION': [reference_location['lat'], reference_location['lon']],
-    'SELECTED': all_selected,
-    'GUI': config.GUI,
-    'VIEW': config.VIEW
+    config.LANGUAGE_STRING: i18n.get_current_language_name(),
+    config.REFERENCE_LOCATION_STRING: [reference_location['lat'], reference_location['lon']],
+    config.SELECTED_STRING: all_selected,
+    config.GUI_STRING: config.GUI,
+    config.VIEW_STRING: config.VIEW
 }
 config.save_preferences(preferences)
 
 results_dictionary = huts_model.get_results_dictionary()
 results = {
-    'RESULTS_DICTIONARY': results_dictionary
+    config.RESULTS_DICTIONARY_STRING: results_dictionary
 }
 config.save_results(results)

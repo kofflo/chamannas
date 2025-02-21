@@ -90,6 +90,8 @@ dormitory	Dormitory	Dormitorio	Matratzenlager
 shared	Shared room	Camera multipla	Mehrbettzimmer
 double	Double room	Camera doppia	Doppelzimmer
 single	Single room	Camera singola	Einzelzimmer
+special	Special room	Camera special	Sonderzimmer
+unattended	Unattended room	Locale incustodito	Unbewarterer Betrieb
 all rooms	All rooms	Tutte le camere	Alle Zimmer
 name	Name	Nome	Name
 country	Country	Nazione	Staat

@@ -22,6 +22,7 @@ import sys
 import os
 import pathlib
 import yaml
+import json
 import datetime
 
 _ASSETS_PATH = pathlib.Path(os.getcwd()) / 'assets'
@@ -33,12 +34,21 @@ ASSETS_PATH_FONTS = _ASSETS_PATH / 'fonts'
 
 _CONFIG_FILE = ASSETS_PATH_DATA / 'config.yaml'
 _PREFERENCES_FILE = ASSETS_PATH_DATA / 'preferences.yaml'
-_RESULTS_FILE = ASSETS_PATH_DATA / 'results.yaml'
+_RESULTS_FILE = ASSETS_PATH_DATA / 'results.json'
 
 _LOG_PATH = pathlib.Path(os.getcwd()) / 'log'
 _LOG_FILE = str(_LOG_PATH / 'chamannas_{0}_{1}.log')
-_LOG_DATE_FORMAT = '%Y%m%d%H%M%S'
 
+_LOG_DATE_FORMAT = '%Y%m%d%H%M%S'
+_JSON_DATE_FORMAT = '%Y-%m-%d'
+_JSON_DATETIME_FORMAT = '%Y-%m-%d %H:%M:%S.%f'
+
+RESULTS_DICTIONARY_STRING = 'RESULTS_DICTIONARY'
+LANGUAGE_STRING = 'LANGUAGE'
+REFERENCE_LOCATION_STRING = 'REFERENCE_LOCATION'
+SELECTED_STRING = 'SELECTED'
+GUI_STRING = 'GUI'
+VIEW_STRING = 'VIEW'
 
 _config = {}
 _args = None
@@ -91,12 +101,14 @@ def load(args=None):
 
     # Load the cached results file
     try:
-        with open(_RESULTS_FILE, encoding='UTF-8-SIG') as yaml_config_results_file:
-            _config.update(yaml.safe_load(yaml_config_results_file))
+        with open(_RESULTS_FILE, encoding='UTF-8-SIG') as json_config_results_file:
+            results_dict_from_json = json.load(json_config_results_file)
+            results_dict = _convert_results_dict_from_json(results_dict_from_json)
+            _config.update(results_dict)
     except FileNotFoundError:
         errors.append({'type': 'Configuration Error',
                        'message': f"Results file '{_RESULTS_FILE}' does not exist"})
-    except (IOError, yaml.YAMLError, TypeError) as e:
+    except (IOError, json.JSONDecodeError, TypeError) as e:
         errors.append({'type': type(e), 'message': str(e)})
 
     # Add the command line parameters to the configuration data if any is available
@@ -133,7 +145,7 @@ def save_preferences(preferences_dict):
     try:
         with open(_PREFERENCES_FILE, 'w', encoding='UTF-8') as yaml_config_save_file:
             yaml_config_save_file.write(yaml.dump(preferences_dict))
-    except (IOError, yaml.YAMLError) as e:
+    except (IOError, json.JSONDecodeError) as e:
         errors.append({'type': type(e), 'message': str(e)})
 
 
@@ -143,8 +155,9 @@ def save_results(results_dict):
     :param results_dict: dictionary containing the results
     """
     try:
-        with open(_RESULTS_FILE, 'w', encoding='UTF-8') as yaml_config_save_file:
-            yaml_config_save_file.write(yaml.dump(results_dict))
+        results_dict_for_json = _convert_results_dict_to_json(results_dict)
+        with open(_RESULTS_FILE, 'w', encoding='UTF-8') as json_config_save_file:
+            json_config_save_file.write(json.dumps(results_dict_for_json, default=str))
     except (IOError, yaml.YAMLError) as e:
         errors.append({'type': type(e), 'message': str(e)})
 
@@ -166,3 +179,48 @@ def save_log(info_type, developer_info):
                 logfile.write(f'{log_name}\t{log_type}\t{log_message}\n')
     except IOError as e:
         errors.append({'type': type(e), 'message': str(e)})
+
+
+def _convert_results_dict_to_json(results_dict):
+    results_dict = results_dict[RESULTS_DICTIONARY_STRING]
+    to_json = {}
+    for index in results_dict:
+        to_json[index] = {}
+        to_json[index]['error'] = results_dict[index]['error']
+        to_json[index]['warning'] = results_dict[index]['warning']
+        to_json[index]['request_time'] = results_dict[index]['request_time'].strftime(_JSON_DATETIME_FORMAT)
+        to_json[index]['hut_status'] = {}
+        for date in results_dict[index]['hut_status']:
+            date_string = date.strftime(_JSON_DATE_FORMAT)
+            to_json[index]['hut_status'][date_string] = results_dict[index]['hut_status'][date]
+        to_json[index]['places'] = {}
+        for date in results_dict[index]['places']:
+            date_string = date.strftime(_JSON_DATE_FORMAT)
+            to_json[index]['places'][date_string] = results_dict[index]['places'][date]
+    return {RESULTS_DICTIONARY_STRING: to_json}
+
+
+def _convert_results_dict_from_json(from_json):
+    """
+
+    :param from_json:
+    :return:
+    """
+    results_dict = {}
+    from_json = from_json[RESULTS_DICTIONARY_STRING]
+    for index in from_json:
+        int_index = int(index)
+        results_dict[int_index] = {}
+        results_dict[int_index]['error'] = from_json[index]['error']
+        results_dict[int_index]['warning'] = from_json[index]['warning']
+        results_dict[int_index]['request_time'] = datetime.datetime.strptime(
+            from_json[index]['request_time'], _JSON_DATETIME_FORMAT)
+        results_dict[int_index]['hut_status'] = {}
+        for date_string in from_json[index]['hut_status']:
+            date = datetime.datetime.strptime(date_string, _JSON_DATE_FORMAT).date()
+            results_dict[int_index]['hut_status'][date] = from_json[index]['hut_status'][date_string]
+        results_dict[int_index]['places'] = {}
+        for date_string in from_json[index]['places']:
+            date = datetime.datetime.strptime(date_string, _JSON_DATE_FORMAT).date()
+            results_dict[int_index]['places'][date] = from_json[index]['places'][date_string]
+    return {RESULTS_DICTIONARY_STRING: results_dict}

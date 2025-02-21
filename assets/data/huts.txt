@@ -686,3 +686,12 @@
 686	Frederic-Simms-Hütte	AT	Tirol	Lechtaler Alpen	FALSE	47.2103	10.3551	2004	DE
 687	Julius Payer Hütte (Rif. Julius Payer)	IT	Südtirol	Ortler Gruppe	FALSE	46.5277	10.5436	3029	DE
 688	Treschhütte SAC	CH	Uri	Glarner Alpen	FALSE	46.7186	8.6495	1475	CH
+689	Läntahütte SAC	CH	Graubünden	Adula Alpen	FALSE	46.5416	9.0418	2090	CH
+690	Cabane des Audannes	CH	Wallis	Berner Alpen	FALSE	46.3435	7.3841	2506	CH
+691	Stickler-Hütte	AT	Salzburg	Radstädter Tauern	FALSE	47.1484	13.3781	1750	AT
+692	Dresdner Hütte	AT	Tirol	Stubaier Alpen	FALSE	46.9981	11.1395	2308	DE
+693	Starkenburger Hütte	AT	Tirol	Stubaier Alpen	FALSE	47.1268	11.2796	2237	DE
+694	Cavardirashütte SAC	CH	Graubünden	Glarner Alpen	FALSE	46.7425	8.8143	2649	CH
+695	Zittel-Haus	AT	Salzburg	Goldberggruppe	FALSE	47.0540	12.9573	3106	AT
+696	SKIP
+697	Domhütte SAC	CH	Wallis	Walliser Alpen	FALSE	46.1028	7.8176	2940	CH

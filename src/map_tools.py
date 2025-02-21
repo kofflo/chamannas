@@ -76,6 +76,7 @@ _HUT_STATUS_COLOURS = {
     HutStatus.CLOSED: 'lightgray',
     HutStatus.NOT_AVAILABLE: 'red',
     HutStatus.AVAILABLE: 'green',
+    HutStatus.UNSERVICED: 'blue',
     'group': 'white'
 }
 
@@ -85,6 +86,7 @@ _HUT_STATUS_BACKUP_COLOURS = {
     HutStatus.CLOSED: (195, 195, 195),
     HutStatus.NOT_AVAILABLE: (255, 0, 0),
     HutStatus.AVAILABLE: (34, 177, 76),
+    HutStatus.UNSERVICED: (0, 0, 255),
     'group': (250, 250, 250)
 }
 

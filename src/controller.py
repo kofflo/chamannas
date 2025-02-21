@@ -33,7 +33,6 @@ class HutsController:
         command_update_reference_location: command the model to update the reference location and the view to update
         command_language: command the i18n module to set a new current language
         command_open_hut_page: command the default browser to open the hut web page
-        command_open_book_page: command the default browser to open the hut booking web page
         command_open_table_view: open a new table view
         command_open_map_view: open a new map view
         command_open_info_frame: open a detailed info frame for a hut
@@ -214,17 +213,7 @@ class HutsController:
         :param data: dictionary containing the details about the hut
         """
         index = data['which']
-        lang_code = i18n.get_current_language_code()
-        web_request.open_hut_page(index, lang_code)
-
-    def command_open_book_page(self, data):
-        """Command the default browser to open the hut booking web page.
-
-        :param data: dictionary containing the details about the hut
-        """
-        index = data['which']
-        lang_code = i18n.get_current_language_code()
-        web_request.open_book_page(index, self._model.request_dates[0], lang_code)
+        web_request.open_hut_page(index)
 
     def command_open_table_view(self, parent=None):
         """Open a new table view.

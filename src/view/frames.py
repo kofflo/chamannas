@@ -830,7 +830,6 @@ class HutsTableView(_HutsView):
         menu_labels.append(Menu.SEPARATOR)
         menu_labels.append(i18n.all_strings['set location'])
         menu_labels.append(i18n.all_strings['open web'])
-        menu_labels.append(i18n.all_strings['open booking'])
         menu_labels.append(Menu.SEPARATOR)
         select_all_label = i18n.all_strings['select all'] if obj.grid_id == 'displayed' \
             else i18n.all_strings['deselect all']
@@ -853,8 +852,6 @@ class HutsTableView(_HutsView):
             self._controller.command_update_reference_location({'which': 'hut', 'index': index})
         elif self._menu_chosen_item == i18n.all_strings['open web']:
             self._controller.command_open_hut_page({'which': index})
-        elif self._menu_chosen_item == i18n.all_strings['open booking']:
-            self._controller.command_open_book_page({'which': index})
         elif self._menu_chosen_item == select_all_label:
             data = {'which': obj.grid_id}
             self._controller.command_select_all(data)
@@ -1311,7 +1308,6 @@ class HutsMapView(_HutsView):
             menu_labels.append(i18n.all_strings['retrieve'])
         menu_labels.append(Menu.SEPARATOR)
         menu_labels.append(i18n.all_strings['open web'])
-        menu_labels.append(i18n.all_strings['open booking'])
         menu_labels.append(i18n.all_strings['zoom on hut'])
         menu_labels.append(Menu.SEPARATOR)
         menu_labels.append(i18n.all_strings['set location'])
@@ -1331,8 +1327,6 @@ class HutsMapView(_HutsView):
             self._controller.command_update_reference_location({'which': 'hut', 'index': index})
         elif self._menu_chosen_item == i18n.all_strings['open web']:
             self._controller.command_open_hut_page({'which': index})
-        elif self._menu_chosen_item == i18n.all_strings['open booking']:
-            self._controller.command_open_book_page({'which': index})
         elif self._menu_chosen_item == i18n.all_strings['zoom on hut']:
             huts_data = {index: self._huts_data[index]}
             self._update_zoom_from_huts(huts_data)
@@ -1562,9 +1556,6 @@ class DetailedInfoView(_HutsInfoFrame):
         self._open_web_button = Button(parent=self,
                                        on_click=self._on_open_web)
 
-        self._open_booking_button = Button(parent=self,
-                                           on_click=self._on_open_booking)
-
         self._grid_detailed = DetailedGrid(self)
 
         self._close_button = Button(parent=self,
@@ -1613,10 +1604,6 @@ class DetailedInfoView(_HutsInfoFrame):
         """Open the information web page of the hut."""
         self._controller.command_open_hut_page({'which': self._index})
 
-    def _on_open_booking(self, _obj):
-        """Open the booking web page of the hut."""
-        self._controller.command_open_book_page({'which': self._index})
-
     def _on_click(self, _obj, position):
         """Update the map zoom based on the click on the zoom icon in the map.
 
@@ -1652,7 +1639,6 @@ class DetailedInfoView(_HutsInfoFrame):
         self._country_text.label = country_label
         self._retrieve_info_button.label = i18n.all_strings['button retrieve info']
         self._open_web_button.label = i18n.all_strings['button open web']
-        self._open_booking_button.label = i18n.all_strings['button open booking']
         self._mountain_text.label = i18n.mountain_ranges_labels[self._hut_info['mountain_range']]
         self._height_text.label = i18n.all_strings['height'] + ": {0} m".format(int(self._hut_info['height']))
         self._self_catering_text.label = i18n.all_strings['self catering']
@@ -1674,7 +1660,6 @@ class DetailedInfoView(_HutsInfoFrame):
         button_sizer = HBoxLayout()
         button_sizer.add(self._retrieve_info_button, border=10)
         button_sizer.add(self._open_web_button, border=10)
-        button_sizer.add(self._open_booking_button, border=10)
         info_right_sizer.add(button_sizer, border=(10, 0, 10, 0))
         info_right_sizer.add(self._grid_detailed, align=Align.LEFT, border=10)
         info_right_sizer.add_stretch()
@@ -1860,7 +1845,6 @@ class SelectedInfoView(_HutsInfoFrame):
         menu_labels.append(Menu.SEPARATOR)
         menu_labels.append(i18n.all_strings['set location'])
         menu_labels.append(i18n.all_strings['open web'])
-        menu_labels.append(i18n.all_strings['open booking'])
 
         menu = Menu(parent=self, items=menu_labels, on_click=self._on_menu_item)
         menu.pop_up()
@@ -1875,8 +1859,6 @@ class SelectedInfoView(_HutsInfoFrame):
             self._controller.command_update_reference_location({'which': 'hut', 'index': index})
         elif self._menu_chosen_item == i18n.all_strings['open web']:
             self._controller.command_open_hut_page({'which': index})
-        elif self._menu_chosen_item == i18n.all_strings['open booking']:
-            self._controller.command_open_book_page({'which': index})
         else:
             return
 

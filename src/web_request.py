@@ -27,7 +27,6 @@ _REQUEST_DELAY = 1.0  # seconds: determines the minimum delay between two web re
 _WEB_DATE_FORMAT = '%d.%m.%Y'
 _DAY_DELTA = datetime.timedelta(days=1.0)
 _HUT_PAGE = '/reservation/book-hut/{0}/wizard'
-_BOOK_PAGE = '/reservation/book-hut/{0}/wizard'
 _TIMEOUT = 5.0
 _DEFAULT_MAX_NIGHTS = 14
 _DEFAULT_ROOM_BASIC_TYPES = {'default_type': 'shared'}

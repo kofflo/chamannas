@@ -5,9 +5,11 @@
 .pydevproject
 __pycache__/
 /assets/data/preferences.yaml
-/assets/data/results.yaml
+/assets/data/results.json
 /assets/tiles/
-/dist/
 /.venv/
 /.idea/
 /log/
+/dist/
+/build/
+chamannas.spec

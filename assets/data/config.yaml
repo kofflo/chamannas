@@ -10,7 +10,7 @@ ABOUT:
   website: https://github.com/kofflo/chamannas
   developer: "Alessandro Conti"
 BASE_URL: https://www.hut-reservation.org/
-UPDATES_URL: https://raw.githubusercontent.com/kofflo/chamannas/master/
+UPDATES_URL: https://github.com/kofflo/chamannas/raw/refs/heads/master/assets/
 ROOM_BASIC_TYPES:
   'Dortoir': 'dormitory'
   'Massenlager': 'dormitory'
@@ -65,14 +65,14 @@ RESULTS_CACHE_EXPIRATION: 7
 TILES_CACHE: 300
 MAX_NIGHTS: 14
 UPDATE_DATA_FILES:
-  assets/data/:
+  data/:
     config.yaml: 'config file'
     huts.txt: 'huts data'
     mountain_ranges.txt: 'mountain ranges'
     regions.txt: 'regions'
     strings.txt: 'strings'
 UPDATE_TILES:
-  assets/tiles/:
+  tiles/:
     tiles.tar: 'tiles archive'
 SUPPORTED_GUIS:
   - 'wx'

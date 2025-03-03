@@ -341,6 +341,7 @@ class HutsController:
                         shutil.copy(update_path, str(config.ASSETS_PATH_DATA / filename))
                     elif filename in all_updates['tiles']:
                         dest_file = str(config.ASSETS_PATH_TILES / filename)
+                        config.ASSETS_PATH_TILES.mkdir(parents=True, exist_ok=True)
                         shutil.copy(update_path, dest_file)
                         tarfile.open(dest_file).extractall(config.ASSETS_PATH_TILES)
                         os.remove(dest_file)
